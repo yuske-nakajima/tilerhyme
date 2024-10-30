@@ -1,0 +1,16 @@
+{
+  "name": "tilerhyme",
+  "version": "0.0.1",
+  "description": "模様生成器",
+  "scripts": {
+    "dev": "live-server src",
+    "format": "prettier --write \"src/**/*.{js,html,css}\""
+  },
+  "author": "yuske-nakajima",
+  "license": "MIT",
+  "thirdPartyNotices": "THIRD_PARTY_NOTICES.md",
+  "devDependencies": {
+    "live-server": "^1.2.2",
+    "prettier": "^3.3.3"
+  }
+}
