@@ -1,0 +1,9 @@
+{
+  "recommendations": [
+    "esbenp.prettier-vscode",
+    "dominikasinski.p5-snippets-and-tools",
+    "gruntfuggly.todo-tree",
+    "oderwat.indent-rainbow",
+    "shardulm94.trailing-spaces"
+  ]
+}

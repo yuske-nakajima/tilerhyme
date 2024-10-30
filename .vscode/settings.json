@@ -1,0 +1,39 @@
+{
+  // 基本
+  "editor.rulers": [120], // 120文字目にルーラーを表示
+  // 自動保存設定
+  "files.autoSave": "afterDelay", // 一定時間後に自動保存
+  // 各言語のformatterを設定
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[html]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[css]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  // 各言語のformatterを設定
+  // format設定
+  "editor.formatOnSave": true, // 保存時の自動フォーマットを有効化
+  // Prettier設定
+  "prettier.trailingComma": "all", // 末尾のカンマを常に付ける
+  "prettier.tabWidth": 2, // インデント幅を2に設定
+  "prettier.singleQuote": true, // シングルクォートを使用
+  "prettier.printWidth": 80, // 1行の最大文字数を80に設定
+  "prettier.useTabs": false, // タブの代わりにスペースを使用
+  "prettier.quoteProps": "as-needed", // プロパティの引用符は必要な場合のみ
+  "prettier.bracketSpacing": true, // オブジェクトリテラルの括弧内にスペースを入れる
+  "prettier.bracketSameLine": false, // 複数行の要素の閉じ括弧を新しい行に
+  "prettier.htmlWhitespaceSensitivity": "css", // HTML空白文字の扱いをCSSに準拠
+  "prettier.endOfLine": "lf", // 改行コードをLFに設定
+  "prettier.semi": false, // セミコロンを使用しない
+  // todo-tree設定
+  "todo-tree.filtering.excludeGlobs": ["**/src/lib/p5.js"], // todo-treeの除外ファイルを設定
+}
