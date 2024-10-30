@@ -1,0 +1,6 @@
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+This project includes p5.js (v1.11.0), which is licensed under the GNU Lesser General Public License v2.1.
+For details, see [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
