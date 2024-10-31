@@ -1,5 +1,5 @@
 function trInitial() {
-  createCanvas(windowWidth * 0.99, windowHeight * 0.99)
+  createCanvas(windowWidth * 0.95, windowHeight * 0.95)
   colorMode(HSB)
   frameRate(24)
 }
