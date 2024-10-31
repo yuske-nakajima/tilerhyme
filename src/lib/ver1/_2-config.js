@@ -1,7 +1,7 @@
 // ------------------------------------------------------------
 // --- 定数
 // ------------------------------------------------------------
-const TR_INIT_DATA_GRID = [
+const TR_DATA_GRID = [
   { value: 85, calcValue: 1, group: 0, isPressed: false },
   { value: 70, calcValue: 2, group: 0, isPressed: false },
   { value: 51, calcValue: 4, group: 0, isPressed: false },
@@ -120,6 +120,14 @@ const TR_COLOR_ARRAY = [
 // ------------------------------------------------------------
 // --- 変数
 // ------------------------------------------------------------
+let trCalcDataGridResult = {
+  key0: 0,
+  key1: 0,
+  key2: 0,
+  key3: 0,
+}
+
+let color = TR_COLOR_ARRAY[0]
 
 // ------------------------------------------------------------
 // --- 関数
@@ -529,4 +537,18 @@ function drawShape(value, shapeCount, rate, color, isFill) {
       }
     }
   })
+}
+
+
+/**
+ * データグリッドのisPressedプロパティを設定する関数
+ * @param {number} value - 設定する値
+ * @param {boolean} isPressed - 設定するisPressedの値
+ */
+function trSetDataGridIsPressed(value, isPressed) {
+  for (let i = 0; i < TR_DATA_GRID.length; i++) {
+    if (TR_DATA_GRID[i].value === value) {
+      TR_DATA_GRID[i].isPressed = isPressed
+    }
+  }
 }

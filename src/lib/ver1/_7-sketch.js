@@ -1,7 +1,7 @@
 // 一度だけ実行される処理
-function setup() {
+async function setup() {
   trInitial()
-  trUiSetup()
+  await trUiSetup()
 }
 
 // 毎フレーム実行される処理
