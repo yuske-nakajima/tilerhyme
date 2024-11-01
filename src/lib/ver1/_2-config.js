@@ -68,6 +68,17 @@ const TR_DATA_GRID = [
   { value: 90, calcValue: 32768, group: 3, isPressed: false },
 ]
 
+const TR_MAPPING_GRID = [
+  [64, 65, 66, 67, 96, 97, 98, 99],
+  [60, 61, 62, 63, 92, 93, 94, 95],
+  [56, 57, 58, 59, 88, 89, 90, 91],
+  [52, 53, 54, 55, 84, 85, 86, 87],
+  [48, 49, 50, 51, 80, 81, 82, 83],
+  [44, 45, 46, 47, 76, 77, 78, 79],
+  [40, 41, 42, 43, 72, 73, 74, 75],
+  [36, 37, 38, 39, 68, 69, 70, 71],
+]
+
 const TR_COLOR_ARRAY = [
   {
     _1: '#ffffff',
@@ -117,6 +128,10 @@ const TR_COLOR_ARRAY = [
   },
 ]
 
+const TR_SOFT_UI_WIDTH = 200
+const TR_SOFT_UI_CELL_WIDTH = TR_SOFT_UI_WIDTH / 8
+
+const TR_COLORS = {}
 // ------------------------------------------------------------
 // --- 変数
 // ------------------------------------------------------------
@@ -127,9 +142,13 @@ let trCalcDataGridResult = {
   key3: 0,
 }
 
-let color = TR_COLOR_ARRAY[0]
+let trColor = TR_COLOR_ARRAY[0]
 
 let trCellDivNum
+
+let trIsNoDevice = false
+
+let trSoftUiStartPos
 
 // ------------------------------------------------------------
 // --- 関数
@@ -552,4 +571,19 @@ function trSetDataGridIsPressed(value, isPressed) {
       TR_DATA_GRID[i].isPressed = isPressed
     }
   }
+}
+
+/**
+ * TR_DATA_GRIDの色を計算結果に基づいて設定する関数。
+ * `trCalcDataGrid`関数を使用してデータグリッドの結果を計算し、
+ * 結果のキーに基づいて`TR_COLOR_ARRAY`から色を選択します。
+ * 有効な色が見つかった場合、それを`trColor`に割り当てます。
+ */
+function trSetColor() {
+  trCalcDataGridResult = trCalcDataGrid(TR_DATA_GRID)
+  const _color = TR_COLOR_ARRAY.at(trCalcDataGridResult.key0 % TR_COLOR_ARRAY.length)
+  if (!_color) {
+    return
+  }
+  trColor = _color
 }

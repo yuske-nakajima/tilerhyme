@@ -14,12 +14,8 @@ function mousePressed() {
   trMousePressed()
 }
 
-// マウスが動いた時に実行される処理
-function mouseDragged() {
-  trMouseDragged()
-}
-
-// マウスが離された時に実行される処理
-function mouseReleased() {
-  trMouseReleased()
+// マウスが押された時に実行される処理のタッチ対応
+function touchStarted() {
+  mousePressed()
+  return false
 }

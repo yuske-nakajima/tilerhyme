@@ -82,7 +82,7 @@ function trGetPressedKeyList(dataGrid) {
  * @param {Array.<{isPressed: boolean, value: number}>} dataGrid - キーのデータグリッド
  * @returns {Promise<string|undefined>} - エラーメッセージまたはundefined
  */
-async function trLpSetup(pressedCallback, dataGrid) {
+async function trLpSetup(pressedCallback, failedCallback, dataGrid) {
   try {
     const access = await navigator.requestMIDIAccess()
 
@@ -96,8 +96,7 @@ async function trLpSetup(pressedCallback, dataGrid) {
       .at(0)
     if (!input) {
       const errorMessage = 'inputが見つかりません'
-      console.error(errorMessage)
-      return errorMessage
+      new Error(errorMessage)
     }
 
     const output = Array.from(access.outputs.values())
@@ -110,8 +109,7 @@ async function trLpSetup(pressedCallback, dataGrid) {
       .at(0)
     if (!output) {
       const errorMessage = 'outputが見つかりません'
-      console.error(errorMessage)
-      return errorMessage
+      new Error(errorMessage)
     }
 
     for (let i = 36; i <= 99; i++) {
@@ -145,13 +143,6 @@ async function trLpSetup(pressedCallback, dataGrid) {
       }
     }
   } catch (e) {
-    const errorMessage = `MIDIデバイスの接続に失敗しました: ${e}`
-    console.error(errorMessage)
-
-    // TODO: MIDIデバイスが接続されていないときの処理
-    // 画面にデバイスに模したUIを表示する
-    // 画面上でボタンを押すと、それを押したことにする
-    // const note = 処理
-    // pressedCallback(note);
+    failedCallback()
   }
 }
