@@ -1,5 +1,5 @@
 function trInitial() {
-  const gap = max(windowWidth * 0.05, windowHeight * 0.05)
+  const gap = max(windowWidth * 0.1, windowHeight * 0.1)
   createCanvas(windowWidth - gap, windowHeight - gap)
   colorMode(HSB)
   frameRate(24)
