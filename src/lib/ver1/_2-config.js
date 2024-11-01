@@ -129,6 +129,8 @@ let trCalcDataGridResult = {
 
 let color = TR_COLOR_ARRAY[0]
 
+let trCellDivNum
+
 // ------------------------------------------------------------
 // --- 関数
 // ------------------------------------------------------------
@@ -509,11 +511,11 @@ function drawShape(value, shapeCount, rate, color, isFill) {
   }
 
   const _count = Math.ceil(shapeCount)
-  const width = windowWidth / _count
-  const count = createVector(_count, windowHeight / width)
+  const _width = width / _count
+  const count = createVector(_count, height / _width)
 
   const loopFunc = (pos) => {
-    const _funcArray = trFuncArray(pos, width, rate, isFill)
+    const _funcArray = trFuncArray(pos, _width, rate, isFill)
     const func = _funcArray.at(value % _funcArray.length)
     if (!func) {
       return
@@ -528,7 +530,7 @@ function drawShape(value, shapeCount, rate, color, isFill) {
     } else {
       noFill()
       stroke(color)
-      strokeWeight(width / 20)
+      strokeWeight(2)
     }
 
     for (let x = 0; x < count.x; x++) {
