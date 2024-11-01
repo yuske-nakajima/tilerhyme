@@ -1,7 +1,7 @@
 // ------------------------------------------------------------
 // --- 定数
 // ------------------------------------------------------------
-const TR_DATA_GRID = [
+const TR_INIT_DATA_GRID = [
   { value: 85, calcValue: 1, group: 0, isPressed: false },
   { value: 70, calcValue: 2, group: 0, isPressed: false },
   { value: 51, calcValue: 4, group: 0, isPressed: false },
@@ -149,6 +149,8 @@ let trCellDivNum
 let trIsNoDevice = false
 
 let trSoftUiStartPos
+
+let trDataGrid = trGetOrInitializeValue('trDataGrid', TR_INIT_DATA_GRID)
 
 // ------------------------------------------------------------
 // --- 関数
@@ -549,7 +551,7 @@ function drawShape(value, shapeCount, rate, color, isFill) {
     } else {
       noFill()
       stroke(color)
-      strokeWeight(2)
+      strokeWeight(1)
     }
 
     for (let x = 0; x < count.x; x++) {
@@ -566,21 +568,22 @@ function drawShape(value, shapeCount, rate, color, isFill) {
  * @param {boolean} isPressed - 設定するisPressedの値
  */
 function trSetDataGridIsPressed(value, isPressed) {
-  for (let i = 0; i < TR_DATA_GRID.length; i++) {
-    if (TR_DATA_GRID[i].value === value) {
-      TR_DATA_GRID[i].isPressed = isPressed
+  for (let i = 0; i < trDataGrid.length; i++) {
+    if (trDataGrid[i].value === value) {
+      trDataGrid[i].isPressed = isPressed
+      trSaveToLocalStorage('trDataGrid', trDataGrid)
     }
   }
 }
 
 /**
- * TR_DATA_GRIDの色を計算結果に基づいて設定する関数。
+ * trDataGridの色を計算結果に基づいて設定する関数。
  * `trCalcDataGrid`関数を使用してデータグリッドの結果を計算し、
  * 結果のキーに基づいて`TR_COLOR_ARRAY`から色を選択します。
  * 有効な色が見つかった場合、それを`trColor`に割り当てます。
  */
 function trSetColor() {
-  trCalcDataGridResult = trCalcDataGrid(TR_DATA_GRID)
+  trCalcDataGridResult = trCalcDataGrid(trDataGrid)
   const _color = TR_COLOR_ARRAY.at(trCalcDataGridResult.key0 % TR_COLOR_ARRAY.length)
   if (!_color) {
     return

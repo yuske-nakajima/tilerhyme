@@ -8,11 +8,12 @@ function trMousePressed() {
         )
         trMousePressedBlock(pos, { width: TR_SOFT_UI_CELL_WIDTH, height: TR_SOFT_UI_CELL_WIDTH }, () => {
           const value = TR_MAPPING_GRID[yi][xi]
-          const getIndex = TR_DATA_GRID.findIndex((item) => item.value === value)
+          const getIndex = trDataGrid.findIndex((item) => item.value === value)
           if (!getIndex) {
             return
           }
-          TR_DATA_GRID[getIndex].isPressed = !TR_DATA_GRID[getIndex].isPressed
+          trDataGrid[getIndex].isPressed = !trDataGrid[getIndex].isPressed
+          trSaveToLocalStorage('trDataGrid', trDataGrid)
         })
       }
     }
