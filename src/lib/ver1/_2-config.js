@@ -539,7 +539,6 @@ function drawShape(value, shapeCount, rate, color, isFill) {
   })
 }
 
-
 /**
  * データグリッドのisPressedプロパティを設定する関数
  * @param {number} value - 設定する値

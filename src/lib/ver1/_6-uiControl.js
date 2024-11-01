@@ -1,8 +1,5 @@
-function trMousePressed() {
-}
+function trMousePressed() {}
 
-function trMouseDragged() {
-}
+function trMouseDragged() {}
 
-function trMouseReleased() {
-}
+function trMouseReleased() {}
