@@ -8,6 +8,7 @@ async function trUiSetup() {
     () => {
       console.log('ノーデバイスモード')
       trIsNoDevice = true
+      trSetColor()
     },
     trSetColor,
     trDataGrid,
