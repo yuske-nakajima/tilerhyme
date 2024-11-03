@@ -24,3 +24,12 @@ function touchStarted() {
 function doubleClicked() {
   trSaveWallPaper()
 }
+
+// スマホ画面をタップした時に実行される処理
+function touchEnded() {
+  // ダブルタップで壁紙を保存
+  if (millis() - lastTapTime < 300) {
+    trSaveWallPaper()
+  }
+  lastTouch = millis()
+}
