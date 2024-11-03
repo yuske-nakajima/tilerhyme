@@ -32,6 +32,10 @@ body {
   width: 100%;
   font-family: var(--ff-default);
   height: 18px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 @media screen and (max-width: 768px) {
@@ -54,15 +58,23 @@ body {
   text-align: center;
   width: 100%;
   font-family: var(--ff-default);
-  padding: 8px;
+  padding: 16px 0;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 #image-download {
   cursor: pointer;
   transition: color 0.5s ease;
+  display: block;
+  padding: 8px 0;
+  max-width: 300px;
+  width: 50%;
 }
 
 #image-download:hover {
   color: #000;
-  background-color: #fff;
+  background-color: #aaa;
 }

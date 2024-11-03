@@ -662,3 +662,15 @@ function trSaveWallPaper() {
   trCellDivNum = ceil(width / 50)
   pixelDensity(originalDensity) // 密度を元に戻す
 }
+
+/**
+ * 画像を保存する関数
+ * @param {p5.Image} img - 保存する画像
+ */
+function trSaveImageClick(e) {
+  // デフォルト挙動をキャンセル
+  e.preventDefault()
+
+  // 画像を保存
+  trSaveWallPaper()
+}
