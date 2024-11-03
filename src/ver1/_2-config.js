@@ -645,15 +645,20 @@ function trDeviceDraw() {
  * 壁紙を保存する関数
  */
 function trSaveWallPaper() {
+  const originalDensity = pixelDensity() // 現在の密度を保存
+
+  pixelDensity(1)
   resizeCanvas(1920, 1080)
   trCellDivNum = ceil(width / 50)
+
   const tempTrIsNoDevice = trIsNoDevice
   trIsNoDevice = false
   trUiDraw()
   trSaveImage(trCanvas)
 
-  // 元に戻す
+  // すべて元に戻す
   trIsNoDevice = tempTrIsNoDevice
   resizeCanvas(windowWidth - trWindowGap, windowHeight - trWindowGap)
   trCellDivNum = ceil(width / 50)
+  pixelDensity(originalDensity) // 密度を元に戻す
 }
