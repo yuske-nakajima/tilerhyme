@@ -671,6 +671,10 @@ function trSaveImageClick(e) {
   // デフォルト挙動をキャンセル
   e.preventDefault()
 
-  // 画像を保存
-  trSaveWallPaper()
+  // アラート
+  const imageSaveConfirm = window.confirm('画像をダウンロードしますか？')
+  if (imageSaveConfirm) {
+    // 画像を保存
+    trSaveWallPaper()
+  }
 }

@@ -1,5 +1,5 @@
 function trInitial() {
-  trWindowGap = max(windowWidth * 0.02, windowHeight * 0.02)
+  trWindowGap = max(windowWidth * 0.01, windowHeight * 0.01)
   trWindowSize = {
     width: windowWidth - trWindowGap,
     height: windowHeight - trWindowGap,

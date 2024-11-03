@@ -50,15 +50,15 @@ body {
   bottom: 18px;
   left: 0;
   padding: 5px;
-  background-color: #333;
-  color: #fff;
+  background-color: black;
+  color: white;
   font-size: 16px;
   font-weight: bold;
   z-index: var(--zi-version);
   text-align: center;
   width: 100%;
   font-family: var(--ff-default);
-  padding: 16px 0;
+  padding: 6px 0 8px 0;
 
   display: flex;
   justify-content: center;
@@ -72,9 +72,10 @@ body {
   padding: 8px 0;
   max-width: 300px;
   width: 50%;
+  transition: all 1s ease;
 }
 
 #image-download:hover {
-  color: #000;
-  background-color: #aaa;
+  color: black;
+  background-color: gray;
 }
