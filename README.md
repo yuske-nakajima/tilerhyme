@@ -12,3 +12,9 @@ https://tilerhyme.yuske.app
 npm install
 npm run dev
 ```
+
+### バージョンタグ付与
+```bash
+git tag version-x.x
+git push origin version-x.x
+```
