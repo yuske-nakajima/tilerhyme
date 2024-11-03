@@ -135,6 +135,12 @@ const TR_COLORS = {}
 // ------------------------------------------------------------
 // --- 変数
 // ------------------------------------------------------------
+let trCanvas
+
+let trWindowSize
+
+let trWindowGap
+
 let trCalcDataGridResult = {
   key0: 0,
   key1: 0,
@@ -589,4 +595,63 @@ function trSetColor() {
     return
   }
   trColor = _color
+}
+
+/**
+ * デバイスの描画を行う関数
+ */
+function trDeviceDraw() {
+  if (trIsNoDevice) {
+    trDrawBlock(() => {
+      const gap = 10
+      fill(TR_COLORS.lineMain)
+      noStroke()
+      rect(trSoftUiStartPos.x - gap / 2, trSoftUiStartPos.y - gap / 2, TR_SOFT_UI_WIDTH + gap)
+    })
+    trDrawBlock(() => {
+      stroke(TR_COLORS.lineMain)
+      strokeWeight(1)
+      for (let xi = 0; xi < 8; xi++) {
+        for (let yi = 0; yi < 8; yi++) {
+          const value = TR_MAPPING_GRID[yi][xi]
+          const getIndex = trDataGrid.findIndex((item) => item.value === value)
+          if (getIndex === undefined) {
+            continue
+          }
+
+          trDrawBlock(() => {
+            if (trDataGrid[getIndex].isPressed) {
+              fill(TR_COLORS.cellMain)
+            } else {
+              fill(TR_COLORS.cellNormal)
+            }
+
+            rect(
+              trSoftUiStartPos.x + TR_SOFT_UI_CELL_WIDTH * xi,
+              trSoftUiStartPos.y + TR_SOFT_UI_CELL_WIDTH * yi,
+              TR_SOFT_UI_CELL_WIDTH,
+              TR_SOFT_UI_CELL_WIDTH,
+            )
+          })
+        }
+      }
+    })
+  }
+}
+
+/**
+ * 壁紙を保存する関数
+ */
+function trSaveWallPaper() {
+  resizeCanvas(1920, 1080)
+  trCellDivNum = ceil(width / 50)
+  const tempTrIsNoDevice = trIsNoDevice
+  trIsNoDevice = false
+  trUiDraw()
+  trSaveImage(trCanvas)
+
+  // 元に戻す
+  trIsNoDevice = tempTrIsNoDevice
+  resizeCanvas(windowWidth - trWindowGap, windowHeight - trWindowGap)
+  trCellDivNum = ceil(width / 50)
 }

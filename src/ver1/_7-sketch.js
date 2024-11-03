@@ -19,3 +19,8 @@ function touchStarted() {
   mousePressed()
   return false
 }
+
+// 画面をダブルクリックした時に実行される処理
+function doubleClicked() {
+  trSaveWallPaper()
+}
