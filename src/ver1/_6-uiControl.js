@@ -9,7 +9,7 @@ function trMousePressed() {
         trMousePressedBlock(pos, { width: TR_SOFT_UI_CELL_WIDTH, height: TR_SOFT_UI_CELL_WIDTH }, () => {
           const value = TR_MAPPING_GRID[yi][xi]
           const getIndex = trDataGrid.findIndex((item) => item.value === value)
-          if (!getIndex) {
+          if (getIndex === undefined) {
             return
           }
           trDataGrid[getIndex].isPressed = !trDataGrid[getIndex].isPressed
