@@ -135,6 +135,14 @@ const TR_COLORS = {}
 // ------------------------------------------------------------
 // --- 変数
 // ------------------------------------------------------------
+let lastTapTime = 0
+
+let trCanvas
+
+let trWindowSize
+
+let trWindowGap
+
 let trCalcDataGridResult = {
   key0: 0,
   key1: 0,
@@ -150,7 +158,7 @@ let trIsNoDevice = false
 
 let trSoftUiStartPos
 
-let trDataGrid = trGetOrInitializeValue('trDataGrid-ver1.0', TR_INIT_DATA_GRID)
+let trDataGrid = trGetOrInitializeValue('trDataGrid-ver1.1', TR_INIT_DATA_GRID)
 
 // ------------------------------------------------------------
 // --- 関数
@@ -571,7 +579,7 @@ function trSetDataGridIsPressed(value, isPressed) {
   for (let i = 0; i < trDataGrid.length; i++) {
     if (trDataGrid[i].value === value) {
       trDataGrid[i].isPressed = isPressed
-      trSaveToLocalStorage('trDataGrid-ver1.0', trDataGrid)
+      trSaveToLocalStorage('trDataGrid-ver1.1', trDataGrid)
     }
   }
 }
@@ -589,4 +597,84 @@ function trSetColor() {
     return
   }
   trColor = _color
+}
+
+/**
+ * デバイスの描画を行う関数
+ */
+function trDeviceDraw() {
+  if (trIsNoDevice) {
+    trDrawBlock(() => {
+      const gap = 10
+      fill(TR_COLORS.lineMain)
+      noStroke()
+      rect(trSoftUiStartPos.x - gap / 2, trSoftUiStartPos.y - gap / 2, TR_SOFT_UI_WIDTH + gap)
+    })
+    trDrawBlock(() => {
+      stroke(TR_COLORS.lineMain)
+      strokeWeight(1)
+      for (let xi = 0; xi < 8; xi++) {
+        for (let yi = 0; yi < 8; yi++) {
+          const value = TR_MAPPING_GRID[yi][xi]
+          const getIndex = trDataGrid.findIndex((item) => item.value === value)
+          if (getIndex === undefined) {
+            continue
+          }
+
+          trDrawBlock(() => {
+            if (trDataGrid[getIndex].isPressed) {
+              fill(TR_COLORS.cellMain)
+            } else {
+              fill(TR_COLORS.cellNormal)
+            }
+
+            rect(
+              trSoftUiStartPos.x + TR_SOFT_UI_CELL_WIDTH * xi,
+              trSoftUiStartPos.y + TR_SOFT_UI_CELL_WIDTH * yi,
+              TR_SOFT_UI_CELL_WIDTH,
+              TR_SOFT_UI_CELL_WIDTH,
+            )
+          })
+        }
+      }
+    })
+  }
+}
+
+/**
+ * 壁紙を保存する関数
+ */
+function trSaveWallPaper() {
+  const originalDensity = pixelDensity() // 現在の密度を保存
+
+  pixelDensity(1)
+  resizeCanvas(1920, 1080)
+  trCellDivNum = ceil(width / 50)
+
+  const tempTrIsNoDevice = trIsNoDevice
+  trIsNoDevice = false
+  trUiDraw()
+  trSaveImage(trCanvas)
+
+  // すべて元に戻す
+  trIsNoDevice = tempTrIsNoDevice
+  resizeCanvas(windowWidth - trWindowGap, windowHeight - trWindowGap)
+  trCellDivNum = ceil(width / 50)
+  pixelDensity(originalDensity) // 密度を元に戻す
+}
+
+/**
+ * 画像を保存する関数
+ * @param {p5.Image} img - 保存する画像
+ */
+function trSaveImageClick(e) {
+  // デフォルト挙動をキャンセル
+  e.preventDefault()
+
+  // アラート
+  const imageSaveConfirm = window.confirm('画像をダウンロードしますか？')
+  if (imageSaveConfirm) {
+    // 画像を保存
+    trSaveWallPaper()
+  }
 }

@@ -152,3 +152,18 @@ async function trLpSetup(pressedCallback, failedCallback, deviceSetColor, dataGr
     failedCallback()
   }
 }
+
+/**
+ * 指定されたキャンバスを画像として保存します。
+ * ファイル名は現在の日時を基に生成され、拡張子は '.tilerhyme' です。
+ *
+ * @param {HTMLCanvasElement} canvas - 保存するキャンバス要素
+ */
+function trSaveImage(canvas) {
+  const fileName =
+    new Date()
+      .toISOString()
+      .replace(/[:\-T]/g, '_')
+      .split('.')[0] + '.tilerhyme'
+  saveCanvas(canvas, fileName, 'png')
+}

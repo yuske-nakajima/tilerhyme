@@ -1,4 +1,6 @@
 :root {
+  /* font-family */
+  --ff-default: 'Arial', sans-serif;
   /* z-index */
   --zi-version: 1000;
 }
@@ -26,11 +28,54 @@ body {
   font-size: 12px;
   font-weight: bold;
   z-index: var(--zi-version);
-  text-align: right;
+  text-align: center;
+  width: 100%;
+  font-family: var(--ff-default);
+  height: 18px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 @media screen and (max-width: 768px) {
   .version-num-area {
     font-size: 6px;
   }
+}
+
+/* 機能 */
+.functions-area {
+  position: absolute;
+  bottom: 18px;
+  left: 0;
+  padding: 5px;
+  background-color: black;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  z-index: var(--zi-version);
+  text-align: center;
+  width: 100%;
+  font-family: var(--ff-default);
+  padding: 6px 0 8px 0;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#image-download {
+  cursor: pointer;
+  transition: color 0.5s ease;
+  display: block;
+  padding: 8px 0;
+  max-width: 300px;
+  width: 50%;
+  transition: all 1s ease;
+}
+
+#image-download:hover {
+  color: black;
+  background-color: gray;
 }
