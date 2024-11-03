@@ -19,20 +19,3 @@ function touchStarted() {
   mousePressed()
   return false
 }
-
-// 画面をダブルクリックした時に実行される処理
-function doubleClicked() {
-  trSaveWallPaper()
-}
-
-// スマホ画面をタップした時に実行される処理
-function touchEnded() {
-  // デフォルトのタッチ動作を防止
-  const curTime = millis()
-  if (curTime - lastTapTime < 200) {
-    trSaveWallPaper()
-    return false // デフォルトの動作を防止
-  }
-  lastTapTime = curTime
-  return false // デフォルトの動作を防止
-}
