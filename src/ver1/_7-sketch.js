@@ -27,9 +27,12 @@ function doubleClicked() {
 
 // スマホ画面をタップした時に実行される処理
 function touchEnded() {
-  // ダブルタップで壁紙を保存
-  if (millis() - lastTapTime < 300) {
+  // デフォルトのタッチ動作を防止
+  const curTime = millis()
+  if (curTime - lastTapTime < 200) {
     trSaveWallPaper()
+    return false // デフォルトの動作を防止
   }
-  lastTapTime = millis()
+  lastTapTime = curTime
+  return false // デフォルトの動作を防止
 }
