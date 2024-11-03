@@ -26,7 +26,8 @@ body {
   font-size: 12px;
   font-weight: bold;
   z-index: var(--zi-version);
-  text-align: right;
+  text-align: center;
+  width: 100%;
 }
 
 @media screen and (max-width: 768px) {
