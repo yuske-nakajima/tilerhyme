@@ -31,5 +31,5 @@ function touchEnded() {
   if (millis() - lastTapTime < 300) {
     trSaveWallPaper()
   }
-  lastTouch = millis()
+  lastTapTime = millis()
 }
