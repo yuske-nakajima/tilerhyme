@@ -150,7 +150,7 @@ let trIsNoDevice = false
 
 let trSoftUiStartPos
 
-let trDataGrid = trGetOrInitializeValue('trDataGrid', TR_INIT_DATA_GRID)
+let trDataGrid = trGetOrInitializeValue('trDataGrid-ver1.0', TR_INIT_DATA_GRID)
 
 // ------------------------------------------------------------
 // --- 関数
@@ -571,7 +571,7 @@ function trSetDataGridIsPressed(value, isPressed) {
   for (let i = 0; i < trDataGrid.length; i++) {
     if (trDataGrid[i].value === value) {
       trDataGrid[i].isPressed = isPressed
-      trSaveToLocalStorage('trDataGrid', trDataGrid)
+      trSaveToLocalStorage('trDataGrid-ver1.0', trDataGrid)
     }
   }
 }

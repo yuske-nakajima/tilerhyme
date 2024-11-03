@@ -13,7 +13,7 @@ function trMousePressed() {
             return
           }
           trDataGrid[getIndex].isPressed = !trDataGrid[getIndex].isPressed
-          trSaveToLocalStorage('trDataGrid', trDataGrid)
+          trSaveToLocalStorage('trDataGrid-ver1.0', trDataGrid)
         })
       }
     }
