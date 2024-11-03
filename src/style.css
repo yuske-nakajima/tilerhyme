@@ -31,10 +31,36 @@ body {
   text-align: center;
   width: 100%;
   font-family: var(--ff-default);
+  height: 18px;
 }
 
 @media screen and (max-width: 768px) {
   .version-num-area {
     font-size: 6px;
   }
+}
+
+/* 機能 */
+.functions-area {
+  position: absolute;
+  bottom: 18px;
+  left: 0;
+  padding: 5px;
+  background-color: #000;
+  color: #fff;
+  font-size: 16px;
+  font-weight: bold;
+  z-index: var(--zi-version);
+  text-align: center;
+  width: 100%;
+  font-family: var(--ff-default);
+}
+
+#image-download {
+  cursor: pointer;
+  transition: opacity 0.5s ease;
+}
+
+#image-download:hover {
+  opacity: 0.7;
 }
