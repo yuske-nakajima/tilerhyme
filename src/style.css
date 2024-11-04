@@ -132,7 +132,7 @@ body {
   display: none;
   justify-content: center;
   align-items: center;
-  font-family: var(--ff-jp);
+  font-family: var(--ff-default);
 }
 
 .dialog-content {
@@ -149,7 +149,7 @@ body {
 }
 
 .dialog-title {
-  font-size: 20px;
+  font-size: 18px;
   font-weight: bold;
   margin-bottom: 10px;
   background-color: black;
@@ -188,4 +188,5 @@ body {
 #dialog-cancel {
   background-color: gray;
   font-weight: 900;
+  grid-column: 1 / -1;
 }
