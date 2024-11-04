@@ -1,6 +1,10 @@
 // ------------------------------------------------------------
 // --- 定数
 // ------------------------------------------------------------
+const TR_APP_NAME = 'TILERHYTHM'
+const TR_VERSION = '1.1'
+const TR_VERSION_NAME = 'RIP'
+
 const TR_INIT_DATA_GRID = [
   { value: 85, calcValue: 1, group: 0, isPressed: false },
   { value: 70, calcValue: 2, group: 0, isPressed: false },
@@ -132,6 +136,13 @@ const TR_SOFT_UI_WIDTH = 200
 const TR_SOFT_UI_CELL_WIDTH = TR_SOFT_UI_WIDTH / 8
 
 const TR_COLORS = {}
+
+const TR_WALLPAPER_MODE = {
+  FULL: 0,
+  INFO: 1,
+}
+
+const TR_WALLPAPER_SIZE = 1080
 // ------------------------------------------------------------
 // --- 変数
 // ------------------------------------------------------------
@@ -159,6 +170,8 @@ let trIsNoDevice = false
 let trSoftUiStartPos
 
 let trDataGrid = trGetOrInitializeValue('trDataGrid-ver1.1', TR_INIT_DATA_GRID)
+
+let trIsDataGridClickable = true
 
 // ------------------------------------------------------------
 // --- 関数
@@ -534,7 +547,7 @@ function trFuncArray(
  * @param {string} color - 形状の色
  * @param {boolean} isFill - 形状が塗りつぶされるか輪郭のみかを決定します
  */
-function drawShape(value, shapeCount, rate, color, isFill) {
+function trDrawShape(value, shapeCount, rate, color, isFill) {
   if (value === 0) {
     return
   }
@@ -644,37 +657,122 @@ function trDeviceDraw() {
 /**
  * 壁紙を保存する関数
  */
-function trSaveWallPaper() {
+function trSaveWallPaper(mode = TR_WALLPAPER_MODE.FULL) {
   const originalDensity = pixelDensity() // 現在の密度を保存
 
-  pixelDensity(1)
-  resizeCanvas(1920, 1080)
+  pixelDensity(2)
+
+  if (mode === TR_WALLPAPER_MODE.FULL) {
+    resizeCanvas(TR_WALLPAPER_SIZE, TR_WALLPAPER_SIZE)
+  } else if (mode === TR_WALLPAPER_MODE.INFO) {
+    resizeCanvas(TR_WALLPAPER_SIZE, TR_WALLPAPER_SIZE)
+  }
+
   trCellDivNum = ceil(width / 50)
 
   const tempTrIsNoDevice = trIsNoDevice
+  const tempTrSoftUiStartPos = { ...trSoftUiStartPos }
+
   trIsNoDevice = false
+  if (mode === TR_WALLPAPER_MODE.INFO) {
+    trIsNoDevice = true
+    trSoftUiStartPos = createVector(width / 2 - TR_SOFT_UI_WIDTH / 2, height / 2 - TR_SOFT_UI_WIDTH / 2)
+  }
+
   trUiDraw()
+
+  if (mode === TR_WALLPAPER_MODE.INFO) {
+    trInfoDraw()
+  }
+
   trSaveImage(trCanvas)
 
   // すべて元に戻す
   trIsNoDevice = tempTrIsNoDevice
+  trSoftUiStartPos = tempTrSoftUiStartPos
   resizeCanvas(windowWidth - trWindowGap, windowHeight - trWindowGap)
   trCellDivNum = ceil(width / 50)
   pixelDensity(originalDensity) // 密度を元に戻す
 }
 
 /**
+ * ダイアログを非表示にする関数。
+ * ダイアログの表示スタイルを 'none' に設定し、データグリッドをクリック可能にする。
+ */
+function trHideDialog() {
+  const dialog = document.getElementById('dialog')
+  dialog.style.display = 'none'
+  trIsDataGridClickable = true
+}
+
+/**
  * 画像を保存する関数
  * @param {p5.Image} img - 保存する画像
  */
-function trSaveImageClick(e) {
-  // デフォルト挙動をキャンセル
-  e.preventDefault()
+function trSaveImageClick(dialog) {
+  return (e) => {
+    trIsDataGridClickable = false
 
-  // アラート
-  const imageSaveConfirm = window.confirm('画像をダウンロードしますか？')
-  if (imageSaveConfirm) {
-    // 画像を保存
-    trSaveWallPaper()
+    // デフォルト挙動をキャンセル
+    e.preventDefault()
+
+    dialog.style.display = 'block'
   }
+}
+
+/**
+ * trInfoDraw 関数は、情報表示用の描画を行います。
+ *
+ * @function trInfoDraw
+ */
+function trInfoDraw() {
+  const infoWidth = 30
+  trDrawBlock(() => {
+    noStroke()
+    fill(TR_COLORS.cellMain)
+    rect(0, 0, width, infoWidth)
+    rect(width - infoWidth, 0, infoWidth, height)
+    rect(0, 0, infoWidth, height)
+    rect(0, height - infoWidth, width, infoWidth)
+  })
+
+  trDrawBlock(() => {
+    fill(TR_COLORS.lineMain)
+    textSize(12)
+    textFont('sans-serif')
+
+    // データ情報
+    textAlign(LEFT, CENTER)
+    text(trGridDataToString(), infoWidth, infoWidth / 2)
+
+    // バージョン情報
+    textAlign(RIGHT, CENTER)
+    text(
+      `${TR_APP_NAME} - ${TR_VERSION_NAME}(${TR_VERSION}) CREATED BY YUSKE`,
+      width - infoWidth,
+      height - infoWidth / 2,
+    )
+  })
+
+  trDrawBlock(() => {
+    noFill()
+    stroke(TR_COLORS.lineMain)
+    strokeWeight(2)
+    rect(0, 0, width, height)
+    rect(infoWidth, infoWidth, width - infoWidth * 2, height - infoWidth * 2)
+  })
+}
+
+/**
+ * trGridDataToString 関数は、trDataGrid 配列の各要素の isPressed プロパティを
+ * 文字列に変換し、'1' または '0' の文字列として結合して返します。
+ *
+ * @returns {string} trDataGrid の各要素の isPressed プロパティを '1' または '0' に変換し、
+ * それらを結合した文字列
+ */
+function trGridDataToString() {
+  return trDataGrid
+    .map((item) => item.isPressed)
+    .map((item) => (item ? '1' : '0'))
+    .join('')
 }

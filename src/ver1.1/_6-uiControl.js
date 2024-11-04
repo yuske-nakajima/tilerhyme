@@ -12,6 +12,9 @@ function trMousePressed() {
           if (getIndex === undefined) {
             return
           }
+          if (!trIsDataGridClickable) {
+            return
+          }
           trDataGrid[getIndex].isPressed = !trDataGrid[getIndex].isPressed
           trSaveToLocalStorage('trDataGrid-ver1.1', trDataGrid)
         })

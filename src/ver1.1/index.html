@@ -4,14 +4,29 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="../style.css" />
-    <title>TILERHYME - rip(1.1)</title>
+    <title>TILERHYME - RIP(ver 1.1)</title>
   </head>
 
   <body>
     <div class="functions-area">
-      <div id="image-download">ダウンロード</div>
+      <div id="image-download">DOWNLOAD</div>
     </div>
-    <div class="version-num-area">TILERHYME - rip(1.1)</div>
+    <div class="version-num-area">TILERHYME - RIP(ver 1.1)</div>
+    <!-- ダイアログ -->
+    <div id="dialog" class="dialog">
+      <div class="dialog-content">
+        <div class="dialog-title">DOWNLOAD IMAGE</div>
+        <div class="dialog-body">
+          <div class="dialog-body__text">SELECT FORMAT</div>
+          <div class="dialog-body__btns">
+            <div id="dialog-download-info" class="dialog-body__btn">INFO</div>
+            <div id="dialog-download" class="dialog-body__btn">FULL</div>
+            <div id="dialog-cancel" class="dialog-body__btn">CANCEL</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- ダイアログ -->
     <script src="../lib/p5.js" defer></script>
     <script src="../lib/_1-helper.js" defer></script>
     <script src="./_2-config.js" defer></script>
