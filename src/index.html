@@ -8,42 +8,14 @@
   </head>
 
   <body>
-    <div class="version-num-area">created by yuske</div>
+    <div class="site-contens">
+      <div class="site-title">TILERHYME</div>
+      <div class="site-link">
+        <a href="/ver1.1">RIP(ver 1.1)</a>
+        <a href="/ver1">RIP(ver 1.0)</a>
+      </div>
+    </div>
+    <div class="version-num-area">CREATED BY YUSKE</div>
     <script src="./lib/p5.js" defer></script>
-    <script>
-      function setup() {
-        createCanvas(windowWidth * 0.95, windowHeight * 0.95)
-        colorMode(HSB)
-        const centerPos = createVector(width / 2, height / 2)
-        const _textSize = min(width, height) / 10
-        fill(0, 0, 100)
-        textAlign(CENTER, CENTER)
-        textSize(_textSize)
-        text('TILERHYME', centerPos.x, centerPos.y)
-
-        // ver1のリンク
-        const ver1Link = createA('../ver1/', 'rip(1.0)')
-        ver1Link.position(centerPos.x, centerPos.y + _textSize)
-
-        // ver1.1のリンク
-        const ver1_1Link = createA('../ver1.1/', 'rip(1.1)')
-
-        const linkList = [ver1Link, ver1_1Link]
-        for (let i = 0; i < linkList.length; i++) {
-          const link = linkList[i]
-
-          // position
-          link.position(centerPos.x, centerPos.y + (_textSize / 2) * (i + 2))
-
-          // style
-          link.style('font-size', '1.5rem')
-          link.style('font-family', 'sans-serif')
-          link.style('color', 'white')
-          link.style('text-decoration', 'none')
-          link.style('transform', 'translateX(-50%)')
-          link.style('cursor', 'pointer')
-        }
-      }
-    </script>
   </body>
 </html>
