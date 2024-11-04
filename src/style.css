@@ -91,6 +91,7 @@ body {
   display: none;
   justify-content: center;
   align-items: center;
+  font-family: var(--ff-default);
 }
 
 .dialog-content {
@@ -110,7 +111,6 @@ body {
   font-size: 20px;
   font-weight: bold;
   margin-bottom: 10px;
-  font-family: var(--ff-default);
   background-color: black;
   color: white;
   padding: 10px;
@@ -127,7 +127,6 @@ body {
 .dialog-body__text {
   /* body内のタイトル */
   font-size: 16px;
-  font-family: var(--ff-default);
 }
 
 .dialog-body__btns {

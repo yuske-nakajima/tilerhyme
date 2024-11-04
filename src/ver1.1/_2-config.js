@@ -695,7 +695,10 @@ function trSaveWallPaper(mode = TR_WALLPAPER_MODE.FULL) {
   pixelDensity(originalDensity) // 密度を元に戻す
 }
 
-
+/**
+ * ダイアログを非表示にする関数。
+ * ダイアログの表示スタイルを 'none' に設定し、データグリッドをクリック可能にする。
+ */
 function trHideDialog() {
   const dialog = document.getElementById('dialog')
   dialog.style.display = 'none'
@@ -717,6 +720,11 @@ function trSaveImageClick(dialog) {
   }
 }
 
+/**
+ * trInfoDraw 関数は、情報表示用の描画を行います。
+ *
+ * @function trInfoDraw
+ */
 function trInfoDraw() {
   const infoWidth = 30
   trDrawBlock(() => {
@@ -755,6 +763,13 @@ function trInfoDraw() {
   })
 }
 
+/**
+ * trGridDataToString 関数は、trDataGrid 配列の各要素の isPressed プロパティを
+ * 文字列に変換し、'1' または '0' の文字列として結合して返します。
+ *
+ * @returns {string} trDataGrid の各要素の isPressed プロパティを '1' または '0' に変換し、
+ * それらを結合した文字列
+ */
 function trGridDataToString() {
   return trDataGrid
     .map((item) => item.isPressed)
