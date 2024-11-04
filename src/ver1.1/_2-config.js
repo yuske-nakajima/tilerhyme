@@ -536,7 +536,7 @@ function trFuncArray(
  * @param {string} color - 形状の色
  * @param {boolean} isFill - 形状が塗りつぶされるか輪郭のみかを決定します
  */
-function drawShape(value, shapeCount, rate, color, isFill) {
+function trDrawShape(value, shapeCount, rate, color, isFill) {
   if (value === 0) {
     return
   }
@@ -649,7 +649,7 @@ function trDeviceDraw() {
 function trSaveWallPaper() {
   const originalDensity = pixelDensity() // 現在の密度を保存
 
-  pixelDensity(1)
+  pixelDensity(2)
   resizeCanvas(1920, 1080)
   trCellDivNum = ceil(width / 50)
 
