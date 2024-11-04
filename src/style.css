@@ -79,3 +79,73 @@ body {
   color: black;
   background-color: gray;
 }
+
+/* ダイアログ */
+.dialog {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: none;
+  justify-content: center;
+  align-items: center;
+}
+
+.dialog-content {
+  background-color: white;
+  width: 80%;
+  max-width: 400px;
+  text-align: center;
+  /* 左右真ん中 */
+  margin: 0 auto;
+  /* 上下真ん中 */
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.dialog-title {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  font-family: var(--ff-default);
+  background-color: black;
+  color: white;
+  padding: 10px;
+}
+
+.dialog-body {
+  padding: 20px;
+}
+
+.dialog-body > * + * {
+  margin-top: 20px;
+}
+
+.dialog-body__text {
+  /* body内のタイトル */
+  font-size: 16px;
+  font-family: var(--ff-default);
+}
+
+.dialog-body__btns {
+  /* 二列のグリッド */
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.dialog-body__btn {
+  padding: 10px;
+  background-color: black;
+  color: white;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+#dialog-cancel {
+  background-color: gray;
+  font-weight: 900;
+}

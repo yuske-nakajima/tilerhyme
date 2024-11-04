@@ -160,6 +160,8 @@ let trSoftUiStartPos
 
 let trDataGrid = trGetOrInitializeValue('trDataGrid-ver1.1', TR_INIT_DATA_GRID)
 
+let trIsDataGridClickable = true
+
 // ------------------------------------------------------------
 // --- 関数
 // ------------------------------------------------------------
@@ -668,13 +670,54 @@ function trSaveWallPaper() {
  * @param {p5.Image} img - 保存する画像
  */
 function trSaveImageClick(e) {
+  trIsDataGridClickable = false
+
   // デフォルト挙動をキャンセル
   e.preventDefault()
 
-  // アラート
-  const imageSaveConfirm = window.confirm('画像をダウンロードしますか？')
-  if (imageSaveConfirm) {
-    // 画像を保存
-    trSaveWallPaper()
+  const dialog = document.getElementById('dialog')
+  const dialogCancel = document.getElementById('dialog-cancel')
+  const dialogDownload = document.getElementById('dialog-download')
+  const dialogDownloadInfo = document.getElementById('dialog-download-info')
+
+  dialog.style.display = 'block'
+
+  // ダイアログを非表示にする関数
+  function hideDialog() {
+    dialog.style.display = 'none'
+    trIsDataGridClickable = true
   }
+
+  // キャンセルボタンのクリックイベント
+  dialogCancel.addEventListener('click', () => {
+    hideDialog()
+  })
+  // タッチイベント
+  dialogCancel.addEventListener('touchend', () => {
+    hideDialog()
+  })
+
+  // ダウンロードボタンのクリックイベント
+  dialogDownload.addEventListener('click', () => {
+    trSaveWallPaper()
+    hideDialog()
+  })
+  // タッチイベント
+  dialogDownload.addEventListener('touchend', () => {
+    trSaveWallPaper()
+    hideDialog()
+  })
+
+  // ダウンロード情報のクリックイベント
+  dialogDownloadInfo.addEventListener('click', () => {
+    // TODO: 置き換え
+    trSaveWallPaper()
+    hideDialog()
+  })
+  // タッチイベント
+  dialogDownloadInfo.addEventListener('touchend', () => {
+    // TODO: 置き換え
+    trSaveWallPaper()
+    hideDialog()
+  })
 }
