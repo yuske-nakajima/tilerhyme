@@ -1,6 +1,10 @@
 // ------------------------------------------------------------
 // --- 定数
 // ------------------------------------------------------------
+const TR_APP_NAME = 'TILERHYTHM'
+const TR_VERSION = '1.1'
+const TR_VERSION_NAME = 'RIP'
+
 const TR_INIT_DATA_GRID = [
   { value: 85, calcValue: 1, group: 0, isPressed: false },
   { value: 70, calcValue: 2, group: 0, isPressed: false },
@@ -132,6 +136,13 @@ const TR_SOFT_UI_WIDTH = 200
 const TR_SOFT_UI_CELL_WIDTH = TR_SOFT_UI_WIDTH / 8
 
 const TR_COLORS = {}
+
+const TR_WALLPAPER_MODE = {
+  FULL: 0,
+  INFO: 1,
+}
+
+const TR_WALLPAPER_SIZE = 1080
 // ------------------------------------------------------------
 // --- 変数
 // ------------------------------------------------------------
@@ -646,78 +657,107 @@ function trDeviceDraw() {
 /**
  * 壁紙を保存する関数
  */
-function trSaveWallPaper() {
+function trSaveWallPaper(mode = TR_WALLPAPER_MODE.FULL) {
   const originalDensity = pixelDensity() // 現在の密度を保存
 
   pixelDensity(2)
-  resizeCanvas(1920, 1080)
+
+  if (mode === TR_WALLPAPER_MODE.FULL) {
+    resizeCanvas(TR_WALLPAPER_SIZE, TR_WALLPAPER_SIZE)
+  } else if (mode === TR_WALLPAPER_MODE.INFO) {
+    resizeCanvas(TR_WALLPAPER_SIZE, TR_WALLPAPER_SIZE)
+  }
+
   trCellDivNum = ceil(width / 50)
 
   const tempTrIsNoDevice = trIsNoDevice
+  const tempTrSoftUiStartPos = { ...trSoftUiStartPos }
+
   trIsNoDevice = false
+  if (mode === TR_WALLPAPER_MODE.INFO) {
+    trIsNoDevice = true
+    trSoftUiStartPos = createVector(width / 2 - TR_SOFT_UI_WIDTH / 2, height / 2 - TR_SOFT_UI_WIDTH / 2)
+  }
+
   trUiDraw()
+
+  if (mode === TR_WALLPAPER_MODE.INFO) {
+    trInfoDraw()
+  }
+
   trSaveImage(trCanvas)
 
   // すべて元に戻す
   trIsNoDevice = tempTrIsNoDevice
+  trSoftUiStartPos = tempTrSoftUiStartPos
   resizeCanvas(windowWidth - trWindowGap, windowHeight - trWindowGap)
   trCellDivNum = ceil(width / 50)
   pixelDensity(originalDensity) // 密度を元に戻す
+}
+
+
+function trHideDialog() {
+  const dialog = document.getElementById('dialog')
+  dialog.style.display = 'none'
+  trIsDataGridClickable = true
 }
 
 /**
  * 画像を保存する関数
  * @param {p5.Image} img - 保存する画像
  */
-function trSaveImageClick(e) {
-  trIsDataGridClickable = false
+function trSaveImageClick(dialog) {
+  return (e) => {
+    trIsDataGridClickable = false
 
-  // デフォルト挙動をキャンセル
-  e.preventDefault()
+    // デフォルト挙動をキャンセル
+    e.preventDefault()
 
-  const dialog = document.getElementById('dialog')
-  const dialogCancel = document.getElementById('dialog-cancel')
-  const dialogDownload = document.getElementById('dialog-download')
-  const dialogDownloadInfo = document.getElementById('dialog-download-info')
-
-  dialog.style.display = 'block'
-
-  // ダイアログを非表示にする関数
-  function hideDialog() {
-    dialog.style.display = 'none'
-    trIsDataGridClickable = true
+    dialog.style.display = 'block'
   }
+}
 
-  // キャンセルボタンのクリックイベント
-  dialogCancel.addEventListener('click', () => {
-    hideDialog()
-  })
-  // タッチイベント
-  dialogCancel.addEventListener('touchend', () => {
-    hideDialog()
-  })
-
-  // ダウンロードボタンのクリックイベント
-  dialogDownload.addEventListener('click', () => {
-    trSaveWallPaper()
-    hideDialog()
-  })
-  // タッチイベント
-  dialogDownload.addEventListener('touchend', () => {
-    trSaveWallPaper()
-    hideDialog()
+function trInfoDraw() {
+  const infoWidth = 30
+  trDrawBlock(() => {
+    noStroke()
+    fill(TR_COLORS.cellMain)
+    rect(0, 0, width, infoWidth)
+    rect(width - infoWidth, 0, infoWidth, height)
+    rect(0, 0, infoWidth, height)
+    rect(0, height - infoWidth, width, infoWidth)
   })
 
-  // ダウンロード情報のクリックイベント
-  dialogDownloadInfo.addEventListener('click', () => {
-    // TODO: 置き換え
-    trSaveWallPaper()
-    hideDialog()
+  trDrawBlock(() => {
+    fill(TR_COLORS.lineMain)
+    textSize(12)
+    textFont('sans-serif')
+
+    // データ情報
+    textAlign(LEFT, CENTER)
+    text(trGridDataToString(), infoWidth, infoWidth / 2)
+
+    // バージョン情報
+    textAlign(RIGHT, CENTER)
+    text(
+      `${TR_APP_NAME} - ${TR_VERSION_NAME}(${TR_VERSION}) CREATED BY YUSKE`,
+      width - infoWidth,
+      height - infoWidth / 2,
+    )
   })
-  // タッチイベント
-  dialogDownloadInfo.addEventListener('touchend', () => {
-    // TODO: 置き換え
-    trSaveWallPaper()
-    hideDialog()
+
+  trDrawBlock(() => {
+    noFill()
+    stroke(TR_COLORS.lineMain)
+    strokeWeight(2)
+    rect(0, 0, width, height)
+    rect(infoWidth, infoWidth, width - infoWidth * 2, height - infoWidth * 2)
   })
+}
+
+function trGridDataToString() {
+  return trDataGrid
+    .map((item) => item.isPressed)
+    .map((item) => (item ? '1' : '0'))
+    .join('')
 }
