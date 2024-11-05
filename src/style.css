@@ -57,6 +57,44 @@ body {
   background-color: #000;
 }
 
+/* アプリタイトル表示 */
+.app-title {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 5px;
+  background-color: #000;
+  color: #fff;
+  font-size: 18px;
+  font-weight: bold;
+  z-index: var(--zi-version);
+  text-align: center;
+  width: 100%;
+  font-family: var(--ff-default);
+  height: 24px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.app-title > a {
+  color: white;
+  text-decoration: none;
+  transition: all 0.5s ease;
+  display: block;
+}
+
+.app-title > a:hover {
+  color: gray;
+}
+
+@media screen and (max-width: 768px) {
+  .app-title {
+    font-size: 12px;
+  }
+}
+
 /* バージョン表示 */
 .version-num-area {
   position: absolute;
