@@ -1,7 +1,7 @@
 // ------------------------------------------------------------
 // --- 定数
 // ------------------------------------------------------------
-const TR_APP_NAME = 'TILERHYTHM'
+const TR_APP_NAME = 'TILERHYME'
 const TR_VERSION = '1.1'
 const TR_VERSION_NAME = 'RIP'
 
@@ -169,7 +169,7 @@ let trIsNoDevice = false
 
 let trSoftUiStartPos
 
-let trDataGrid = trGetOrInitializeValue('trDataGrid-ver1.1', TR_INIT_DATA_GRID)
+let trDataGrid = trGetOrInitializeValue(`trDataGrid-ver${TR_VERSION}`, TR_INIT_DATA_GRID)
 
 let trIsDataGridClickable = true
 
@@ -592,7 +592,7 @@ function trSetDataGridIsPressed(value, isPressed) {
   for (let i = 0; i < trDataGrid.length; i++) {
     if (trDataGrid[i].value === value) {
       trDataGrid[i].isPressed = isPressed
-      trSaveToLocalStorage('trDataGrid-ver1.1', trDataGrid)
+      trSaveToLocalStorage(`trDataGrid-ver${TR_VERSION}`, trDataGrid)
     }
   }
 }
