@@ -215,7 +215,7 @@ function trDrawEllipseSquare(pos, width, rotateNum = 16) {
   trDrawBlock(() => {
     translate(pos.x, pos.y)
     rotate(frameCount / rotateNum)
-    const w = width * abs(sin(frameCount / 60))
+    const w = width * abs(sin(frameCount / 20))
     ellipse(0 - w / 3, 0 - w / 3, w / 3)
     ellipse(0 + w / 3, 0 - w / 3, w / 3)
     ellipse(0 - w / 3, 0 + w / 3, w / 3)
@@ -249,7 +249,7 @@ function trDrawHalfEllipseTop(pos, width, rotateNum = 16) {
   trDrawBlock(() => {
     translate(pos.x, pos.y)
     rotate(frameCount / rotateNum)
-    const w = width * abs(sin(frameCount / 60))
+    const w = width * abs(sin(frameCount / 30))
     arc(0, 0, w, w, PI, TWO_PI)
   })
 }
@@ -263,7 +263,7 @@ function trDrawHalfEllipseBottom(pos, width, rotateNum = 16) {
   trDrawBlock(() => {
     translate(pos.x, pos.y)
     rotate(frameCount / rotateNum)
-    const w = width * abs(sin(frameCount / 60))
+    const w = width * abs(sin(frameCount / 50))
     arc(0, 0, w, w, 0, PI)
   })
 }
@@ -277,7 +277,7 @@ function trDrawRect(pos, width, rotateNum = 16) {
   trDrawBlock(() => {
     translate(pos.x, pos.y)
     rotate(frameCount / rotateNum)
-    const w = width * abs(sin(frameCount / 60))
+    const w = width * abs(sin(frameCount / 40))
     rectMode(CENTER)
     rect(0, 0, w)
   })

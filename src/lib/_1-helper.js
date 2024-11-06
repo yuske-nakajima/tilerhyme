@@ -169,7 +169,12 @@ function trSaveImage(canvas) {
 }
 
 function trRandomSeed() {
-  const randomList = [2, 4, 8, 16, -2, -4, -8, -16]
+  const randomList = []
+  for (let i = 1; i <= 8; i++) {
+    randomList.push(i)
+    randomList.push(-i)
+  }
+
   // randomListの中からランダムに1つ選ぶ
   const r = Math.random() * randomList.length
   return randomList[Math.floor(r)]
