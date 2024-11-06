@@ -143,6 +143,11 @@ const TR_WALLPAPER_MODE = {
 }
 
 const TR_WALLPAPER_SIZE = 1080
+
+const TR_RANDOM_SEED_ARRAY = []
+for (let i = 0; i < 100; i++) {
+  TR_RANDOM_SEED_ARRAY.push(trRandomSeed())
+}
 // ------------------------------------------------------------
 // --- 変数
 // ------------------------------------------------------------
@@ -206,11 +211,15 @@ function trCalcDataGrid(dataGrid) {
  * @param {{x: number, y: number}} pos - 位置ベクトル
  * @param {number} width - 幅
  */
-function trDrawEllipseSquare(pos, width) {
-  ellipse(pos.x - width / 3, pos.y - width / 3, width / 3)
-  ellipse(pos.x + width / 3, pos.y - width / 3, width / 3)
-  ellipse(pos.x - width / 3, pos.y + width / 3, width / 3)
-  ellipse(pos.x + width / 3, pos.y + width / 3, width / 3)
+function trDrawEllipseSquare(pos, width, rotateNum = 16) {
+  trDrawBlock(() => {
+    translate(pos.x, pos.y)
+    rotate(frameCount / rotateNum)
+    ellipse(0 - width / 3, 0 - width / 3, width / 3)
+    ellipse(0 + width / 3, 0 - width / 3, width / 3)
+    ellipse(0 - width / 3, 0 + width / 3, width / 3)
+    ellipse(0 + width / 3, 0 + width / 3, width / 3)
+  })
 }
 
 /**
@@ -218,11 +227,15 @@ function trDrawEllipseSquare(pos, width) {
  * @param {{x: number, y: number}} pos - 位置ベクトル
  * @param {number} width - 幅
  */
-function trDrawEllipseRhombus(pos, width) {
-  ellipse(pos.x - width / 3, pos.y, width / 3)
-  ellipse(pos.x + width / 3, pos.y, width / 3)
-  ellipse(pos.x, pos.y - width / 3, width / 3)
-  ellipse(pos.x, pos.y + width / 3, width / 3)
+function trDrawEllipseRhombus(pos, width, rotateNum = 16) {
+  trDrawBlock(() => {
+    translate(pos.x, pos.y)
+    rotate(frameCount / rotateNum)
+    ellipse(0 - width / 3, 0, width / 3)
+    ellipse(0 + width / 3, 0, width / 3)
+    ellipse(0, 0 - width / 3, width / 3)
+    ellipse(0, 0 + width / 3, width / 3)
+  })
 }
 
 /**
@@ -230,8 +243,12 @@ function trDrawEllipseRhombus(pos, width) {
  * @param {{x: number, y: number}} pos - 位置ベクトル
  * @param {number} width - 幅
  */
-function trDrawHalfEllipseTop(pos, width) {
-  arc(pos.x, pos.y, width, width, PI, TWO_PI)
+function trDrawHalfEllipseTop(pos, width, rotateNum = 16) {
+  trDrawBlock(() => {
+    translate(pos.x, pos.y)
+    rotate(frameCount / rotateNum)
+    arc(0, 0, width, width, PI, TWO_PI)
+  })
 }
 
 /**
@@ -239,8 +256,12 @@ function trDrawHalfEllipseTop(pos, width) {
  * @param {{x: number, y: number}} pos - 位置ベクトル
  * @param {number} width - 幅
  */
-function trDrawHalfEllipseBottom(pos, width) {
-  arc(pos.x, pos.y, width, width, 0, PI)
+function trDrawHalfEllipseBottom(pos, width, rotateNum = 16) {
+  trDrawBlock(() => {
+    translate(pos.x, pos.y)
+    rotate(frameCount / rotateNum)
+    arc(0, 0, width, width, 0, PI)
+  })
 }
 
 /**
@@ -248,9 +269,13 @@ function trDrawHalfEllipseBottom(pos, width) {
  * @param {{x: number, y: number}} pos - 位置ベクトル
  * @param {number} width - 幅
  */
-function trDrawRect(pos, width) {
-  rectMode(CENTER)
-  rect(pos.x, pos.y, width)
+function trDrawRect(pos, width, rotateNum = 16) {
+  trDrawBlock(() => {
+    translate(pos.x, pos.y)
+    rotate(frameCount / rotateNum)
+    rectMode(CENTER)
+    rect(0, 0, width)
+  })
 }
 
 /**
@@ -258,11 +283,15 @@ function trDrawRect(pos, width) {
  * @param {{x: number, y: number}} pos - 位置ベクトル
  * @param {number} width - 幅
  */
-function trDrawRectSquare(pos, width) {
-  trDrawRect(createVector(pos.x - width / 3, pos.y - width / 3), width / 3)
-  trDrawRect(createVector(pos.x + width / 3, pos.y - width / 3), width / 3)
-  trDrawRect(createVector(pos.x - width / 3, pos.y + width / 3), width / 3)
-  trDrawRect(createVector(pos.x + width / 3, pos.y + width / 3), width / 3)
+function trDrawRectSquare(pos, width, rotateNum = 16) {
+  trDrawBlock(() => {
+    translate(pos.x, pos.y)
+    rotate(frameCount / rotateNum)
+    trDrawRect(createVector(0 - width / 3, 0 - width / 3), width / 3)
+    trDrawRect(createVector(0 + width / 3, 0 - width / 3), width / 3)
+    trDrawRect(createVector(0 - width / 3, 0 + width / 3), width / 3)
+    trDrawRect(createVector(0 + width / 3, 0 + width / 3), width / 3)
+  })
 }
 
 /**
@@ -270,11 +299,15 @@ function trDrawRectSquare(pos, width) {
  * @param {{x: number, y: number}} pos - 位置ベクトル
  * @param {number} width - 幅
  */
-function trDrawRectRhombus(pos, width) {
-  trDrawRect(createVector(pos.x - width / 3, pos.y), width / 3)
-  trDrawRect(createVector(pos.x + width / 3, pos.y), width / 3)
-  trDrawRect(createVector(pos.x, pos.y - width / 3), width / 3)
-  trDrawRect(createVector(pos.x, pos.y + width / 3), width / 3)
+function trDrawRectRhombus(pos, width, rotateNum = 16) {
+  trDrawBlock(() => {
+    translate(pos.x, pos.y)
+    rotate(frameCount / rotateNum)
+    trDrawRect(createVector(0 - width / 3, 0), width / 3)
+    trDrawRect(createVector(0 + width / 3, 0), width / 3)
+    trDrawRect(createVector(0, 0 - width / 3), width / 3)
+    trDrawRect(createVector(0, 0 + width / 3), width / 3)
+  })
 }
 
 /**
@@ -282,13 +315,17 @@ function trDrawRectRhombus(pos, width) {
  * @param {{x: number, y: number}} pos - 位置ベクトル
  * @param {number} width - 幅
  */
-function trDrawRhombus(pos, width) {
-  beginShape()
-  vertex(pos.x, pos.y - width)
-  vertex(pos.x + width, pos.y)
-  vertex(pos.x, pos.y + width)
-  vertex(pos.x - width, pos.y)
-  endShape(CLOSE)
+function trDrawRhombus(pos, width, rotateNum = 16) {
+  trDrawBlock(() => {
+    translate(pos.x, pos.y)
+    rotate(frameCount / rotateNum)
+    beginShape()
+    vertex(0, -width)
+    vertex(width, 0)
+    vertex(0, width)
+    vertex(-width, 0)
+    endShape(CLOSE)
+  })
 }
 
 /**
@@ -296,11 +333,15 @@ function trDrawRhombus(pos, width) {
  * @param {{x: number, y: number}} pos - 位置ベクトル
  * @param {number} width - 幅
  */
-function trDrawRhombusSquare(pos, width) {
-  trDrawRhombus(createVector(pos.x - width / 3, pos.y - width / 3), width / 3)
-  trDrawRhombus(createVector(pos.x + width / 3, pos.y - width / 3), width / 3)
-  trDrawRhombus(createVector(pos.x - width / 3, pos.y + width / 3), width / 3)
-  trDrawRhombus(createVector(pos.x + width / 3, pos.y + width / 3), width / 3)
+function trDrawRhombusSquare(pos, width, rotateNum = 16) {
+  trDrawBlock(() => {
+    translate(pos.x, pos.y)
+    rotate(frameCount / rotateNum)
+    trDrawRhombus(createVector(0 - width / 3, 0 - width / 3), width / 3)
+    trDrawRhombus(createVector(0 + width / 3, 0 - width / 3), width / 3)
+    trDrawRhombus(createVector(0 - width / 3, 0 + width / 3), width / 3)
+    trDrawRhombus(createVector(0 + width / 3, 0 + width / 3), width / 3)
+  })
 }
 
 /**
@@ -308,11 +349,15 @@ function trDrawRhombusSquare(pos, width) {
  * @param {{x: number, y: number}} pos - 位置ベクトル
  * @param {number} width - 幅
  */
-function trDrawRhombusRhombus(pos, width) {
-  trDrawRhombus(createVector(pos.x - width / 3, pos.y), width / 3)
-  trDrawRhombus(createVector(pos.x + width / 3, pos.y), width / 3)
-  trDrawRhombus(createVector(pos.x, pos.y - width / 3), width / 3)
-  trDrawRhombus(createVector(pos.x, pos.y + width / 3), width / 3)
+function trDrawRhombusRhombus(pos, width, rotateNum = 16) {
+  trDrawBlock(() => {
+    translate(pos.x, pos.y)
+    rotate(frameCount / rotateNum)
+    trDrawRhombus(createVector(0 - width / 3, 0), width / 3)
+    trDrawRhombus(createVector(0 + width / 3, 0), width / 3)
+    trDrawRhombus(createVector(0, 0 - width / 3), width / 3)
+    trDrawRhombus(createVector(0, 0 + width / 3), width / 3)
+  })
 }
 
 /**
@@ -342,25 +387,25 @@ function trFuncArray(
     () => {
       // ずらした四角1
       if ((y % 2 === 0 && x % 2 === 1) || (y % 2 === 1 && x % 2 === 0)) {
-        trDrawRect(centerPos, width * rate)
+        trDrawRect(centerPos, width * rate, TR_RANDOM_SEED_ARRAY[0])
       }
     },
     () => {
       // ずらした四角2
       if ((y % 2 === 0 && x % 2 === 0) || (y % 2 === 1 && x % 2 === 1)) {
-        trDrawRect(centerPos, width * rate)
+        trDrawRect(centerPos, width * rate, TR_RANDOM_SEED_ARRAY[1])
       }
     },
     () => {
       // ずらしたひし形1
       if ((y % 2 === 0 && x % 2 === 1) || (y % 2 === 1 && x % 2 === 0)) {
-        trDrawRhombus(centerPos, (width / 2) * rate)
+        trDrawRhombus(centerPos, (width / 2) * rate, TR_RANDOM_SEED_ARRAY[2])
       }
     },
     () => {
       // ずらしたひし形2
       if ((y % 2 === 0 && x % 2 === 0) || (y % 2 === 1 && x % 2 === 1)) {
-        trDrawRhombus(centerPos, (width / 2) * rate)
+        trDrawRhombus(centerPos, (width / 2) * rate, TR_RANDOM_SEED_ARRAY[3])
       }
     },
   ]
@@ -389,23 +434,23 @@ function trFuncArray(
       },
       () => {
         // 四隅に円
-        trDrawEllipseSquare(centerPos, width)
+        trDrawEllipseSquare(centerPos, width, TR_RANDOM_SEED_ARRAY[4])
       },
       () => {
         //四隅に円（ずらした）1
         if ((y % 2 === 0 && x % 2 === 1) || (y % 2 === 1 && x % 2 === 0)) {
-          trDrawEllipseSquare(centerPos, width)
+          trDrawEllipseSquare(centerPos, width, TR_RANDOM_SEED_ARRAY[5])
         }
       },
       () => {
         //四隅に円（ずらした）2
         if ((y % 2 === 0 && x % 2 === 0) || (y % 2 === 1 && x % 2 === 1)) {
-          trDrawEllipseSquare(centerPos, width)
+          trDrawEllipseSquare(centerPos, width, TR_RANDOM_SEED_ARRAY[6])
         }
       },
       () => {
         // ひし形に円を配置（4つ）
-        trDrawEllipseRhombus(centerPos, width)
+        trDrawEllipseRhombus(centerPos, width, TR_RANDOM_SEED_ARRAY[7])
       },
       () => {
         // ひし形に円を配置（4つ）（ずらした）1
@@ -416,16 +461,16 @@ function trFuncArray(
       () => {
         // ひし形に円を配置（4つ）（ずらした）2
         if ((y % 2 === 0 && x % 2 === 0) || (y % 2 === 1 && x % 2 === 1)) {
-          trDrawEllipseRhombus(centerPos, width)
+          trDrawEllipseRhombus(centerPos, width, TR_RANDOM_SEED_ARRAY[8])
         }
       },
       // 半円（上）
       () => {
-        trDrawHalfEllipseTop(centerPos, width * rate)
+        trDrawHalfEllipseTop(centerPos, width * rate, TR_RANDOM_SEED_ARRAY[9])
       },
       // 半円（下）
       () => {
-        trDrawHalfEllipseBottom(centerPos, width * rate)
+        trDrawHalfEllipseBottom(centerPos, width * rate, TR_RANDOM_SEED_ARRAY[10])
       },
       () => {
         // ずらした半円1（下）
@@ -436,80 +481,80 @@ function trFuncArray(
       () => {
         // ずらした半円2（下）
         if ((y % 2 === 0 && x % 2 === 0) || (y % 2 === 1 && x % 2 === 1)) {
-          trDrawHalfEllipseBottom(centerPos, width * rate)
+          trDrawHalfEllipseBottom(centerPos, width * rate, TR_RANDOM_SEED_ARRAY[11])
         }
       },
       // 四角系
       () => {
         // 四角
-        trDrawRect(centerPos, width * rate)
+        trDrawRect(centerPos, width * rate, TR_RANDOM_SEED_ARRAY[12])
       },
       () => {
         // 四隅に四角
-        trDrawRectSquare(centerPos, width)
+        trDrawRectSquare(centerPos, width, TR_RANDOM_SEED_ARRAY[13])
       },
       () => {
         // 四隅に四角（ずらした）1
         if ((y % 2 === 0 && x % 2 === 1) || (y % 2 === 1 && x % 2 === 0)) {
-          trDrawRectSquare(centerPos, width)
+          trDrawRectSquare(centerPos, width, TR_RANDOM_SEED_ARRAY[14])
         }
       },
       () => {
         // 四隅に四角（ずらした）2
         if ((y % 2 === 0 && x % 2 === 0) || (y % 2 === 1 && x % 2 === 1)) {
-          trDrawRectSquare(centerPos, width)
+          trDrawRectSquare(centerPos, width, TR_RANDOM_SEED_ARRAY[15])
         }
       },
       () => {
         // ひし形に四角を配置（4つ）
-        trDrawRectRhombus(centerPos, width)
+        trDrawRectRhombus(centerPos, width, TR_RANDOM_SEED_ARRAY[16])
       },
       () => {
         // ひし形に四角を配置（4つ）（ずらした）1
         if ((y % 2 === 0 && x % 2 === 1) || (y % 2 === 1 && x % 2 === 0)) {
-          trDrawRectRhombus(centerPos, width)
+          trDrawRectRhombus(centerPos, width, TR_RANDOM_SEED_ARRAY[17])
         }
       },
       () => {
         // ひし形に四角を配置（4つ）（ずらした）2
         if ((y % 2 === 0 && x % 2 === 0) || (y % 2 === 1 && x % 2 === 1)) {
-          trDrawRectRhombus(centerPos, width)
+          trDrawRectRhombus(centerPos, width, TR_RANDOM_SEED_ARRAY[18])
         }
       },
       // ひし形
       () => {
-        trDrawRhombus(centerPos, (width / 2) * rate)
+        trDrawRhombus(centerPos, (width / 2) * rate, TR_RANDOM_SEED_ARRAY[19])
       },
       () => {
         // 四隅にひし形
-        trDrawRhombusSquare(centerPos, width)
+        trDrawRhombusSquare(centerPos, width, TR_RANDOM_SEED_ARRAY[20])
       },
       () => {
         // 四隅にひし形（ずらした）1
         if ((y % 2 === 0 && x % 2 === 1) || (y % 2 === 1 && x % 2 === 0)) {
-          trDrawRhombusSquare(centerPos, width)
+          trDrawRhombusSquare(centerPos, width, TR_RANDOM_SEED_ARRAY[21])
         }
       },
       () => {
         // 四隅にひし形（ずらした）2
         if ((y % 2 === 0 && x % 2 === 0) || (y % 2 === 1 && x % 2 === 1)) {
-          trDrawRhombusSquare(centerPos, width)
+          trDrawRhombusSquare(centerPos, width, TR_RANDOM_SEED_ARRAY[22])
         }
       },
       () => {
         // ひし形にひし形を配置（4つ）
-        trDrawRhombusRhombus(centerPos, width)
+        trDrawRhombusRhombus(centerPos, width, TR_RANDOM_SEED_ARRAY[23])
       },
       () => {
         // ひし形にひし形を配置（4つ）（ずらした）1
         if ((y % 2 === 0 && x % 2 === 1) || (y % 2 === 1 && x % 2 === 0)) {
-          trDrawRhombusRhombus(centerPos, width)
+          trDrawRhombusRhombus(centerPos, width, TR_RANDOM_SEED_ARRAY[24])
         }
       },
       () => {
         // ひし形にひし形を配置（4つ）（ずらした）2
         if ((y % 2 === 0 && x % 2 === 0) || (y % 2 === 1 && x % 2 === 1)) {
-          trDrawRhombusRhombus(centerPos, width)
+          trDrawRhombusRhombus(centerPos, width, TR_RANDOM_SEED_ARRAY[25])
         }
       },
     ]) {
