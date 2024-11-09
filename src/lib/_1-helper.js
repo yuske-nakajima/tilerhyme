@@ -170,7 +170,7 @@ function trSaveImage(canvas) {
 
 function trRandomSeed() {
   const randomList = []
-  for (let i = 1; i <= 8; i++) {
+  for (let i = 8; i <= 8; i++) {
     randomList.push(i)
     randomList.push(-i)
   }

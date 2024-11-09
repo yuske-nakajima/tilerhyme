@@ -17,6 +17,7 @@ function trMousePressed() {
           }
           trDataGrid[getIndex].isPressed = !trDataGrid[getIndex].isPressed
           trSaveToLocalStorage(`trDataGrid-ver${TR_VERSION}`, trDataGrid)
+          trChangePatternFrame = frameCount
         })
       }
     }

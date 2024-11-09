@@ -11,4 +11,6 @@ function trUiDraw() {
   trDrawShape(ceil(trCalcDataGridResult.key3), trCellDivNum, 0.2, trColor._3, true)
 
   trDeviceDraw()
+
+  trRotateCalc()
 }
