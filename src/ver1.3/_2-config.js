@@ -175,7 +175,7 @@ let trIsNoDevice = false
 
 let trSoftUiStartPos
 
-let trDataGrid = trGetOrInitializeValue(`trDataGrid-ver${TR_VERSION}`, TR_INIT_DATA_GRID)
+let trDataGrid = TR_INIT_DATA_GRID
 
 let trIsDataGridClickable = true
 
@@ -683,7 +683,7 @@ function trSetDataGridIsPressed(value, isPressed) {
   for (let i = 0; i < trDataGrid.length; i++) {
     if (trDataGrid[i].value === value) {
       trDataGrid[i].isPressed = isPressed
-      trSaveToLocalStorage(`trDataGrid-ver${TR_VERSION}`, trDataGrid)
+      trUpdateUrl()
       trChangePatternFrame = frameCount
     }
   }
@@ -875,4 +875,35 @@ function trGridDataToString() {
  */
 function trRotateCalc() {
   trRotateValue = (frameCount - trChangePatternFrame) / TR_ROTATE_NUM
+}
+
+/**
+ * URLのクエリパラメータからデータを取得し、trDataGridを更新する関数。
+ * URLに'data'パラメータが含まれている場合、その値を解析してtrDataGridを更新する。
+ * 'data'パラメータが存在しない場合、trDataGridを初期データに設定する。
+ */
+function trUrlToData() {
+  const url = new URL(window.location.href)
+  const data = url.searchParams.get('data')
+  if (data) {
+    const dataGrid = data.split('').map((item) => (item === '1' ? true : false))
+    for (let i = 0; i < trDataGrid.length; i++) {
+      trDataGrid[i].isPressed = dataGrid[i]
+    }
+  } else {
+    trDataGrid = TR_INIT_DATA_GRID
+  }
+}
+
+/**
+ * 現在のURLにデータを追加して更新します。
+ *
+ * この関数は、現在のウィンドウのURLを取得し、URLの検索パラメータに
+ * 'data' パラメータを設定します。その後、履歴を更新して新しいURLを
+ * ブラウザのアドレスバーに反映させます。
+ */
+function trUpdateUrl() {
+  const url = new URL(window.location.href)
+  url.searchParams.set('data', trGridDataToString())
+  window.history.pushState({}, '', url)
 }
