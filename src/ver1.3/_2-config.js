@@ -885,7 +885,13 @@ function trRotateCalc() {
 function trUrlToData() {
   const url = new URL(window.location.href)
   const data = url.searchParams.get('data')
-  if (data) {
+
+  // dataをバリデーション
+  // dataは0または1のみで構成されている必要がある
+  // dataの長さは64である必要がある
+  const isValidData = data && data.length === 64 && /^[01]+$/.test(data)
+
+  if (isValidData) {
     const dataGrid = data.split('').map((item) => (item === '1' ? true : false))
     for (let i = 0; i < trDataGrid.length; i++) {
       trDataGrid[i].isPressed = dataGrid[i]
