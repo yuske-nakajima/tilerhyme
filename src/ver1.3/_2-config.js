@@ -185,6 +185,8 @@ let trBlockFrameCount = 0
 
 let trRotateValue = 0
 
+let trQrImage
+
 // ------------------------------------------------------------
 // --- 関数
 // ------------------------------------------------------------
@@ -684,6 +686,7 @@ function trSetDataGridIsPressed(value, isPressed) {
     if (trDataGrid[i].value === value) {
       trDataGrid[i].isPressed = isPressed
       trUpdateUrl()
+      trCreateQrCode()
       trChangePatternFrame = frameCount
     }
   }
@@ -775,6 +778,9 @@ function trSaveWallPaper(mode = TR_WALLPAPER_MODE.FULL) {
 
   if (mode === TR_WALLPAPER_MODE.INFO) {
     trInfoDraw()
+    if (trQrImage) {
+      trQrDraw()
+    }
   }
 
   trSaveImage(trCanvas)
@@ -912,4 +918,34 @@ function trUpdateUrl() {
   const url = new URL(window.location.href)
   url.searchParams.set('data', trGridDataToString())
   window.history.pushState({}, '', url)
+}
+
+/**
+ * QRコードを作成する関数
+ */
+function trCreateQrCode() {
+  const url = new URL(window.location.href)
+  const data = url.searchParams.get('data')
+  const qrData = `${url.origin}${url.pathname}?data=${data}`
+
+  // QRコードを作成
+  const qr = qrcode(0, 'L')
+  qr.addData(qrData)
+  qr.make()
+
+  // QRコードのHTML要素を作成
+  const qrDiv = document.createElement('div')
+  qrDiv.innerHTML = qr.createImgTag(4, 0)
+
+  // QRコードの画像を読み込む
+  const imgElement = qrDiv.querySelector('img')
+  trQrImage = loadImage(imgElement.src)
+}
+
+/**
+ * QRコードを描画する関数
+ */
+function trQrDraw() {
+  imageMode(CENTER)
+  image(trQrImage, width - 110, height - 110)
 }

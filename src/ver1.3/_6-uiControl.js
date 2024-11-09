@@ -17,6 +17,7 @@ function trMousePressed() {
           }
           trDataGrid[getIndex].isPressed = !trDataGrid[getIndex].isPressed
           trUpdateUrl()
+          trCreateQrCode()
           trChangePatternFrame = frameCount
         })
       }
