@@ -947,5 +947,6 @@ function trCreateQrCode() {
  */
 function trQrDraw() {
   imageMode(CENTER)
-  image(trQrImage, width - 110, height - 110)
+  const gap = trQrImage.width / 2 + 40
+  image(trQrImage, width - gap, height - gap)
 }
