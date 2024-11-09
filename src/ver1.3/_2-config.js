@@ -869,6 +869,10 @@ function trGridDataToString() {
     .join('')
 }
 
+/**
+ * trRotateCalc 関数は、現在のフレーム数とパターン変更フレーム数の差を TR_ROTATE_NUM で割った値を
+ * trRotateValue に代入します。
+ */
 function trRotateCalc() {
   trRotateValue = (frameCount - trChangePatternFrame) / TR_ROTATE_NUM
 }
