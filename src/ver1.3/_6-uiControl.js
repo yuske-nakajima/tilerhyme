@@ -1,7 +1,7 @@
 function trMousePressed() {
   if (trIsNoDevice) {
-    for (let xi = 0; xi < 8; xi++) {
-      for (let yi = 0; yi < 8; yi++) {
+    for (let xi = 0; xi < TR_DEVICE_GRID_NUM; xi++) {
+      for (let yi = 0; yi < TR_DEVICE_GRID_NUM; yi++) {
         const pos = createVector(
           trSoftUiStartPos.x + TR_SOFT_UI_CELL_WIDTH * xi,
           trSoftUiStartPos.y + TR_SOFT_UI_CELL_WIDTH * yi,

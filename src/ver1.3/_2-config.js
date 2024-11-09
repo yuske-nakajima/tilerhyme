@@ -147,6 +147,8 @@ const TR_WALLPAPER_SIZE = 1080
 const TR_ROTATE_NUM = 4
 
 const TR_CYCLE_FRAME = 60 / TR_ROTATE_NUM
+
+const TR_DEVICE_GRID_NUM = 8
 // ------------------------------------------------------------
 // --- 変数
 // ------------------------------------------------------------
@@ -716,8 +718,8 @@ function trDeviceDraw() {
     trDrawBlock(() => {
       stroke(TR_COLORS.lineMain)
       strokeWeight(1)
-      for (let xi = 0; xi < 8; xi++) {
-        for (let yi = 0; yi < 8; yi++) {
+      for (let xi = 0; xi < TR_DEVICE_GRID_NUM; xi++) {
+        for (let yi = 0; yi < TR_DEVICE_GRID_NUM; yi++) {
           const value = TR_MAPPING_GRID[yi][xi]
           const getIndex = trDataGrid.findIndex((item) => item.value === value)
           if (getIndex === undefined) {
