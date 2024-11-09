@@ -167,3 +167,15 @@ function trSaveImage(canvas) {
       .split('.')[0] + '.tilerhyme'
   saveCanvas(canvas, fileName, 'png')
 }
+
+function trRandomSeed() {
+  const randomList = []
+  for (let i = 8; i <= 8; i++) {
+    randomList.push(i)
+    randomList.push(-i)
+  }
+
+  // randomListの中からランダムに1つ選ぶ
+  const r = Math.random() * randomList.length
+  return randomList[Math.floor(r)]
+}
