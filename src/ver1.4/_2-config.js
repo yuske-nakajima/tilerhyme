@@ -149,6 +149,11 @@ const TR_ROTATE_NUM = 4
 const TR_CYCLE_FRAME = 60 / TR_ROTATE_NUM
 
 const TR_DEVICE_GRID_NUM = 8
+
+const TR_MODE = {
+  NORMAL: 0,
+  AUTO: 1,
+}
 // ------------------------------------------------------------
 // --- 変数
 // ------------------------------------------------------------
@@ -186,6 +191,9 @@ let trBlockFrameCount = 0
 let trRotateValue = 0
 
 let trQrImage
+
+// MODE object value
+let trMode = TR_MODE.NORMAL
 
 // ------------------------------------------------------------
 // --- 関数
