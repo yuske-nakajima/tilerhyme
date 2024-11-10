@@ -1,9 +1,8 @@
 function trUiDraw() {
   if (trMode === TR_MODE.AUTO) {
-    if (frameCount % AUTO_MODE_INTERVAL === 0) {
-      // 0 or 1 の64文字のランダム文字列を生成
-      const randomString = Array.from({ length: 64 }, () => floor(random(2))).join('')
-      const dataGrid = randomString.split('').map((item) => (item === '1' ? true : false))
+    if (frameCount % TR_AUTO_MODE_INTERVAL === 0) {
+      // 自動モードはlife gameのルールを適用する
+      const dataGrid = trModeLifeGameGrid.split('').map((item) => (item === '1' ? true : false))
       for (let i = 0; i < trDataGrid.length; i++) {
         trDataGrid[i].isPressed = dataGrid[i]
       }
@@ -24,6 +23,17 @@ function trUiDraw() {
         trSetColor,
         trDataGrid,
       ).then()
+
+      // 次の世代のセルの状態を計算する
+      let next = Array(64).fill('0')
+      for (let i = 0; i < 64; i++) {
+        let _left = trModeLifeGameGrid[(i - 1 + 64) % 64]
+        let _center = trModeLifeGameGrid[i]
+        let _right = trModeLifeGameGrid[(i + 1) % 64]
+        // Rule 30
+        next[i] = (_left === '1') ^ (_center === '1' || _right === '1') ? '1' : '0'
+      }
+      trModeLifeGameGrid = next.join('')
     }
   }
 

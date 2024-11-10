@@ -155,7 +155,7 @@ const TR_MODE = {
   AUTO: 1,
 }
 
-const AUTO_MODE_INTERVAL = 60
+const TR_AUTO_MODE_INTERVAL = 60
 // ------------------------------------------------------------
 // --- 変数
 // ------------------------------------------------------------
@@ -197,6 +197,8 @@ let trQrImage
 // MODE object value
 let trMode = TR_MODE.NORMAL
 
+const trModeLifeGameGridRandomNum = Math.floor(Math.random() * 64)
+let trModeLifeGameGrid = Array.from({ length: 64 }, (_, i) => (i === trModeLifeGameGridRandomNum ? 1 : 0)).join('')
 // ------------------------------------------------------------
 // --- 関数
 // ------------------------------------------------------------
