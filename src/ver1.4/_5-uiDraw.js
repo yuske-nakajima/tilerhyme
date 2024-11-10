@@ -1,4 +1,19 @@
 function trUiDraw() {
+  if (trMode === TR_MODE.AUTO) {
+    if (frameCount % AUTO_MODE_INTERVAL === 0) {
+      // 0 or 1 の64文字のランダム文字列を生成
+      const randomString = Array.from({ length: 64 }, () => floor(random(2))).join('')
+      const dataGrid = randomString.split('').map((item) => (item === '1' ? true : false))
+      for (let i = 0; i < trDataGrid.length; i++) {
+        trDataGrid[i].isPressed = dataGrid[i]
+      }
+      trUpdateUrl()
+      trCreateQrCode()
+      trSetColor()
+      trChangePatternFrame = frameCount
+    }
+  }
+
   background(trColor._1)
 
   // fill - color2
