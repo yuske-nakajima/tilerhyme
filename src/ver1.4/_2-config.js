@@ -197,8 +197,9 @@ let trQrImage
 // MODE object value
 let trMode = TR_MODE.NORMAL
 
-const trModeLifeGameGridRandomNum = Math.floor(Math.random() * 48) + 16
-let trModeLifeGameGrid = Array.from({ length: 64 }, (_, i) => (i === trModeLifeGameGridRandomNum ? 1 : 0)).join('')
+// life gameの初期値は色情報以外のcellとする
+const lifeGameInitNum = Math.floor(Math.random() * 48) + 16
+let trModeLifeGameGrid = Array.from({ length: 64 }, (_, i) => (i === lifeGameInitNum ? 1 : 0)).join('')
 // ------------------------------------------------------------
 // --- 関数
 // ------------------------------------------------------------
