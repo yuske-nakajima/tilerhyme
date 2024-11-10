@@ -1,6 +1,8 @@
 function trUiDraw() {
   if (trMode === TR_MODE.AUTO) {
     if (frameCount % TR_AUTO_MODE_INTERVAL === 0) {
+      trModeLifeGameGridHistory.push(trModeLifeGameGrid)
+
       if (!trModeLifeGameGrid.includes('1')) {
         trModeLifeGameGrid = Array.from({ length: 64 }, () => floor(random(2))).join('')
       }
@@ -75,9 +77,13 @@ function trUiDraw() {
       }
 
       const nextGrid = _next.join('')
-      if (trModeLifeGameGrid === nextGrid) {
+      if (
+        trModeLifeGameGrid === nextGrid ||
+        trModeLifeGameGridHistory.includes(nextGrid) // ループしている場合は初期化
+      ) {
         // 同じ状態の場合は初期化
         trModeLifeGameGrid = Array.from({ length: 64 }, () => floor(random(2))).join('')
+        trModeLifeGameGridHistory = []
       } else {
         trModeLifeGameGrid = nextGrid
       }

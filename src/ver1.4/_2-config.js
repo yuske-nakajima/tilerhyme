@@ -199,6 +199,8 @@ let trMode = TR_MODE.NORMAL
 
 // life gameの初期値はランダム値
 let trModeLifeGameGrid = Array.from({ length: 64 }, () => Math.floor(Math.random() * 2)).join('')
+
+let trModeLifeGameGridHistory = []
 // ------------------------------------------------------------
 // --- 関数
 // ------------------------------------------------------------
