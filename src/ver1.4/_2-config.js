@@ -155,7 +155,7 @@ const TR_MODE = {
   AUTO: 1,
 }
 
-const TR_AUTO_MODE_INTERVAL = 60
+const TR_AUTO_MODE_INTERVAL = 30
 // ------------------------------------------------------------
 // --- 変数
 // ------------------------------------------------------------
@@ -197,9 +197,8 @@ let trQrImage
 // MODE object value
 let trMode = TR_MODE.NORMAL
 
-// life gameの初期値は色情報以外のcellとする
-const lifeGameInitNum = Math.floor(Math.random() * 48) + 16
-let trModeLifeGameGrid = Array.from({ length: 64 }, (_, i) => (i === lifeGameInitNum ? 1 : 0)).join('')
+// life gameの初期値はランダム値
+let trModeLifeGameGrid = Array.from({ length: 64 }, () => Math.floor(Math.random() * 2)).join('')
 // ------------------------------------------------------------
 // --- 関数
 // ------------------------------------------------------------

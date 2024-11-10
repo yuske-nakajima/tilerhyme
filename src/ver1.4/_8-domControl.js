@@ -79,11 +79,6 @@ const modeAutoFunc = (e) => {
   trMode = TR_MODE.AUTO
   modeDialog.style.display = 'none'
   trIsDataGridClickable = true
-  const dataGrid = trDataGrid.map((item) => (item.isPressed ? '1' : '0')).join('')
-  // 色情報以外のcellに1が含まれている場合は、現状のcellからスタートする
-  if (dataGrid.slice(16).includes('1')) {
-    trModeLifeGameGrid = dataGrid
-  }
 }
 modeAuto.addEventListener('click', modeAutoFunc)
 modeAuto.addEventListener('touchend', modeAutoFunc)
