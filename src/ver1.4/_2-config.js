@@ -495,34 +495,34 @@ function trFuncArray(
       },
       () => {
         // 四隅に円
-        trDrawEllipseSquare(centerPos, width)
+        trDrawEllipseSquare(centerPos, width * rate)
       },
       () => {
         //四隅に円（ずらした）1
         if ((y % 2 === 0 && x % 2 === 1) || (y % 2 === 1 && x % 2 === 0)) {
-          trDrawEllipseSquare(centerPos, width)
+          trDrawEllipseSquare(centerPos, width * rate)
         }
       },
       () => {
         //四隅に円（ずらした）2
         if ((y % 2 === 0 && x % 2 === 0) || (y % 2 === 1 && x % 2 === 1)) {
-          trDrawEllipseSquare(centerPos, width)
+          trDrawEllipseSquare(centerPos, width * rate)
         }
       },
       () => {
         // ひし形に円を配置（4つ）
-        trDrawEllipseRhombus(centerPos, width)
+        trDrawEllipseRhombus(centerPos, width * rate)
       },
       () => {
         // ひし形に円を配置（4つ）（ずらした）1
         if ((y % 2 === 0 && x % 2 === 1) || (y % 2 === 1 && x % 2 === 0)) {
-          trDrawEllipseRhombus(centerPos, width)
+          trDrawEllipseRhombus(centerPos, width * rate)
         }
       },
       () => {
         // ひし形に円を配置（4つ）（ずらした）2
         if ((y % 2 === 0 && x % 2 === 0) || (y % 2 === 1 && x % 2 === 1)) {
-          trDrawEllipseRhombus(centerPos, width)
+          trDrawEllipseRhombus(centerPos, width * rate)
         }
       },
       // 半円（上）
@@ -552,34 +552,34 @@ function trFuncArray(
       },
       () => {
         // 四隅に四角
-        trDrawRectSquare(centerPos, width)
+        trDrawRectSquare(centerPos, width * rate)
       },
       () => {
         // 四隅に四角（ずらした）1
         if ((y % 2 === 0 && x % 2 === 1) || (y % 2 === 1 && x % 2 === 0)) {
-          trDrawRectSquare(centerPos, width)
+          trDrawRectSquare(centerPos, width * rate)
         }
       },
       () => {
         // 四隅に四角（ずらした）2
         if ((y % 2 === 0 && x % 2 === 0) || (y % 2 === 1 && x % 2 === 1)) {
-          trDrawRectSquare(centerPos, width)
+          trDrawRectSquare(centerPos, width * rate)
         }
       },
       () => {
         // ひし形に四角を配置（4つ）
-        trDrawRectRhombus(centerPos, width)
+        trDrawRectRhombus(centerPos, width * rate)
       },
       () => {
         // ひし形に四角を配置（4つ）（ずらした）1
         if ((y % 2 === 0 && x % 2 === 1) || (y % 2 === 1 && x % 2 === 0)) {
-          trDrawRectRhombus(centerPos, width)
+          trDrawRectRhombus(centerPos, width * rate)
         }
       },
       () => {
         // ひし形に四角を配置（4つ）（ずらした）2
         if ((y % 2 === 0 && x % 2 === 0) || (y % 2 === 1 && x % 2 === 1)) {
-          trDrawRectRhombus(centerPos, width)
+          trDrawRectRhombus(centerPos, width * rate)
         }
       },
       // ひし形
@@ -588,34 +588,34 @@ function trFuncArray(
       },
       () => {
         // 四隅にひし形
-        trDrawRhombusSquare(centerPos, width)
+        trDrawRhombusSquare(centerPos, width * rate)
       },
       () => {
         // 四隅にひし形（ずらした）1
         if ((y % 2 === 0 && x % 2 === 1) || (y % 2 === 1 && x % 2 === 0)) {
-          trDrawRhombusSquare(centerPos, width)
+          trDrawRhombusSquare(centerPos, width * rate)
         }
       },
       () => {
         // 四隅にひし形（ずらした）2
         if ((y % 2 === 0 && x % 2 === 0) || (y % 2 === 1 && x % 2 === 1)) {
-          trDrawRhombusSquare(centerPos, width)
+          trDrawRhombusSquare(centerPos, width * rate)
         }
       },
       () => {
         // ひし形にひし形を配置（4つ）
-        trDrawRhombusRhombus(centerPos, width)
+        trDrawRhombusRhombus(centerPos, width * rate)
       },
       () => {
         // ひし形にひし形を配置（4つ）（ずらした）1
         if ((y % 2 === 0 && x % 2 === 1) || (y % 2 === 1 && x % 2 === 0)) {
-          trDrawRhombusRhombus(centerPos, width)
+          trDrawRhombusRhombus(centerPos, width * rate)
         }
       },
       () => {
         // ひし形にひし形を配置（4つ）（ずらした）2
         if ((y % 2 === 0 && x % 2 === 0) || (y % 2 === 1 && x % 2 === 1)) {
-          trDrawRhombusRhombus(centerPos, width)
+          trDrawRhombusRhombus(centerPos, width * rate)
         }
       },
     ]) {
