@@ -526,25 +526,25 @@ function trFuncArray(
         }
       },
       // 半円（上）
-      () => {
-        trDrawHalfEllipseTop(centerPos, width * rate)
-      },
+      // () => {
+      //   trDrawHalfEllipseTop(centerPos, width * rate)
+      // },
       // 半円（下）
-      () => {
-        trDrawHalfEllipseBottom(centerPos, width * rate)
-      },
-      () => {
-        // ずらした半円1（下）
-        if ((y % 2 === 0 && x % 2 === 1) || (y % 2 === 1 && x % 2 === 0)) {
-          trDrawHalfEllipseBottom(centerPos, width * rate)
-        }
-      },
-      () => {
-        // ずらした半円2（下）
-        if ((y % 2 === 0 && x % 2 === 0) || (y % 2 === 1 && x % 2 === 1)) {
-          trDrawHalfEllipseBottom(centerPos, width * rate)
-        }
-      },
+      // () => {
+      //   trDrawHalfEllipseBottom(centerPos, width * rate)
+      // },
+      // () => {
+      //   // ずらした半円1（下）
+      //   if ((y % 2 === 0 && x % 2 === 1) || (y % 2 === 1 && x % 2 === 0)) {
+      //     trDrawHalfEllipseBottom(centerPos, width * rate)
+      //   }
+      // },
+      // () => {
+      //   // ずらした半円2（下）
+      //   if ((y % 2 === 0 && x % 2 === 0) || (y % 2 === 1 && x % 2 === 1)) {
+      //     trDrawHalfEllipseBottom(centerPos, width * rate)
+      //   }
+      // },
       // 四角系
       () => {
         // 四角
