@@ -69,6 +69,8 @@ const modeNormalFunc = (e) => {
   trMode = TR_MODE.NORMAL
   modeDialog.style.display = 'none'
   trIsDataGridClickable = true
+
+  imageDownloadArea.style.display = 'block'
 }
 modeNormal.addEventListener('click', modeNormalFunc)
 modeNormal.addEventListener('touchend', modeNormalFunc)
@@ -79,6 +81,8 @@ const modeAutoFunc = (e) => {
   trMode = TR_MODE.AUTO
   modeDialog.style.display = 'none'
   trIsDataGridClickable = true
+
+  imageDownloadArea.style.display = 'none'
 }
 modeAuto.addEventListener('click', modeAutoFunc)
 modeAuto.addEventListener('touchend', modeAutoFunc)
