@@ -9,8 +9,21 @@ function trUiDraw() {
       }
       trUpdateUrl()
       trCreateQrCode()
-      trSetColor()
       trChangePatternFrame = frameCount
+
+      trLpSetup(
+        (i) => {
+          trSetDataGridIsPressed(i, !trGetPressedKeyList(trDataGrid).includes(i))
+          // 背景色を変更する
+          trSetColor()
+        },
+        () => {
+          trIsNoDevice = true
+          trSetColor()
+        },
+        trSetColor,
+        trDataGrid,
+      ).then()
     }
   }
 
