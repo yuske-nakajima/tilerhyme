@@ -15,15 +15,17 @@ function trUiDraw() {
       trUpdateUrl()
       trCreateQrCode()
       trChangePatternFrame = frameCount
+      trSetDataParams()
 
       trLpSetup(
-        (i) => {
+        async (i) => {
           trSetDataGridIsPressed(i, !trGetPressedKeyList(trDataGrid).includes(i))
-          // 背景色を変更する
+          await trSetDataParams()
         },
         () => {
           trIsNoDevice = true
         },
+        trSetDataParams,
         trDataGrid,
       ).then()
 
@@ -87,9 +89,10 @@ function trUiDraw() {
     }
   }
 
-  background(0, 0, 100)
+  background(map(trDataParams[16], 0, 99, 0, 360), 50, 90)
+
+  // TODO: ここに描画処理を書く
+  trDrawShape()
 
   trDeviceDraw()
-
-  trRotateCalc()
 }

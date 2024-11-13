@@ -143,6 +143,8 @@ let trMode = TR_MODE.NORMAL
 let trModeLifeGameGrid = Array.from({ length: 64 }, () => Math.floor(Math.random() * 2)).join('')
 
 let trModeLifeGameGridHistory = []
+
+let trDataParams = []
 // ------------------------------------------------------------
 // --- 関数
 // ------------------------------------------------------------
@@ -159,6 +161,7 @@ function trSetDataGridIsPressed(value, isPressed) {
       trUpdateUrl()
       trCreateQrCode()
       trChangePatternFrame = frameCount
+      trSetDataParams()
     }
   }
 }
@@ -405,4 +408,66 @@ function trQrDraw() {
   imageMode(CENTER)
   const gap = trQrImage.width / 2 + 40
   image(trQrImage, width - gap, height - gap)
+}
+
+/**
+ * 現在のグリッドの状態に基づいてデータパラメータを生成して設定する関数。
+ *
+ * この関数は以下の手順を実行します:
+ * 1. スイッチの状態を64ビットの整数に変換します。
+ * 2. 全てオフの状態を特別扱いします。
+ * 3. 入力のSHA-256ハッシュを生成します。
+ * 4. ハッシュを17個のパラメータに分割し、それぞれ0-99の範囲にします。
+ *
+ * @async
+ * @function trSetDataParams
+ * @returns {Promise<void>} データパラメータが設定されたときに解決されるPromise。
+ */
+async function trSetDataParams() {
+  // スイッチの状態を64ビットの整数に変換
+  const input = BigInt(`0b${trGridDataToString()}`)
+
+  // 全てオフの状態を特別扱いしない
+  const hashInput = input === 0n ? 'all_off' : input.toString()
+
+  // SHA-256ハッシュを生成
+  const hashBuffer = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(hashInput))
+  const hashArray = Array.from(new Uint8Array(hashBuffer))
+  const hashHex = hashArray.map((b) => b.toString(16).padStart(2, '0')).join('')
+
+  // ハッシュを17個のパラメータに分割（各パラメータは0-99の範囲）
+  trDataParams = []
+  for (let i = 0; i < 17; i++) {
+    const part = hashHex.substr(i * 3, 3)
+    trDataParams.push(parseInt(part, 16) % 100)
+  }
+}
+
+function drawTilePattern(x, y, tileSize) {
+  // 0-14
+  trDrawBlock(() => {
+    fill(map(trDataParams[0], 0, 99, 0, 360), 80, 80)
+    stroke(map(trDataParams[1], 0, 99, 0, 360), 80, 80)
+    strokeWeight(2)
+    rect(x, y, tileSize, tileSize)
+
+    // TODO: エッシャーのタイル
+  })
+}
+
+/**
+ * trDrawShape 関数は、指定された幅と高さに基づいて形状を描画します。
+ * 幅と高さを100で割った値を使用して、trDataParams 配列の各パラメータに対して
+ * 矩形を描画します。矩形は黒色で塗りつぶされ、指定された位置に描画されます。
+ */
+function trDrawShape() {
+  // 画面全体をタイルで埋める
+  let tileSize = width / map(trDataParams[15], 0, 99, 1, 100) // タイルの基本サイズ
+  for (let y = 0; y < height; y += tileSize) {
+    for (let x = 0; x < width; x += tileSize) {
+      trDrawBlock(() => {
+        drawTilePattern(x, y, tileSize)
+      })
+    }
+  }
 }

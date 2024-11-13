@@ -82,7 +82,7 @@ function trGetPressedKeyList(dataGrid) {
  * @param {Array.<{isPressed: boolean, value: number}>} dataGrid - キーのデータグリッド
  * @returns {Promise<string|undefined>} - エラーメッセージまたはundefined
  */
-async function trLpSetup(pressedCallback, failedCallback, dataGrid) {
+async function trLpSetup(pressedCallback, failedCallback, setDataParams, dataGrid) {
   try {
     const access = await navigator.requestMIDIAccess()
 
@@ -116,6 +116,7 @@ async function trLpSetup(pressedCallback, failedCallback, dataGrid) {
       const isPressed = trGetPressedKeyList(dataGrid).includes(i)
       if (isPressed) {
         output.send([0x90, i, 41 /* 色コード */])
+        await setDataParams()
       } else {
         output.send([0x90, i, 0])
       }
