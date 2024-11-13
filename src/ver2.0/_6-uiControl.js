@@ -22,7 +22,5 @@ function trMousePressed() {
         })
       }
     }
-
-    trSetColor()
   }
 }

@@ -20,13 +20,10 @@ function trUiDraw() {
         (i) => {
           trSetDataGridIsPressed(i, !trGetPressedKeyList(trDataGrid).includes(i))
           // 背景色を変更する
-          trSetColor()
         },
         () => {
           trIsNoDevice = true
-          trSetColor()
         },
-        trSetColor,
         trDataGrid,
       ).then()
 
@@ -90,16 +87,7 @@ function trUiDraw() {
     }
   }
 
-  background(trColor._1)
-
-  // fill - color2
-  trDrawShape(ceil(trCalcDataGridResult.key1), trCellDivNum, 0.9, trColor._2, true)
-
-  // fill - color3
-  trDrawShape(ceil(trCalcDataGridResult.key2), trCellDivNum, 0.75, trColor._3, false)
-
-  // fill - color3
-  trDrawShape(ceil(trCalcDataGridResult.key3), trCellDivNum, 0.6, trColor._3, true)
+  background(0, 0, 100)
 
   trDeviceDraw()
 
