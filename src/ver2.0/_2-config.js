@@ -443,17 +443,53 @@ async function trSetDataParams() {
   }
 }
 
-function drawTilePattern(x, y, tileSize) {
-  // 0-14
-  trDrawBlock(() => {
-    fill(map(trDataParams[0], 0, 99, 0, 360), 80, 80)
-    stroke(map(trDataParams[1], 0, 99, 0, 360), 80, 80)
-    strokeWeight(2)
-    rect(x, y, tileSize, tileSize)
+// バリエーション
+function trDrawTilePattern1(t) {
+  return function (x, y, tileSize) {
+    const w = x * tileSize
+    const h = y * tileSize
 
-    // TODO: エッシャーのタイル
-  })
+    const hue = map(trDataParams[0], 0, 99, 0, 360)
+    const satauration = map(trDataParams[1], 0, 99, 50, 80)
+    const brightness = map(trDataParams[2], 0, 99, 50, 80)
+
+    const mainColor = color(hue, satauration, brightness)
+
+    // 0-14
+    trDrawBlock(() => {
+      noStroke()
+      fill(mainColor)
+      const gap = (tileSize / 100) * map(trDataParams[3], 0, 99, 10, 30)
+      let point1
+      let point2
+      let point3
+      let point4
+
+      const target = y % 2 === t ? 0 : 1
+
+      if (x % 2 === target) {
+        point1 = createVector(w + gap, h)
+        point2 = createVector(w + tileSize, h + gap)
+        point3 = createVector(w + tileSize - gap, h + tileSize)
+        point4 = createVector(w, h + tileSize - gap)
+      } else {
+        point1 = createVector(w, h + gap)
+        point2 = createVector(w + tileSize - gap, h)
+        point3 = createVector(w + tileSize, h + tileSize - gap)
+        point4 = createVector(w + gap, h + tileSize)
+      }
+      beginShape()
+      vertex(point1.x, point1.y)
+      vertex(point2.x, point2.y)
+      vertex(point3.x, point3.y)
+      vertex(point4.x, point4.y)
+      endShape(CLOSE)
+    })
+  }
 }
+// バリーション
+
+const trFuncArray = [trDrawTilePattern1(0), trDrawTilePattern1(1)]
 
 /**
  * trDrawShape 関数は、指定された幅と高さに基づいて形状を描画します。
@@ -462,12 +498,16 @@ function drawTilePattern(x, y, tileSize) {
  */
 function trDrawShape() {
   // 画面全体をタイルで埋める
-  let tileSize = width / map(trDataParams[15], 0, 99, 1, 100) // タイルの基本サイズ
-  for (let y = 0; y < height; y += tileSize) {
-    for (let x = 0; x < width; x += tileSize) {
-      trDrawBlock(() => {
-        drawTilePattern(x, y, tileSize)
-      })
+  const tileSize = width / map(trDataParams[15], 0, 99, 1, 20) // タイルの基本サイズ
+  const w = ceil(width / tileSize)
+  const h = ceil(height / tileSize)
+
+  const value = trDataParams.reduce((acc, cur) => acc + cur, 0)
+  const mode = round(map(value, 0, 99 * 17, 0, trFuncArray.length - 1))
+
+  for (let y = 0; y < h; y++) {
+    for (let x = 0; x < w; x++) {
+      trFuncArray[mode](x, y, tileSize)
     }
   }
 }
