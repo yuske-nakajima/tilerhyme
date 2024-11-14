@@ -776,6 +776,45 @@ function trDrawTilePattern4(x, y, tileSize) {
     }
   })
 }
+
+function trDrawTilePattern5(x, y, tileSize) {
+  const w = x * tileSize
+  const h = y * tileSize
+  const centerPos = createVector(w + tileSize / 2, h + tileSize / 2)
+  const ellipseSize = tileSize * 0.8
+  const pixel = tileSize / 100
+
+  const secondEllipseSize = ellipseSize * map(trDataParams[4], 0, 99, 0.2, 0.5)
+  const secondEllipsePos = createVector(
+    centerPos.x + map(trDataParams[5], 0, 99, -pixel * 4, pixel * 4),
+    centerPos.y + map(trDataParams[6], 0, 99, -pixel * 4, pixel * 4),
+  )
+
+  const fillColor = color(
+    map(trDataParams[0], 0, 99, 0, 360),
+    map(trDataParams[1], 0, 99, 80, 90),
+    map(trDataParams[2], 0, 99, 80, 100),
+  )
+
+  const fillColor2 = color(
+    map(trDataParams[3], 0, 99, 0, 360),
+    map(trDataParams[4], 0, 99, 80, 90),
+    map(trDataParams[5], 0, 99, 80, 100),
+  )
+
+  const eList = [
+    [centerPos, ellipseSize, fillColor],
+    [secondEllipsePos, secondEllipseSize, fillColor2],
+  ]
+
+  trDrawBlock(() => {
+    for (const [pos, size, _fillColor] of eList) {
+      fill(_fillColor)
+      noStroke()
+      ellipse(pos.x, pos.y, size, size)
+    }
+  })
+}
 // バリーション
 
 const trFuncArray = [
@@ -784,6 +823,7 @@ const trFuncArray = [
   trDrawTilePattern2,
   trDrawTilePattern3,
   trDrawTilePattern4,
+  trDrawTilePattern5,
 ]
 
 /**
