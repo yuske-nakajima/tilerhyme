@@ -452,14 +452,14 @@ function trDrawTilePattern1(t) {
     const fillColor = color(
       map(trDataParams[0], 0, 99, 0, 360),
       map(trDataParams[1], 0, 99, 50, 80),
-      map(trDataParams[2], 0, 99, 50, 80),
+      map(trDataParams[2], 0, 99, 80, 100),
       map(trDataParams[3], 0, 99, 0.5, 1),
     )
 
     const strokeColor = color(
       map(trDataParams[4], 0, 99, 0, 360),
       map(trDataParams[5], 0, 99, 50, 80),
-      map(trDataParams[6], 0, 99, 50, 80),
+      map(trDataParams[6], 0, 99, 80, 100),
       map(trDataParams[7], 0, 99, 0.5, 1),
     )
 
@@ -513,7 +513,7 @@ function trDrawTilePattern2(_x, _y, tileSize) {
   const strokeColor = color(
     map(trDataParams[4], 0, 99, 0, 360),
     map(trDataParams[5], 0, 99, 50, 80),
-    map(trDataParams[6], 0, 99, 50, 80),
+    map(trDataParams[6], 0, 99, 80, 100),
     map(trDataParams[7], 0, 99, 0.5, 1),
   )
 
@@ -598,9 +598,80 @@ function trDrawTilePattern2(_x, _y, tileSize) {
     }
   })
 }
+
+function trDrawTilePattern3(x, y, tileSize) {
+  trDrawBlock(() => {
+    // 6角形の描画
+    const w = x * tileSize
+    const h = y * tileSize
+
+    const fillColor = color(
+      map(trDataParams[0], 0, 99, 0, 360),
+      map(trDataParams[1], 0, 99, 50, 80),
+      map(trDataParams[2], 0, 99, 80, 100),
+      map(trDataParams[3], 0, 99, 0.5, 1),
+    )
+
+    const fillColor2 = color(
+      map(trDataParams[4], 0, 99, 0, 360),
+      map(trDataParams[5], 0, 99, 50, 80),
+      map(trDataParams[6], 0, 99, 80, 100),
+      map(trDataParams[7], 0, 99, 0.5, 1),
+    )
+
+    const strokeColor = color(
+      map(trDataParams[8], 0, 99, 0, 360),
+      map(trDataParams[9], 0, 99, 50, 80),
+      map(trDataParams[10], 0, 99, 50, 80),
+      map(trDataParams[11], 0, 99, 0.5, 1),
+    )
+
+    const points = []
+    points[0] = createVector(w + tileSize / 4, h)
+    points[1] = createVector(points[0].x + tileSize / 2, points[0].y)
+    points[2] = createVector(w + tileSize, h + tileSize / 2)
+    points[3] = createVector(points[1].x, h + tileSize)
+    points[4] = createVector(points[0].x, points[3].y)
+    points[5] = createVector(w, points[2].y)
+
+    stroke(strokeColor)
+    strokeWeight(map(trDataParams[12], 0, 99, 1, 4))
+    fill(fillColor)
+    beginShape()
+    for (let i = 0; i < points.length; i++) {
+      vertex(points[i].x, points[i].y)
+    }
+    endShape(CLOSE)
+
+    const points2 = []
+    points2[0] = points[0]
+    points2[1] = points[1]
+    points2[2] = createVector(w + tileSize / 2, h + tileSize / 2)
+    points2[3] = points[5]
+
+    const points3 = []
+    points3[0] = points[5]
+    points3[1] = points2[2]
+    points3[2] = points[3]
+    points3[3] = points[4]
+    trDrawBlock(() => {
+      fill(fillColor2)
+      beginShape()
+      for (let i = 0; i < points2.length; i++) {
+        vertex(points2[i].x, points2[i].y)
+      }
+      endShape(CLOSE)
+      beginShape()
+      for (let i = 0; i < points3.length; i++) {
+        vertex(points3[i].x, points3[i].y)
+      }
+      endShape(CLOSE)
+    })
+  })
+}
 // バリーション
 
-const trFuncArray = [trDrawTilePattern1(0), trDrawTilePattern1(1), trDrawTilePattern2]
+const trFuncArray = [trDrawTilePattern1(0), trDrawTilePattern1(1), trDrawTilePattern2, trDrawTilePattern3]
 
 /**
  * trDrawShape 関数は、指定された幅と高さに基づいて形状を描画します。
@@ -614,7 +685,7 @@ function trDrawShape() {
   const h = ceil(height / tileSize)
 
   const value = trDataParams.reduce((acc, cur) => acc + cur, 0)
-  const mode = ceil(map(value, 0, 99 * 17, 0, trFuncArray.length - 1))
+  const mode = value % trFuncArray.length
 
   for (let y = 0; y <= h; y++) {
     for (let x = 0; x <= w; x++) {
