@@ -449,17 +449,25 @@ function trDrawTilePattern1(t) {
     const w = x * tileSize
     const h = y * tileSize
 
-    const hue = map(trDataParams[0], 0, 99, 0, 360)
-    const satauration = map(trDataParams[1], 0, 99, 50, 80)
-    const brightness = map(trDataParams[2], 0, 99, 50, 80)
+    const fillColor = color(
+      map(trDataParams[0], 0, 99, 0, 360),
+      map(trDataParams[1], 0, 99, 50, 80),
+      map(trDataParams[2], 0, 99, 50, 80),
+      map(trDataParams[3], 0, 99, 0.5, 1),
+    )
 
-    const mainColor = color(hue, satauration, brightness)
+    const strokeColor = color(
+      map(trDataParams[4], 0, 99, 0, 360),
+      map(trDataParams[5], 0, 99, 50, 80),
+      map(trDataParams[6], 0, 99, 50, 80),
+      map(trDataParams[7], 0, 99, 0.5, 1),
+    )
 
     // 0-14
     trDrawBlock(() => {
       noStroke()
-      fill(mainColor)
-      const gap = (tileSize / 100) * map(trDataParams[3], 0, 99, 10, 30)
+      fill(fillColor)
+      const gap = (tileSize / 100) * map(trDataParams[8], 0, 99, 10, 30)
       let point1
       let point2
       let point3
@@ -478,6 +486,8 @@ function trDrawTilePattern1(t) {
         point3 = createVector(w + tileSize, h + tileSize - gap)
         point4 = createVector(w + gap, h + tileSize)
       }
+      stroke(strokeColor)
+      strokeWeight(map(trDataParams[9], 0, 99, 0, 4))
       beginShape()
       vertex(point1.x, point1.y)
       vertex(point2.x, point2.y)
@@ -487,9 +497,110 @@ function trDrawTilePattern1(t) {
     })
   }
 }
+
+// ピタゴラスタイル
+function trDrawTilePattern2(_x, _y, tileSize) {
+  const x = _x * tileSize
+  const y = _y * tileSize
+
+  const fillColor = color(
+    map(trDataParams[0], 0, 99, 0, 360),
+    map(trDataParams[1], 0, 99, 50, 80),
+    map(trDataParams[2], 0, 99, 50, 80),
+    map(trDataParams[3], 0, 99, 0.5, 1),
+  )
+
+  const strokeColor = color(
+    map(trDataParams[4], 0, 99, 0, 360),
+    map(trDataParams[5], 0, 99, 50, 80),
+    map(trDataParams[6], 0, 99, 50, 80),
+    map(trDataParams[7], 0, 99, 0.5, 1),
+  )
+
+  trDrawBlock(() => {
+    const v = new Array(9)
+
+    // Generate square vertices
+    for (let i = 0; i < 4; i++) {
+      const angle = (TWO_PI * (i + 0.5)) / 4
+      v[i] = createVector(x + (cos(angle) * tileSize) / sqrt(2), y + (sin(angle) * tileSize) / sqrt(2))
+    }
+
+    const gap = (sqrt(5) - 1) / map(trDataParams[8], 0, 99, 2, 4)
+    let theta = atan(gap)
+
+    let slope = p5.Vector.sub(v[1], v[0])
+    slope.rotate(theta)
+
+    v[4] = slope.copy()
+    v[4].mult(sin(theta))
+    v[4].add(v[0])
+
+    v[5] = slope.copy()
+    v[5].mult(cos(theta))
+    v[5].add(v[0])
+
+    v[6] = slope.copy()
+    v[6].mult(1.0 / cos(theta))
+    v[6].add(v[0])
+
+    v[7] = p5.Vector.sub(v[5], v[1])
+    v[7].add(v[4])
+
+    v[8] = p5.Vector.sub(v[6], v[1])
+    v[8].add(v[0])
+
+    // Draw main squares
+    let indDomain = [
+      [
+        [0, 1, 5],
+        [4, 6, 2, 3],
+        [3, 7, 8],
+      ],
+      [
+        [1, 5, 6],
+        [0, 4, 7, 8],
+      ],
+    ]
+
+    noStroke()
+    for (let i = 0; i < 2; i++) {
+      for (let ind of indDomain[i]) {
+        if (i === 0) {
+          fill(fillColor)
+        } else {
+          noFill()
+        }
+        beginShape()
+        for (let j of ind) {
+          vertex(v[j].x, v[j].y)
+        }
+        endShape(CLOSE)
+      }
+    }
+
+    // Draw edges
+    let indLine = [
+      [0, 6],
+      [1, 5],
+      [3, 4],
+      [7, 8],
+    ]
+    strokeWeight(map(trDataParams[7], 0, 99, 1, 4))
+    stroke(strokeColor)
+    noFill()
+    for (let ind of indLine) {
+      beginShape()
+      for (let i of ind) {
+        vertex(v[i].x, v[i].y)
+      }
+      endShape()
+    }
+  })
+}
 // バリーション
 
-const trFuncArray = [trDrawTilePattern1(0), trDrawTilePattern1(1)]
+const trFuncArray = [trDrawTilePattern1(0), trDrawTilePattern1(1), trDrawTilePattern2]
 
 /**
  * trDrawShape 関数は、指定された幅と高さに基づいて形状を描画します。
@@ -498,15 +609,15 @@ const trFuncArray = [trDrawTilePattern1(0), trDrawTilePattern1(1)]
  */
 function trDrawShape() {
   // 画面全体をタイルで埋める
-  const tileSize = width / map(trDataParams[15], 0, 99, 1, 20) // タイルの基本サイズ
+  const tileSize = width / map(trDataParams[15], 0, 99, 5, 20) // タイルの基本サイズ
   const w = ceil(width / tileSize)
   const h = ceil(height / tileSize)
 
   const value = trDataParams.reduce((acc, cur) => acc + cur, 0)
-  const mode = round(map(value, 0, 99 * 17, 0, trFuncArray.length - 1))
+  const mode = ceil(map(value, 0, 99 * 17, 0, trFuncArray.length - 1))
 
-  for (let y = 0; y < h; y++) {
-    for (let x = 0; x < w; x++) {
+  for (let y = 0; y <= h; y++) {
+    for (let x = 0; x <= w; x++) {
       trFuncArray[mode](x, y, tileSize)
     }
   }
