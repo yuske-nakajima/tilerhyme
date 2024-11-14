@@ -633,45 +633,158 @@ function trDrawTilePattern3(x, y, tileSize) {
     points[3] = createVector(points[1].x, h + tileSize)
     points[4] = createVector(points[0].x, points[3].y)
     points[5] = createVector(w, points[2].y)
+    points[6] = createVector(w + tileSize / 2, h + tileSize / 2)
+
+    const p1 = [0, 1, 2, 3, 4, 5]
+    const p2 = [0, 1, 6, 5]
+    const p3 = [5, 6, 3, 4]
 
     stroke(strokeColor)
     strokeWeight(map(trDataParams[12], 0, 99, 1, 4))
     fill(fillColor)
     beginShape()
-    for (let i = 0; i < points.length; i++) {
-      vertex(points[i].x, points[i].y)
+    for (let i = 0; i < p1.length; i++) {
+      const pi = p1[i]
+      vertex(points[pi].x, points[pi].y)
     }
     endShape(CLOSE)
 
-    const points2 = []
-    points2[0] = points[0]
-    points2[1] = points[1]
-    points2[2] = createVector(w + tileSize / 2, h + tileSize / 2)
-    points2[3] = points[5]
-
-    const points3 = []
-    points3[0] = points[5]
-    points3[1] = points2[2]
-    points3[2] = points[3]
-    points3[3] = points[4]
     trDrawBlock(() => {
       fill(fillColor2)
       beginShape()
-      for (let i = 0; i < points2.length; i++) {
-        vertex(points2[i].x, points2[i].y)
+      for (let i = 0; i < p2.length; i++) {
+        const pi = p2[i]
+        vertex(points[pi].x, points[pi].y)
       }
       endShape(CLOSE)
       beginShape()
-      for (let i = 0; i < points3.length; i++) {
-        vertex(points3[i].x, points3[i].y)
+      for (let i = 0; i < p3.length; i++) {
+        const pi = p3[i]
+        vertex(points[pi].x, points[pi].y)
       }
       endShape(CLOSE)
     })
   })
 }
+
+function trDrawTilePattern4(x, y, tileSize) {
+  trDrawBlock(() => {
+    // 6角形の描画
+    const w = x * tileSize
+    const h = y * tileSize
+
+    const fillColor = color(
+      map(trDataParams[0], 0, 99, 0, 360),
+      map(trDataParams[1], 0, 99, 50, 80),
+      map(trDataParams[2], 0, 99, 80, 100),
+    )
+
+    const fillColor2 = color(
+      map(trDataParams[1], 0, 99, 0, 360),
+      map(trDataParams[2], 0, 99, 50, 80),
+      map(trDataParams[3], 0, 99, 80, 100),
+    )
+
+    const fillColor3 = color(
+      map(trDataParams[2], 0, 99, 0, 360),
+      map(trDataParams[3], 0, 99, 50, 80),
+      map(trDataParams[4], 0, 99, 80, 100),
+    )
+
+    const fillColor4 = color(
+      map(trDataParams[3], 0, 99, 0, 360),
+      map(trDataParams[4], 0, 99, 50, 80),
+      map(trDataParams[5], 0, 99, 80, 100),
+    )
+
+    const fillColor5 = color(
+      map(trDataParams[4], 0, 99, 0, 360),
+      map(trDataParams[5], 0, 99, 50, 80),
+      map(trDataParams[6], 0, 99, 50, 80),
+    )
+
+    const points = []
+    points[0] = createVector(w + tileSize / 4, h)
+    points[1] = createVector(points[0].x + tileSize / 2, points[0].y)
+    points[2] = createVector(w + tileSize, h + tileSize / 2)
+    points[3] = createVector(points[1].x, h + tileSize)
+    points[4] = createVector(points[0].x, points[3].y)
+    points[5] = createVector(w, points[2].y)
+    points[6] = createVector(w + tileSize / 2, h + tileSize / 2)
+
+    points[7] = createVector(w, h)
+    points[8] = createVector(w + tileSize, h)
+    points[9] = createVector(w + tileSize, h + tileSize)
+    points[10] = createVector(w, h + tileSize)
+
+    const p1 = [0, 1, 6]
+    const p2 = [1, 2, 6]
+    const p3 = [2, 3, 6]
+    const p4 = [3, 4, 6]
+    const p5 = [4, 5, 6]
+    const p6 = [5, 0, 6]
+    const p7 = [7, 0, 5]
+    const p8 = [1, 8, 2]
+    const p9 = [2, 9, 3]
+    const p10 = [4, 10, 5]
+
+    const pA = [p1, p3]
+    const pB = [p2, p5]
+    const pC = [p4, p6]
+    const pD = [p7, p8]
+    const pE = [p9, p10]
+
+    const pGroup1 = [
+      [pA, fillColor],
+      [pB, fillColor2],
+      [pC, fillColor3],
+    ]
+
+    const pGroup2 = [
+      [pD, fillColor4],
+      [pE, fillColor5],
+    ]
+
+    noStroke()
+    for (const [pList, _fillColor] of pGroup1) {
+      trDrawBlock(() => {
+        fill(_fillColor)
+        for (const p of pList) {
+          beginShape()
+          for (let i = 0; i < p.length; i++) {
+            const pi = p[i]
+            vertex(points[pi].x, points[pi].y)
+          }
+          endShape(CLOSE)
+        }
+      })
+    }
+
+    for (const [pList, _fillColor] of pGroup2) {
+      trDrawBlock(() => {
+        fill(_fillColor)
+        noStroke()
+        for (const p of pList) {
+          beginShape()
+          for (let i = 0; i < p.length; i++) {
+            const pi = p[i]
+            vertex(points[pi].x, points[pi].y)
+          }
+          endShape(CLOSE)
+        }
+      })
+    }
+  })
+}
 // バリーション
 
-const trFuncArray = [trDrawTilePattern1(0), trDrawTilePattern1(1), trDrawTilePattern2, trDrawTilePattern3]
+const trFuncArray = [
+  trDrawTilePattern1(0),
+  trDrawTilePattern1(1),
+  trDrawTilePattern2,
+  trDrawTilePattern3,
+  trDrawTilePattern4,
+]
 
 /**
  * trDrawShape 関数は、指定された幅と高さに基づいて形状を描画します。
