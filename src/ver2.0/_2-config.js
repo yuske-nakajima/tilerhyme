@@ -734,36 +734,18 @@ function trDrawTilePattern4(x, y, tileSize) {
     const pD = [p7, p8]
     const pE = [p9, p10]
 
-    const pGroup1 = [
+    const pGroup = [
       [pA, fillColor],
       [pB, fillColor2],
       [pC, fillColor3],
-    ]
-
-    const pGroup2 = [
       [pD, fillColor4],
       [pE, fillColor5],
     ]
 
-    noStroke()
-    for (const [pList, _fillColor] of pGroup1) {
+    for (const [pList, _fillColor] of pGroup) {
       trDrawBlock(() => {
-        fill(_fillColor)
-        for (const p of pList) {
-          beginShape()
-          for (let i = 0; i < p.length; i++) {
-            const pi = p[i]
-            vertex(points[pi].x, points[pi].y)
-          }
-          endShape(CLOSE)
-        }
-      })
-    }
-
-    for (const [pList, _fillColor] of pGroup2) {
-      trDrawBlock(() => {
-        fill(_fillColor)
         noStroke()
+        fill(_fillColor)
         for (const p of pList) {
           beginShape()
           for (let i = 0; i < p.length; i++) {
