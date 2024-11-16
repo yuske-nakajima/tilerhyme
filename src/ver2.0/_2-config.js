@@ -919,6 +919,72 @@ function trDrawTilePattern7(_x, _y, tileSize) {
     }
   })
 }
+
+function trDrawTilePattern8(_x, _y, tileSize) {
+  const x = _x * tileSize
+  const y = _y * tileSize
+  const centerPos = createVector(x + tileSize / 2, y + tileSize / 2)
+
+  const fillColor = color(
+    map(trDataParams[0], 0, 99, 0, 360),
+    map(trDataParams[1], 0, 99, 50, 80),
+    map(trDataParams[2], 0, 99, 80, 100),
+  )
+
+  const fillColor2 = color(
+    map(trDataParams[1], 0, 99, 0, 360),
+    map(trDataParams[2], 0, 99, 50, 80),
+    map(trDataParams[3], 0, 99, 80, 100),
+  )
+
+  const fillColor3 = color(
+    map(trDataParams[2], 0, 99, 0, 360),
+    map(trDataParams[3], 0, 99, 50, 80),
+    map(trDataParams[4], 0, 99, 80, 100),
+  )
+
+  const num = ceil(map(trDataParams[5], 0, 99, 0, 99))
+  let alphabet = ''
+
+  if (num < 50) {
+    // 0-49 を 65-90 (A-Z) にマッピング
+    let value = map(num, 0, 49, 65, 90)
+    value = floor(value)
+    alphabet = String.fromCharCode(value)
+  } else {
+    // 50-99 を 97-122 (a-z) にマッピング
+    let value = map(num, 50, 99, 97, 122)
+    value = floor(value)
+    alphabet = String.fromCharCode(value)
+  }
+
+  trDrawBlock(() => {
+    textAlign(CENTER, CENTER)
+    textFont('Arial')
+    textStyle(BOLD)
+    textSize(tileSize / 2)
+
+    // 円の上に alphabet を描画 6つ
+    // rotate して描画
+
+    const rotateNum = map(trDataParams[3], 0, 99, 3, 9)
+
+    for (let i = 0; i < rotateNum; i++) {
+      if (i % 2 === 0) {
+        fill(fillColor)
+      } else {
+        fill(fillColor2)
+      }
+      const angle = (TWO_PI / rotateNum) * i
+      const pos = createVector(centerPos.x + (cos(angle) * tileSize) / 4, centerPos.y + (sin(angle) * tileSize) / 4)
+      trDrawBlock(() => {
+        translate(pos.x, pos.y)
+        rotate(angle)
+        text(alphabet, 0, 0)
+      })
+    }
+  })
+}
 // バリーション
 
 const trFuncArray = [
@@ -930,6 +996,7 @@ const trFuncArray = [
   trDrawTilePattern5,
   trDrawTilePattern6,
   trDrawTilePattern7,
+  trDrawTilePattern8,
 ]
 
 /**
