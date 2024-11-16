@@ -443,50 +443,51 @@ async function trSetDataParams() {
   }
 }
 
+function trGetColor() {
+  const colors = {}
+
+  for (let i = 1; i <= 12; i++) {
+    colors[`color${i}`] = color(
+      map(trDataParams[0 + i], 0, 99, 0, 360),
+      map(trDataParams[1 + i], 0, 99, 50, 80),
+      map(trDataParams[2 + i], 0, 99, 80, 100),
+    )
+  }
+
+  return colors
+}
+
 // バリエーション
 function trDrawTilePattern1(t) {
-  return function (x, y, tileSize) {
-    const w = x * tileSize
-    const h = y * tileSize
-
-    const fillColor = color(
-      map(trDataParams[0], 0, 99, 0, 360),
-      map(trDataParams[1], 0, 99, 50, 80),
-      map(trDataParams[2], 0, 99, 80, 100),
-      map(trDataParams[3], 0, 99, 0.5, 1),
-    )
-
-    const strokeColor = color(
-      map(trDataParams[4], 0, 99, 0, 360),
-      map(trDataParams[5], 0, 99, 50, 80),
-      map(trDataParams[6], 0, 99, 80, 100),
-      map(trDataParams[7], 0, 99, 0.5, 1),
-    )
+  return function (_x, _y, tileSize) {
+    const x = _x * tileSize
+    const y = _y * tileSize
+    const { color1: fillColor1, color2: strokeColor1 } = trGetColor()
 
     // 0-14
     trDrawBlock(() => {
       noStroke()
-      fill(fillColor)
+      fill(fillColor1)
       const gap = (tileSize / 100) * map(trDataParams[8], 0, 99, 10, 30)
       let point1
       let point2
       let point3
       let point4
 
-      const target = y % 2 === t ? 0 : 1
+      const target = _y % 2 === t ? 0 : 1
 
-      if (x % 2 === target) {
-        point1 = createVector(w + gap, h)
-        point2 = createVector(w + tileSize, h + gap)
-        point3 = createVector(w + tileSize - gap, h + tileSize)
-        point4 = createVector(w, h + tileSize - gap)
+      if (_x % 2 === target) {
+        point1 = createVector(x + gap, y)
+        point2 = createVector(x + tileSize, y + gap)
+        point3 = createVector(x + tileSize - gap, y + tileSize)
+        point4 = createVector(x, y + tileSize - gap)
       } else {
-        point1 = createVector(w, h + gap)
-        point2 = createVector(w + tileSize - gap, h)
-        point3 = createVector(w + tileSize, h + tileSize - gap)
-        point4 = createVector(w + gap, h + tileSize)
+        point1 = createVector(x, y + gap)
+        point2 = createVector(x + tileSize - gap, y)
+        point3 = createVector(x + tileSize, y + tileSize - gap)
+        point4 = createVector(x + gap, y + tileSize)
       }
-      stroke(strokeColor)
+      stroke(strokeColor1)
       strokeWeight(map(trDataParams[9], 0, 99, 0, 4))
       beginShape()
       vertex(point1.x, point1.y)
@@ -503,19 +504,7 @@ function trDrawTilePattern2(_x, _y, tileSize) {
   const x = _x * tileSize
   const y = _y * tileSize
 
-  const fillColor = color(
-    map(trDataParams[0], 0, 99, 0, 360),
-    map(trDataParams[1], 0, 99, 50, 80),
-    map(trDataParams[2], 0, 99, 50, 80),
-    map(trDataParams[3], 0, 99, 0.5, 1),
-  )
-
-  const strokeColor = color(
-    map(trDataParams[4], 0, 99, 0, 360),
-    map(trDataParams[5], 0, 99, 50, 80),
-    map(trDataParams[6], 0, 99, 80, 100),
-    map(trDataParams[7], 0, 99, 0.5, 1),
-  )
+  const { color1: fillColor1, color2: strokeColor1 } = trGetColor()
 
   trDrawBlock(() => {
     const v = new Array(9)
@@ -567,7 +556,7 @@ function trDrawTilePattern2(_x, _y, tileSize) {
     for (let i = 0; i < 2; i++) {
       for (let ind of indDomain[i]) {
         if (i === 0) {
-          fill(fillColor)
+          fill(fillColor1)
         } else {
           noFill()
         }
@@ -587,7 +576,7 @@ function trDrawTilePattern2(_x, _y, tileSize) {
       [7, 8],
     ]
     strokeWeight(map(trDataParams[7], 0, 99, 1, 4))
-    stroke(strokeColor)
+    stroke(strokeColor1)
     noFill()
     for (let ind of indLine) {
       beginShape()
@@ -599,41 +588,22 @@ function trDrawTilePattern2(_x, _y, tileSize) {
   })
 }
 
-function trDrawTilePattern3(x, y, tileSize) {
+function trDrawTilePattern3(_x, _y, tileSize) {
   trDrawBlock(() => {
     // 6角形の描画
-    const w = x * tileSize
-    const h = y * tileSize
+    const x = _x * tileSize
+    const y = _y * tileSize
 
-    const fillColor = color(
-      map(trDataParams[0], 0, 99, 0, 360),
-      map(trDataParams[1], 0, 99, 50, 80),
-      map(trDataParams[2], 0, 99, 80, 100),
-      map(trDataParams[3], 0, 99, 0.5, 1),
-    )
-
-    const fillColor2 = color(
-      map(trDataParams[4], 0, 99, 0, 360),
-      map(trDataParams[5], 0, 99, 50, 80),
-      map(trDataParams[6], 0, 99, 80, 100),
-      map(trDataParams[7], 0, 99, 0.5, 1),
-    )
-
-    const strokeColor = color(
-      map(trDataParams[8], 0, 99, 0, 360),
-      map(trDataParams[9], 0, 99, 50, 80),
-      map(trDataParams[10], 0, 99, 50, 80),
-      map(trDataParams[11], 0, 99, 0.5, 1),
-    )
+    const { color1: fillColor1, color2: fillColor2, color3: strokeColor } = trGetColor()
 
     const points = []
-    points[0] = createVector(w + tileSize / 4, h)
+    points[0] = createVector(x + tileSize / 4, y)
     points[1] = createVector(points[0].x + tileSize / 2, points[0].y)
-    points[2] = createVector(w + tileSize, h + tileSize / 2)
-    points[3] = createVector(points[1].x, h + tileSize)
+    points[2] = createVector(x + tileSize, y + tileSize / 2)
+    points[3] = createVector(points[1].x, y + tileSize)
     points[4] = createVector(points[0].x, points[3].y)
-    points[5] = createVector(w, points[2].y)
-    points[6] = createVector(w + tileSize / 2, h + tileSize / 2)
+    points[5] = createVector(x, points[2].y)
+    points[6] = createVector(x + tileSize / 2, y + tileSize / 2)
 
     const p1 = [0, 1, 2, 3, 4, 5]
     const p2 = [0, 1, 6, 5]
@@ -641,7 +611,7 @@ function trDrawTilePattern3(x, y, tileSize) {
 
     stroke(strokeColor)
     strokeWeight(map(trDataParams[12], 0, 99, 1, 4))
-    fill(fillColor)
+    fill(fillColor1)
     beginShape()
     for (let i = 0; i < p1.length; i++) {
       const pi = p1[i]
@@ -667,55 +637,33 @@ function trDrawTilePattern3(x, y, tileSize) {
   })
 }
 
-function trDrawTilePattern4(x, y, tileSize) {
+function trDrawTilePattern4(_x, _y, tileSize) {
   trDrawBlock(() => {
     // 6角形の描画
-    const w = x * tileSize
-    const h = y * tileSize
+    const x = _x * tileSize
+    const y = _y * tileSize
 
-    const fillColor = color(
-      map(trDataParams[0], 0, 99, 0, 360),
-      map(trDataParams[1], 0, 99, 50, 80),
-      map(trDataParams[2], 0, 99, 80, 100),
-    )
-
-    const fillColor2 = color(
-      map(trDataParams[1], 0, 99, 0, 360),
-      map(trDataParams[2], 0, 99, 50, 80),
-      map(trDataParams[3], 0, 99, 80, 100),
-    )
-
-    const fillColor3 = color(
-      map(trDataParams[2], 0, 99, 0, 360),
-      map(trDataParams[3], 0, 99, 50, 80),
-      map(trDataParams[4], 0, 99, 80, 100),
-    )
-
-    const fillColor4 = color(
-      map(trDataParams[3], 0, 99, 0, 360),
-      map(trDataParams[4], 0, 99, 50, 80),
-      map(trDataParams[5], 0, 99, 80, 100),
-    )
-
-    const fillColor5 = color(
-      map(trDataParams[4], 0, 99, 0, 360),
-      map(trDataParams[5], 0, 99, 50, 80),
-      map(trDataParams[6], 0, 99, 50, 80),
-    )
+    const {
+      color1: fillColor1,
+      color2: fillColor2,
+      color3: fillColor3,
+      color4: fillColor4,
+      color5: fillColor5,
+    } = trGetColor()
 
     const points = []
-    points[0] = createVector(w + tileSize / 4, h)
+    points[0] = createVector(x + tileSize / 4, y)
     points[1] = createVector(points[0].x + tileSize / 2, points[0].y)
-    points[2] = createVector(w + tileSize, h + tileSize / 2)
-    points[3] = createVector(points[1].x, h + tileSize)
+    points[2] = createVector(x + tileSize, y + tileSize / 2)
+    points[3] = createVector(points[1].x, y + tileSize)
     points[4] = createVector(points[0].x, points[3].y)
-    points[5] = createVector(w, points[2].y)
-    points[6] = createVector(w + tileSize / 2, h + tileSize / 2)
+    points[5] = createVector(x, points[2].y)
+    points[6] = createVector(x + tileSize / 2, y + tileSize / 2)
 
-    points[7] = createVector(w, h)
-    points[8] = createVector(w + tileSize, h)
-    points[9] = createVector(w + tileSize, h + tileSize)
-    points[10] = createVector(w, h + tileSize)
+    points[7] = createVector(x, y)
+    points[8] = createVector(x + tileSize, y)
+    points[9] = createVector(x + tileSize, y + tileSize)
+    points[10] = createVector(x, y + tileSize)
 
     const p1 = [0, 1, 6]
     const p2 = [1, 2, 6]
@@ -735,7 +683,7 @@ function trDrawTilePattern4(x, y, tileSize) {
     const pE = [p9, p10]
 
     const pGroup = [
-      [pA, fillColor],
+      [pA, fillColor1],
       [pB, fillColor2],
       [pC, fillColor3],
       [pD, fillColor4],
@@ -759,10 +707,10 @@ function trDrawTilePattern4(x, y, tileSize) {
   })
 }
 
-function trDrawTilePattern5(x, y, tileSize) {
-  const w = x * tileSize
-  const h = y * tileSize
-  const centerPos = createVector(w + tileSize / 2, h + tileSize / 2)
+function trDrawTilePattern5(_x, _y, tileSize) {
+  const x = _x * tileSize
+  const y = _y * tileSize
+  const centerPos = createVector(x + tileSize / 2, y + tileSize / 2)
   const ellipseSize = tileSize * 0.8
   const pixel = tileSize / 100
 
@@ -772,20 +720,10 @@ function trDrawTilePattern5(x, y, tileSize) {
     centerPos.y + map(trDataParams[6], 0, 99, -pixel * 4, pixel * 4),
   )
 
-  const fillColor = color(
-    map(trDataParams[0], 0, 99, 0, 360),
-    map(trDataParams[1], 0, 99, 80, 90),
-    map(trDataParams[2], 0, 99, 80, 100),
-  )
-
-  const fillColor2 = color(
-    map(trDataParams[3], 0, 99, 0, 360),
-    map(trDataParams[4], 0, 99, 80, 90),
-    map(trDataParams[5], 0, 99, 80, 100),
-  )
+  const { color1: fillColor1, color2: fillColor2 } = trGetColor()
 
   const eList = [
-    [centerPos, ellipseSize, fillColor],
+    [centerPos, ellipseSize, fillColor1],
     [secondEllipsePos, secondEllipseSize, fillColor2],
   ]
 
@@ -805,28 +743,13 @@ function trDrawTilePattern6(_x, _y, tileSize) {
   const firstRectWidth = _w * map(trDataParams[14], 0, 99, 10, 60)
   const secondRectWidth = tileSize - firstRectWidth
 
-  const fillColor = color(
-    map(trDataParams[0], 0, 99, 0, 360),
-    map(trDataParams[1], 0, 99, 50, 80),
-    map(trDataParams[2], 0, 99, 80, 100),
-  )
+  const { color1: fillColor1, color2: fillColor2, color3: fillColor3 } = trGetColor()
 
-  const fillColor2 = color(
-    map(trDataParams[1], 0, 99, 0, 360),
-    map(trDataParams[2], 0, 99, 50, 80),
-    map(trDataParams[3], 0, 99, 80, 100),
-  )
-
-  const fillColor3 = color(
-    map(trDataParams[2], 0, 99, 0, 360),
-    map(trDataParams[3], 0, 99, 50, 80),
-    map(trDataParams[4], 0, 99, 80, 100),
-  )
   trDrawBlock(() => {
     noStroke()
 
     trDrawBlock(() => {
-      fill(fillColor)
+      fill(fillColor1)
       rect(x, y, firstRectWidth)
     })
 
@@ -845,26 +768,10 @@ function trDrawTilePattern6(_x, _y, tileSize) {
 function trDrawTilePattern7(_x, _y, tileSize) {
   const x = _x * tileSize
   const y = _y * tileSize
-  // const innerTileSize = tileSize / map(trDataParams[14], 0, 99, 5, 10)
   const innerTileSize = tileSize / 2
 
-  const fillColor = color(
-    map(trDataParams[0], 0, 99, 0, 360),
-    map(trDataParams[1], 0, 99, 50, 80),
-    map(trDataParams[2], 0, 99, 80, 100),
-  )
+  const { color1: fillColor1, color2: fillColor2, color3: fillColor3 } = trGetColor()
 
-  const fillColor2 = color(
-    map(trDataParams[1], 0, 99, 0, 360),
-    map(trDataParams[2], 0, 99, 50, 80),
-    map(trDataParams[3], 0, 99, 80, 100),
-  )
-
-  const fillColor3 = color(
-    map(trDataParams[2], 0, 99, 0, 360),
-    map(trDataParams[3], 0, 99, 50, 80),
-    map(trDataParams[4], 0, 99, 80, 100),
-  )
   trDrawBlock(() => {
     noStroke()
 
@@ -874,7 +781,7 @@ function trDrawTilePattern7(_x, _y, tileSize) {
           fill(fillColor3)
           rect(x, y, tileSize)
 
-          fill(fillColor)
+          fill(fillColor1)
           triangle(x + tileSize, y, x + tileSize, y + tileSize, x, y + tileSize)
 
           fill(fillColor2)
@@ -885,7 +792,7 @@ function trDrawTilePattern7(_x, _y, tileSize) {
           fill(fillColor2)
           rect(x, y, tileSize)
 
-          fill(fillColor)
+          fill(fillColor1)
           triangle(x, y, x + tileSize, y + tileSize, x, y + tileSize)
 
           fill(fillColor3)
@@ -898,7 +805,7 @@ function trDrawTilePattern7(_x, _y, tileSize) {
           fill(fillColor2)
           rect(x, y, tileSize)
 
-          fill(fillColor)
+          fill(fillColor1)
           triangle(x, y, x + tileSize, y, x + tileSize, y + tileSize)
 
           fill(fillColor3)
@@ -909,7 +816,7 @@ function trDrawTilePattern7(_x, _y, tileSize) {
           fill(fillColor3)
           rect(x, y, tileSize)
 
-          fill(fillColor)
+          fill(fillColor1)
           triangle(x, y, x + tileSize, y, x, y + tileSize)
 
           fill(fillColor2)
@@ -925,23 +832,7 @@ function trDrawTilePattern8(_x, _y, tileSize) {
   const y = _y * tileSize
   const centerPos = createVector(x + tileSize / 2, y + tileSize / 2)
 
-  const fillColor = color(
-    map(trDataParams[0], 0, 99, 0, 360),
-    map(trDataParams[1], 0, 99, 50, 80),
-    map(trDataParams[2], 0, 99, 80, 100),
-  )
-
-  const fillColor2 = color(
-    map(trDataParams[1], 0, 99, 0, 360),
-    map(trDataParams[2], 0, 99, 50, 80),
-    map(trDataParams[3], 0, 99, 80, 100),
-  )
-
-  const fillColor3 = color(
-    map(trDataParams[2], 0, 99, 0, 360),
-    map(trDataParams[3], 0, 99, 50, 80),
-    map(trDataParams[4], 0, 99, 80, 100),
-  )
+  const { color1: fillColor1, color2: fillColor2 } = trGetColor()
 
   const num = ceil(map(trDataParams[5], 0, 99, 0, 99))
   let alphabet = ''
@@ -971,7 +862,7 @@ function trDrawTilePattern8(_x, _y, tileSize) {
 
     for (let i = 0; i < rotateNum; i++) {
       if (i % 2 === 0) {
-        fill(fillColor)
+        fill(fillColor1)
       } else {
         fill(fillColor2)
       }
