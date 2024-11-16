@@ -855,18 +855,14 @@ function trDrawTilePattern8(_x, _y, tileSize) {
     textStyle(BOLD)
     textSize(tileSize / 2)
 
-    // 円の上に alphabet を描画 6つ
-    // rotate して描画
-
-    const rotateNum = map(trDataParams[3], 0, 99, 3, 9)
-
+    const rotateNum = 5
     for (let i = 0; i < rotateNum; i++) {
       if (i % 2 === 0) {
         fill(fillColor1)
       } else {
         fill(fillColor2)
       }
-      const angle = (TWO_PI / rotateNum) * i
+      const angle = (TWO_PI / (rotateNum - 1)) * i
       const pos = createVector(centerPos.x + (cos(angle) * tileSize) / 4, centerPos.y + (sin(angle) * tileSize) / 4)
       trDrawBlock(() => {
         translate(pos.x, pos.y)
@@ -1026,7 +1022,7 @@ function trDrawTilePattern10(_x, _y, tileSize) {
   const diff = tileSizePixel * map(trDataParams[14], 0, 99, 1, 8)
 
   const diffA = diff
-  const diffB = tileSizePixel - diff
+  const diffB = tileSize - diff
 
   const posX1 = x
   const posY1 = _x % 2 === 0 ? y + diffA : y + diffB
@@ -1036,7 +1032,9 @@ function trDrawTilePattern10(_x, _y, tileSize) {
   const points = [createVector(posX1, posY1)]
   for (let i = 1; i * tileSizePixel < tileSize; i++) {
     // ノイズで埋める
-    points.push(createVector(x + i * tileSizePixel, points[i - 1].y + noise(trDataParams[13]) * 0.3 * trDataParams[14]))
+    points.push(
+      createVector(x + i * tileSizePixel, points[i - 1].y + noise(trDataParams[13]) * 0.15 * trDataParams[14]),
+    )
   }
   points.push(createVector(posX2, posY2))
 
@@ -1062,7 +1060,7 @@ function trDrawTilePattern11(_x, _y, tileSize) {
   const diff = tileSizePixel * map(trDataParams[14], 0, 99, 1, 8)
 
   const diffA = diff
-  const diffB = tileSizePixel - diff
+  const diffB = tileSize - diff
 
   const posX1 = _y % 2 === 0 ? x + diffA : x + diffB
   const posY1 = y
@@ -1072,7 +1070,9 @@ function trDrawTilePattern11(_x, _y, tileSize) {
   const points = [createVector(posX1, posY1)]
   for (let i = 1; i * tileSizePixel < tileSize; i++) {
     // ノイズで埋める
-    points.push(createVector(points[i - 1].x + noise(trDataParams[13]) * 0.3 * trDataParams[14], y + i * tileSizePixel))
+    points.push(
+      createVector(points[i - 1].x + noise(trDataParams[13]) * 0.15 * trDataParams[14], y + i * tileSizePixel),
+    )
   }
   points.push(createVector(posX2, posY2))
 
@@ -1085,6 +1085,39 @@ function trDrawTilePattern11(_x, _y, tileSize) {
       vertex(points[i].x, points[i].y)
     }
     endShape()
+  })
+}
+
+function trDrawTilePattern12(_x, _y, tileSize) {
+  const x = _x * tileSize
+  const y = _y * tileSize
+
+  const { color1: fillColor1 } = trGetColor()
+
+  const tileSizePixel = tileSize / 10
+  const diff = tileSizePixel * map(trDataParams[14], 0, 99, 1, 8)
+
+  const diffA = diff
+  const diffB = tileSize - diff
+
+  const points = []
+
+  points[0] = createVector(x + diffA, y)
+  points[1] = createVector(x + tileSize, y)
+  points[2] = createVector(x + tileSize, y + diffB)
+  points[3] = createVector(x + diffB, y + tileSize)
+  points[4] = createVector(x, y + tileSize)
+  points[5] = createVector(x, y + diffA)
+
+  trDrawBlock(() => {
+    noStroke()
+    fill(fillColor1)
+
+    beginShape()
+    for (let i = 0; i < points.length; i++) {
+      vertex(points[i].x, points[i].y)
+    }
+    endShape(CLOSE)
   })
 }
 // バリーション
@@ -1102,6 +1135,7 @@ const trFuncArray = [
   trDrawTilePattern9,
   trDrawTilePattern10,
   trDrawTilePattern11,
+  trDrawTilePattern12,
 ]
 
 /**
