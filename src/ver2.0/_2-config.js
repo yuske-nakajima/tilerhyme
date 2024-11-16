@@ -449,8 +449,8 @@ function trGetColor() {
   for (let i = 1; i <= 12; i++) {
     colors[`color${i}`] = color(
       map(trDataParams[0 + i], 0, 99, 0, 360),
-      map(trDataParams[1 + i], 0, 99, 50, 80),
-      map(trDataParams[2 + i], 0, 99, 80, 100),
+      map(trDataParams[1 + i], 0, 99, 90, 100),
+      map(trDataParams[2 + i], 0, 99, 90, 100),
     )
   }
 
@@ -876,6 +876,145 @@ function trDrawTilePattern8(_x, _y, tileSize) {
     }
   })
 }
+
+function trDrawTilePattern9(_x, _y, tileSize) {
+  const x = _x * tileSize
+  const y = _y * tileSize
+
+  const { color1: fillColor1, color2: fillColor2, color3: fillColor3 } = trGetColor()
+
+  const divNum = 6
+  const divTileSize = tileSize / divNum
+
+  const points1 = []
+  const points2 = []
+  for (let i = 0; i < divNum; i++) {
+    points1.push(createVector(x, y + divTileSize * i))
+    points2.push(createVector(x + tileSize, y + divTileSize * i))
+  }
+
+  const pList = [[0, 2]]
+
+  trDrawBlock(() => {
+    noStroke()
+
+    let [p1, p2] = pList[0]
+
+    if (_x % 2 === 0) {
+      trDrawBlock(() => {
+        fill(fillColor1)
+        quad(
+          points1[p1].x,
+          points1[p1].y,
+          points2[p2].x,
+          points2[p2].y,
+          points2[p2 + 3].x,
+          points2[p2 + 3].y,
+          points1[p1 + 3].x,
+          points1[p1 + 3].y,
+        )
+      })
+
+      trDrawBlock(() => {
+        fill(fillColor2)
+        quad(
+          points1[p1 + 1].x,
+          points1[p1 + 1].y,
+          points2[p2 + 1].x,
+          points2[p2 + 1].y,
+          points2[p2 + 2].x,
+          points2[p2 + 2].y,
+          points1[p1 + 2].x,
+          points1[p1 + 2].y,
+        )
+      })
+
+      trDrawBlock(() => {
+        fill(fillColor1)
+        quad(
+          points2[p1].x,
+          points2[p1].y,
+          points1[p2].x,
+          points1[p2].y,
+          points1[p2 + 3].x,
+          points1[p2 + 3].y,
+          points2[p1 + 3].x,
+          points2[p1 + 3].y,
+        )
+      })
+
+      trDrawBlock(() => {
+        fill(fillColor2)
+        quad(
+          points2[p1 + 1].x,
+          points2[p1 + 1].y,
+          points1[p2 + 1].x,
+          points1[p2 + 1].y,
+          points1[p2 + 2].x,
+          points1[p2 + 2].y,
+          points2[p1 + 2].x,
+          points2[p1 + 2].y,
+        )
+      })
+    } else {
+      trDrawBlock(() => {
+        fill(fillColor1)
+        quad(
+          points2[p1].x,
+          points2[p1].y,
+          points1[p2].x,
+          points1[p2].y,
+          points1[p2 + 3].x,
+          points1[p2 + 3].y,
+          points2[p1 + 3].x,
+          points2[p1 + 3].y,
+        )
+      })
+
+      trDrawBlock(() => {
+        fill(fillColor2)
+        quad(
+          points2[p1 + 1].x,
+          points2[p1 + 1].y,
+          points1[p2 + 1].x,
+          points1[p2 + 1].y,
+          points1[p2 + 2].x,
+          points1[p2 + 2].y,
+          points2[p1 + 2].x,
+          points2[p1 + 2].y,
+        )
+      })
+
+      trDrawBlock(() => {
+        fill(fillColor1)
+        quad(
+          points1[p1].x,
+          points1[p1].y,
+          points2[p2].x,
+          points2[p2].y,
+          points2[p2 + 3].x,
+          points2[p2 + 3].y,
+          points1[p1 + 3].x,
+          points1[p1 + 3].y,
+        )
+      })
+
+      trDrawBlock(() => {
+        fill(fillColor2)
+        quad(
+          points1[p1 + 1].x,
+          points1[p1 + 1].y,
+          points2[p2 + 1].x,
+          points2[p2 + 1].y,
+          points2[p2 + 2].x,
+          points2[p2 + 2].y,
+          points1[p1 + 2].x,
+          points1[p1 + 2].y,
+        )
+      })
+    }
+  })
+}
 // バリーション
 
 const trFuncArray = [
@@ -888,6 +1027,7 @@ const trFuncArray = [
   trDrawTilePattern6,
   trDrawTilePattern7,
   trDrawTilePattern8,
+  trDrawTilePattern9,
 ]
 
 /**
