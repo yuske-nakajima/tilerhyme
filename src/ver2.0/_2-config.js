@@ -797,6 +797,50 @@ function trDrawTilePattern5(x, y, tileSize) {
     }
   })
 }
+
+function trDrawTilePattern6(_x, _y, tileSize) {
+  const x = _x * tileSize
+  const y = _y * tileSize
+  const _w = tileSize / 100
+  const firstRectWidth = _w * map(trDataParams[14], 0, 99, 10, 60)
+  const secondRectWidth = tileSize - firstRectWidth
+
+  const fillColor = color(
+    map(trDataParams[0], 0, 99, 0, 360),
+    map(trDataParams[1], 0, 99, 50, 80),
+    map(trDataParams[2], 0, 99, 80, 100),
+  )
+
+  const fillColor2 = color(
+    map(trDataParams[1], 0, 99, 0, 360),
+    map(trDataParams[2], 0, 99, 50, 80),
+    map(trDataParams[3], 0, 99, 80, 100),
+  )
+
+  const fillColor3 = color(
+    map(trDataParams[2], 0, 99, 0, 360),
+    map(trDataParams[3], 0, 99, 50, 80),
+    map(trDataParams[4], 0, 99, 80, 100),
+  )
+  trDrawBlock(() => {
+    noStroke()
+
+    trDrawBlock(() => {
+      fill(fillColor)
+      rect(x, y, firstRectWidth)
+    })
+
+    trDrawBlock(() => {
+      fill(fillColor2)
+      rect(x + firstRectWidth, y, secondRectWidth)
+    })
+
+    trDrawBlock(() => {
+      fill(fillColor3)
+      rect(x, y + firstRectWidth, secondRectWidth)
+    })
+  })
+}
 // バリーション
 
 const trFuncArray = [
@@ -806,6 +850,7 @@ const trFuncArray = [
   trDrawTilePattern3,
   trDrawTilePattern4,
   trDrawTilePattern5,
+  trDrawTilePattern6,
 ]
 
 /**
