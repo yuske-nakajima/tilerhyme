@@ -1120,22 +1120,58 @@ function trDrawTilePattern12(_x, _y, tileSize) {
     endShape(CLOSE)
   })
 }
+
+function trDrawTilePattern13(_x, _y, tileSize) {
+  const x = _x * tileSize
+  const y = _y * tileSize
+
+  const { color1: fillColor1 } = trGetColor()
+
+  trDrawBlock(() => {
+    noStroke()
+
+    fill(fillColor1)
+    ellipse(x + tileSize / 2, y + tileSize / 2, tileSize)
+  })
+}
+
+function trDrawTilePattern14(_x, _y, tileSize) {
+  const x = _x * tileSize
+  const y = _y * tileSize
+
+  const { color1: fillColor1, color2: fillColor2 } = trGetColor()
+
+  trDrawBlock(() => {
+    noStroke()
+
+    fill(fillColor1)
+    ellipse(x + tileSize / 2, y + tileSize / 2, tileSize)
+
+    fill(fillColor2)
+    ellipse(x, y + tileSize / 2, tileSize)
+
+    fill(fillColor1)
+    ellipse(x + tileSize / 2, y + tileSize, tileSize)
+  })
+}
 // バリーション
 
 const trFuncArray = [
-  trDrawTilePattern1(0),
-  trDrawTilePattern1(1),
-  trDrawTilePattern2,
-  trDrawTilePattern3,
-  trDrawTilePattern4,
-  trDrawTilePattern5,
-  trDrawTilePattern6,
-  trDrawTilePattern7,
-  trDrawTilePattern8,
-  trDrawTilePattern9,
-  trDrawTilePattern10,
-  trDrawTilePattern11,
-  trDrawTilePattern12,
+  // trDrawTilePattern1(0),
+  // trDrawTilePattern1(1),
+  // trDrawTilePattern2,
+  // trDrawTilePattern3,
+  // trDrawTilePattern4,
+  // trDrawTilePattern5,
+  // trDrawTilePattern6,
+  // trDrawTilePattern7,
+  // trDrawTilePattern8,
+  // trDrawTilePattern9,
+  // trDrawTilePattern10,
+  // trDrawTilePattern11,
+  // trDrawTilePattern12,
+  // trDrawTilePattern13,
+  trDrawTilePattern14,
 ]
 
 /**
