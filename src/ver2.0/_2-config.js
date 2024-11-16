@@ -881,7 +881,7 @@ function trDrawTilePattern9(_x, _y, tileSize) {
   const x = _x * tileSize
   const y = _y * tileSize
 
-  const { color1: fillColor1, color2: fillColor2, color3: fillColor3 } = trGetColor()
+  const { color1: fillColor1, color2: fillColor2 } = trGetColor()
 
   const divNum = 6
   const divTileSize = tileSize / divNum
@@ -1015,6 +1015,42 @@ function trDrawTilePattern9(_x, _y, tileSize) {
     }
   })
 }
+
+function trDrawTilePattern10(_x, _y, tileSize) {
+  const x = _x * tileSize
+  const y = _y * tileSize
+
+  const { color1: strokeColor1 } = trGetColor()
+
+  const tileSizePixel = tileSize / 10
+  const diff = tileSizePixel * map(trDataParams[14], 0, 99, 1, 8)
+
+  const diffA = diff
+  const diffB = tileSizePixel - diff
+
+  const posX1 = x
+  const posY1 = _x % 2 === 0 ? y + diffA : y + diffB
+  const posX2 = x + tileSize
+  const posY2 = _x % 2 === 0 ? y + diffB : y + diffA
+
+  const points = [createVector(posX1, posY1)]
+  for (let i = 1; i * tileSizePixel < tileSize; i++) {
+    // ノイズで埋める
+    points.push(createVector(x + i * tileSizePixel, points[i - 1].y + noise(trDataParams[13]) * 0.3 * trDataParams[14]))
+  }
+  points.push(createVector(posX2, posY2))
+
+  trDrawBlock(() => {
+    noFill()
+    stroke(strokeColor1)
+    strokeWeight(map(trDataParams[13], 0, 99, 1, 10))
+    beginShape()
+    for (let i = 0; i < points.length; i++) {
+      vertex(points[i].x, points[i].y)
+    }
+    endShape()
+  })
+}
 // バリーション
 
 const trFuncArray = [
@@ -1028,6 +1064,7 @@ const trFuncArray = [
   trDrawTilePattern7,
   trDrawTilePattern8,
   trDrawTilePattern9,
+  trDrawTilePattern10,
 ]
 
 /**
