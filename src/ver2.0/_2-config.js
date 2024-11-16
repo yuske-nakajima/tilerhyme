@@ -841,6 +841,84 @@ function trDrawTilePattern6(_x, _y, tileSize) {
     })
   })
 }
+
+function trDrawTilePattern7(_x, _y, tileSize) {
+  const x = _x * tileSize
+  const y = _y * tileSize
+  // const innerTileSize = tileSize / map(trDataParams[14], 0, 99, 5, 10)
+  const innerTileSize = tileSize / 2
+
+  const fillColor = color(
+    map(trDataParams[0], 0, 99, 0, 360),
+    map(trDataParams[1], 0, 99, 50, 80),
+    map(trDataParams[2], 0, 99, 80, 100),
+  )
+
+  const fillColor2 = color(
+    map(trDataParams[1], 0, 99, 0, 360),
+    map(trDataParams[2], 0, 99, 50, 80),
+    map(trDataParams[3], 0, 99, 80, 100),
+  )
+
+  const fillColor3 = color(
+    map(trDataParams[2], 0, 99, 0, 360),
+    map(trDataParams[3], 0, 99, 50, 80),
+    map(trDataParams[4], 0, 99, 80, 100),
+  )
+  trDrawBlock(() => {
+    noStroke()
+
+    if (_y % 2 === 0) {
+      if (_x % 2 === 0) {
+        trDrawBlock(() => {
+          fill(fillColor3)
+          rect(x, y, tileSize)
+
+          fill(fillColor)
+          triangle(x + tileSize, y, x + tileSize, y + tileSize, x, y + tileSize)
+
+          fill(fillColor2)
+          rect(x + tileSize - innerTileSize, y + tileSize - innerTileSize, innerTileSize)
+        })
+      } else {
+        trDrawBlock(() => {
+          fill(fillColor2)
+          rect(x, y, tileSize)
+
+          fill(fillColor)
+          triangle(x, y, x + tileSize, y + tileSize, x, y + tileSize)
+
+          fill(fillColor3)
+          rect(x, y + tileSize - innerTileSize, innerTileSize)
+        })
+      }
+    } else {
+      if (_x % 2 === 0) {
+        trDrawBlock(() => {
+          fill(fillColor2)
+          rect(x, y, tileSize)
+
+          fill(fillColor)
+          triangle(x, y, x + tileSize, y, x + tileSize, y + tileSize)
+
+          fill(fillColor3)
+          rect(x + tileSize - innerTileSize, y, innerTileSize)
+        })
+      } else {
+        trDrawBlock(() => {
+          fill(fillColor3)
+          rect(x, y, tileSize)
+
+          fill(fillColor)
+          triangle(x, y, x + tileSize, y, x, y + tileSize)
+
+          fill(fillColor2)
+          rect(x, y, innerTileSize)
+        })
+      }
+    }
+  })
+}
 // バリーション
 
 const trFuncArray = [
@@ -851,6 +929,7 @@ const trFuncArray = [
   trDrawTilePattern4,
   trDrawTilePattern5,
   trDrawTilePattern6,
+  trDrawTilePattern7,
 ]
 
 /**
