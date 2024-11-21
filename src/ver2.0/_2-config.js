@@ -1154,6 +1154,21 @@ function trDrawTilePattern14(_x, _y, tileSize) {
     ellipse(x + tileSize / 2, y + tileSize, tileSize)
   })
 }
+
+function trDrawTilePattern15(_x, _y, tileSize) {
+  const x = _x * tileSize
+  const y = _y * tileSize
+
+  const { color1: fillColor1, color2: fillColor2 } = trGetColor()
+
+  trDrawBlock(() => {
+    noStroke()
+    fill(fillColor1)
+    translate(x, y)
+    rotate(PI / 4)
+    rect(0, 0, tileSize * 0.7)
+  })
+}
 // バリーション
 
 const trFuncArray = [
@@ -1172,6 +1187,7 @@ const trFuncArray = [
   trDrawTilePattern12,
   trDrawTilePattern13,
   trDrawTilePattern14,
+  trDrawTilePattern15,
 ]
 
 /**
