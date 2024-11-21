@@ -1159,14 +1159,67 @@ function trDrawTilePattern15(_x, _y, tileSize) {
   const x = _x * tileSize
   const y = _y * tileSize
 
-  const { color1: fillColor1, color2: fillColor2 } = trGetColor()
+  const { color1: fillColor1 } = trGetColor()
 
   trDrawBlock(() => {
     noStroke()
+    rectMode(CENTER)
     fill(fillColor1)
     translate(x, y)
     rotate(PI / 4)
     rect(0, 0, tileSize * 0.7)
+  })
+}
+
+function trDrawTilePattern16(_x, _y, tileSize) {
+  const x = _x * tileSize
+  const y = _y * tileSize
+
+  const { color1: fillColor1, color2: fillColor2, color3: fillColor3 } = trGetColor()
+
+  trDrawBlock(() => {
+    noStroke()
+    rectMode(CENTER)
+    translate(x, y)
+    rotate(PI / 4)
+
+    fill(fillColor1)
+    rect(0, 0, tileSize * 0.7)
+
+    fill(fillColor2)
+    rect(0, 0, tileSize * 0.5)
+
+    fill(fillColor3)
+    rect(0, 0, tileSize * 0.3)
+  })
+}
+
+function trDrawTilePattern17(_x, _y, tileSize) {
+  const x = _x * tileSize
+  const y = _y * tileSize
+
+  const { color1: fillColor1, color2: fillColor2, color3: fillColor3 } = trGetColor()
+
+  trDrawBlock(() => {
+    noStroke()
+    rectMode(CENTER)
+    translate(x, y)
+    rotate(PI / 4)
+
+    fill(fillColor1)
+    rect(0, 0, tileSize * 0.6)
+
+    fill(fillColor2)
+    rect(0, 0, tileSize * 0.4)
+
+    fill(fillColor3)
+    rect(0, 0, tileSize * 0.2)
+
+    fill(fillColor1)
+    ellipse(0 + tileSize, 0, tileSize * 0.3)
+    ellipse(0 - tileSize, 0, tileSize * 0.3)
+    ellipse(0, 0 + tileSize, tileSize * 0.3)
+    ellipse(0, 0 - tileSize, tileSize * 0.3)
   })
 }
 // バリーション
@@ -1188,6 +1241,8 @@ const trFuncArray = [
   trDrawTilePattern13,
   trDrawTilePattern14,
   trDrawTilePattern15,
+  trDrawTilePattern16,
+  trDrawTilePattern17,
 ]
 
 /**
