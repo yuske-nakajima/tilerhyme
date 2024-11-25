@@ -1222,6 +1222,33 @@ function trDrawTilePattern17(_x, _y, tileSize) {
     ellipse(0, 0 - tileSize, tileSize * 0.3)
   })
 }
+
+function trDrawTilePattern18(_x, _y, tileSize) {
+  const x = _x * tileSize
+  const y = _y * tileSize
+  const centerPos = createVector(x + tileSize / 2, y + tileSize / 2)
+
+  const { color1: fillColor1, color2: fillColor2, color3: fillColor3, color4: fillColor4 } = trGetColor()
+
+  trDrawBlock(() => {
+    noStroke()
+    fill(fillColor3)
+    rect(x, y, tileSize * 1.1, tileSize * 1.1)
+
+    strokeWeight(min(width / 150, height / 150))
+
+    stroke(fillColor1)
+    fill(fillColor2)
+    ellipse(centerPos.x, centerPos.y, tileSize)
+
+    fill(fillColor4)
+    ellipse(x + tileSize / 2, y + tileSize * 0.6, tileSize * 0.6)
+
+    stroke(fillColor1)
+    fill(fillColor3)
+    ellipse(x, y + tileSize, tileSize)
+  })
+}
 // バリーション
 
 const trFuncArray = [
@@ -1243,6 +1270,7 @@ const trFuncArray = [
   trDrawTilePattern15,
   trDrawTilePattern16,
   trDrawTilePattern17,
+  trDrawTilePattern18,
 ]
 
 /**
