@@ -1249,6 +1249,118 @@ function trDrawTilePattern18(_x, _y, tileSize) {
     ellipse(x, y + tileSize, tileSize)
   })
 }
+
+function trDrawTilePattern19(_x, _y, tileSize) {
+  const x = _x * tileSize
+  const y = _y * tileSize
+  const centerPos = createVector(x + tileSize / 2, y + tileSize / 2)
+
+  const { color1: fillColor1, color2: fillColor2, color3: fillColor3, color4: fillColor4 } = trGetColor()
+
+  const pointList = [
+    { x: centerPos.x, y: y },
+    { x: x + tileSize, y: centerPos.y },
+    { x: centerPos.x, y: y + tileSize },
+    { x: x, y: centerPos.y },
+  ]
+
+  const seed = trDataParams[(_x * _y) % 16]
+  const startPosIndex = (seed + 1) % 4
+  const startPos = pointList[startPosIndex]
+  const endPos = pointList[(startPosIndex + 1) % 4]
+
+  trDrawBlock(() => {
+    noFill()
+    strokeWeight(min(width / 100, height / 100))
+    stroke(fillColor1)
+
+    beginShape()
+    vertex(startPos.x, startPos.y)
+    vertex(centerPos.x, centerPos.y)
+    vertex(endPos.x, endPos.y)
+    endShape()
+
+    fill(fillColor1)
+    const ellipseSize = trDataParams[15] / 100
+    ellipse(centerPos.x, centerPos.y, min(tileSize * ellipseSize, tileSize / 4))
+  })
+}
+
+function trDrawTilePattern20(_x, _y, tileSize) {
+  const x = _x * tileSize
+  const y = _y * tileSize
+  const centerPos = createVector(x + tileSize / 2, y + tileSize / 2)
+
+  const { color1: fillColor1, color2: fillColor2, color3: fillColor3, color4: fillColor4 } = trGetColor()
+
+  const pointList = [
+    { x: x, y: y },
+    { x: x + tileSize, y: y },
+    { x: x + tileSize, y: y + tileSize },
+    { x: x, y: y + tileSize },
+  ]
+
+  const seed = trDataParams[(_x * _y) % 16]
+  const startPosIndex = (seed + 1) % 4
+  const startPos = pointList[startPosIndex]
+  const endPos = pointList[(startPosIndex + 1) % 4]
+
+  trDrawBlock(() => {
+    noFill()
+    strokeWeight(min(width / 100, height / 100))
+    stroke(fillColor1)
+
+    beginShape()
+    vertex(startPos.x, startPos.y)
+    vertex(centerPos.x, centerPos.y)
+    vertex(endPos.x, endPos.y)
+    endShape()
+
+    fill(fillColor1)
+    const ellipseSize = trDataParams[15] / 100
+    ellipse(centerPos.x, centerPos.y, min(tileSize * ellipseSize, tileSize / 4))
+  })
+}
+
+function trDrawTilePattern21(_x, _y, tileSize) {
+  const x = _x * tileSize
+  const y = _y * tileSize
+  const centerPos = createVector(x + tileSize / 2, y + tileSize / 2)
+
+  const { color1: fillColor1, color2: fillColor2, color3: fillColor3, color4: fillColor4 } = trGetColor()
+
+  const pointList = [
+    { x: x, y: y },
+    { x: centerPos.x, y: y },
+    { x: x + tileSize, y: y },
+    { x: x + tileSize, y: centerPos.y },
+    { x: x + tileSize, y: y + tileSize },
+    { x: centerPos.x, y: y + tileSize },
+    { x: x, y: y + tileSize },
+    { x: x, y: centerPos.y },
+  ]
+
+  const seed = trDataParams[(_x * _y) % 16]
+  const startPosIndex = (seed + 1) % 4
+  const startPos = pointList[startPosIndex]
+  const endPos = pointList[(startPosIndex + 1) % 4]
+
+  trDrawBlock(() => {
+    noFill()
+    strokeWeight(min(width / 100, height / 100))
+    stroke(fillColor1)
+
+    beginShape()
+    vertex(startPos.x, startPos.y)
+    vertex(centerPos.x, centerPos.y)
+    vertex(endPos.x, endPos.y)
+    endShape()
+
+    fill(fillColor1)
+    const ellipseSize = trDataParams[15] / 100
+    ellipse(centerPos.x, centerPos.y, min(tileSize * ellipseSize, tileSize / 4))
+  })
+}
 // バリーション
 
 const trFuncArray = [
@@ -1271,6 +1383,9 @@ const trFuncArray = [
   trDrawTilePattern16,
   trDrawTilePattern17,
   trDrawTilePattern18,
+  trDrawTilePattern19,
+  trDrawTilePattern20,
+  trDrawTilePattern21,
 ]
 
 /**
