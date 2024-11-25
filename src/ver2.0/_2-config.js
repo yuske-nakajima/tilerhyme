@@ -446,11 +446,21 @@ async function trSetDataParams() {
 function trGetColor() {
   const colors = {}
 
+  // カラー
+  // for (let i = 1; i <= 12; i++) {
+  //   colors[`color${i}`] = color(
+  //     map(trDataParams[0 + i], 0, 99, 0, 360),
+  //     map(trDataParams[1 + i], 0, 99, 90, 100),
+  //     map(trDataParams[2 + i], 0, 99, 90, 100),
+  //   )
+  // }
+
+  // 無彩色
   for (let i = 1; i <= 12; i++) {
     colors[`color${i}`] = color(
       map(trDataParams[0 + i], 0, 99, 0, 360),
-      map(trDataParams[1 + i], 0, 99, 90, 100),
-      map(trDataParams[2 + i], 0, 99, 90, 100),
+      map(trDataParams[1 + i], 0, 99, 0, 0),
+      map(trDataParams[2 + i], 0, 99, 0, 100),
     )
   }
 
