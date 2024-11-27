@@ -89,14 +89,23 @@ function trUiDraw() {
     }
   }
 
+  // 有彩色
+  background(
+    color(
+      map(trDataParams[14], 0, 99, 0, 360),
+      map(trDataParams[15], 0, 99, 10, 20),
+      map(trDataParams[16], 0, 99, 90, 100),
+    ),
+  )
+
+  // 無彩色
   // background(
   //   color(
-  //     map(trDataParams[14], 0, 99, 0, 360),
-  //     map(trDataParams[15], 0, 99, 50, 80),
-  //     map(trDataParams[16], 0, 99, 50, 80),
+  //     map(trDataParams[10], 0, 99, 0, 360),
+  //     map(trDataParams[11], 0, 99, 0, 0),
+  //     map(trDataParams[12], 0, 99, 0, 100),
   //   ),
   // )
-  background(0)
 
   // TODO: ここに描画処理を書く
   trDrawShape()
