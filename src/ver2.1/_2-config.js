@@ -106,7 +106,7 @@ const TR_MODE = {
   AUTO: 1,
 }
 
-const TR_AUTO_MODE_INTERVAL = 480
+const TR_AUTO_MODE_INTERVAL = 60
 // ------------------------------------------------------------
 // --- 変数
 // ------------------------------------------------------------
@@ -675,6 +675,195 @@ const trDrawTilePattern1_3_1 = _trDrawTilePattern1((params) => {
 
   ellipse(0, 0, _tileSize)
 })
+
+function _trDrawTilePattern2(func) {
+  return function (_x, _y, tileSize) {
+    const x = _x * tileSize
+    const y = _y * tileSize
+    const centerPos = createVector(x + tileSize / 2, y + tileSize / 2)
+
+    const { color1, color2, color3, color4, color5 } = trChromaticGetColor()
+
+    const pointList = [
+      { x: x + tileSize * 0.5, y: y },
+      { x: x + tileSize, y: y + tileSize * 0.5 },
+      { x: x + tileSize * 0.5, y: y + tileSize },
+      { x: x, y: y + tileSize * 0.5 },
+    ]
+
+    const p1 =
+      trDataParams[((_x + _y) * trDataParams[(_x + _y) % trDataParams.length]) % trDataParams.length] % pointList.length
+    const p2 = (p1 + 1) % pointList.length
+    const p3 = (p1 + 2) % pointList.length
+    const p4 = (p1 + 3) % pointList.length
+
+    const noiseList = []
+    for (let i = 0.1; i <= 1; i += 0.1) {
+      noiseList.push(i)
+    }
+
+    const sineValue = sin(frameCount * 50 * 0.01)
+    const interpolationFactor = map(sineValue, -1, 1, 0.01, 1)
+
+    const _tileSize = tileSize * interpolationFactor
+
+    trDrawBlock(() => {
+      func({
+        _x,
+        _y,
+        x,
+        y,
+        tileSize,
+        color1,
+        color2,
+        color3,
+        color4,
+        color5,
+        _tileSize,
+        pointList,
+        p1,
+        p2,
+        p3,
+        p4,
+        centerPos,
+      })
+    })
+  }
+}
+
+const trDrawTilePattern2_1_1 = _trDrawTilePattern2((params) => {
+  const { _tileSize, tileSize, color1, color2, pointList, p1, p2 } = params
+
+  noFill()
+  strokeWeight(tileSize * 0.1)
+
+  const xTileSize = pointList[p1].x === pointList[p2].x ? 0 : _tileSize
+
+  stroke(color1)
+  line(
+    pointList[p1].x + xTileSize,
+    pointList[p1].y + xTileSize,
+    pointList[p2].x + xTileSize,
+    pointList[p2].y + xTileSize,
+  )
+
+  stroke(color2)
+  line(pointList[p1].x, pointList[p1].y, pointList[p2].x, pointList[p2].y)
+})
+
+const trDrawTilePattern2_1_2 = _trDrawTilePattern2((params) => {
+  const { _tileSize, tileSize, color1, color2, pointList, p1, p3 } = params
+
+  noFill()
+  strokeWeight(tileSize * 0.1)
+
+  stroke(color1)
+  line(pointList[p1].x, pointList[p1].y, pointList[p3].x, pointList[p3].y)
+
+  const xTileSize = pointList[p1].x === pointList[p3].x ? 0 : _tileSize
+  const yTileSize = pointList[p1].y === pointList[p3].y ? 0 : _tileSize
+
+  stroke(color2)
+  line(pointList[p1].x, pointList[p1].y, pointList[p3].x + xTileSize, pointList[p3].y + yTileSize)
+})
+
+const trDrawTilePattern2_1_3 = _trDrawTilePattern2((params) => {
+  const { _tileSize, tileSize, color1, color2, pointList, p1, p2 } = params
+
+  noFill()
+  strokeWeight(tileSize * 0.1)
+
+  stroke(color1)
+  line(pointList[p1].x, pointList[p1].y, pointList[p1].x + _tileSize / 2, pointList[p1].y)
+
+  stroke(color2)
+  line(pointList[p2].x, pointList[p2].y, pointList[p2].x, pointList[p2].y + _tileSize)
+})
+
+const trDrawTilePattern2_1_4 = _trDrawTilePattern2((params) => {
+  const { _tileSize, tileSize, color1, color2, pointList, p1, p2 } = params
+
+  noFill()
+  stroke(color1)
+  strokeWeight(tileSize * 0.1)
+
+  line(pointList[p1].x, pointList[p1].y, pointList[p1].x + _tileSize / 2, pointList[p1].y)
+
+  stroke(color2)
+  line(pointList[p2].x, pointList[p2].y, pointList[p2].x, pointList[p2].y + _tileSize / 2)
+})
+
+const trDrawTilePattern2_2_1 = _trDrawTilePattern2((params) => {
+  const { _tileSize, color1, pointList } = params
+
+  noFill()
+  stroke(color1)
+  strokeWeight(_tileSize * min(trDataParams[0] / 100, 0.5))
+  line(pointList[0].x, pointList[0].y, pointList[0].x, pointList[0].y + _tileSize)
+})
+
+const trDrawTilePattern2_2_2 = _trDrawTilePattern2((params) => {
+  const { _tileSize, color1, pointList } = params
+
+  noFill()
+  stroke(color1)
+  strokeWeight(_tileSize * min(trDataParams[0] / 100, 0.5))
+  line(pointList[1].x, pointList[1].y, pointList[1].x - _tileSize, pointList[1].y)
+})
+
+const trDrawTilePattern2_2_3 = _trDrawTilePattern2((params) => {
+  const { _tileSize, color1, pointList } = params
+
+  noFill()
+  stroke(color1)
+  strokeWeight(_tileSize * min(trDataParams[0] / 100, 0.5))
+  line(pointList[0].x, pointList[0].y, pointList[0].x, pointList[0].y - _tileSize)
+  line(pointList[3].x, pointList[0].y, pointList[0].x + _tileSize, pointList[0].y)
+})
+
+const trDrawTilePattern2_2_4 = _trDrawTilePattern2((params) => {
+  const { x, y, _tileSize, color1, color2 } = params
+
+  translate(x, y)
+
+  noFill()
+  rectMode(CENTER)
+
+  stroke(color1)
+  strokeWeight(_tileSize * min(trDataParams[0] / 100, 0.1))
+
+  stroke(color1)
+  arc(0 + _tileSize / 2, 0 + _tileSize / 2, _tileSize, _tileSize, PI, PI + HALF_PI)
+
+  stroke(color2)
+  arc(0 - _tileSize / 2, 0 - _tileSize / 2, _tileSize, _tileSize, 0, HALF_PI)
+})
+
+const trDrawTilePattern2_2_5 = _trDrawTilePattern2((params) => {
+  const { x, y, _tileSize, color1, color2 } = params
+
+  translate(x, y)
+
+  noFill()
+  rectMode(CENTER)
+
+  stroke(color1)
+  strokeWeight(_tileSize * min(trDataParams[0] / 100, 0.1))
+
+  stroke(color1)
+  beginShape()
+  vertex(0, 0 + _tileSize / 2)
+  vertex(0, 0)
+  vertex(0 + _tileSize / 2, 0)
+  endShape()
+
+  stroke(color2)
+  beginShape()
+  vertex(0, 0 - _tileSize / 2)
+  vertex(0, 0)
+  vertex(0 - _tileSize / 2, 0)
+  endShape()
+})
 // バリーション
 
 const trFuncArray = [
@@ -688,6 +877,15 @@ const trFuncArray = [
   trDrawTilePattern1_2_3_1,
   trDrawTilePattern1_3,
   trDrawTilePattern1_3_1,
+  trDrawTilePattern2_1_1,
+  trDrawTilePattern2_1_2,
+  trDrawTilePattern2_1_3,
+  trDrawTilePattern2_1_4,
+  trDrawTilePattern2_2_1,
+  trDrawTilePattern2_2_2,
+  trDrawTilePattern2_2_3,
+  trDrawTilePattern2_2_4,
+  trDrawTilePattern2_2_5,
 ]
 
 /**
