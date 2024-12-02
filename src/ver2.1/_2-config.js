@@ -878,26 +878,63 @@ const trDrawTilePattern2_2_2 = _trDrawTilePattern2((params) => {
   line(pointList[1].x, pointList[1].y, pointList[1].x - _tileSize, pointList[1].y)
 })
 
-const trDrawTilePattern2_2_3 = _trDrawTilePattern2((params) => {
-  const { _tileSize, color1, pointList } = params
+const trDrawTilePattern2_2_3_1_1 = _trDrawTilePattern2((params) => {
+  const { _tileSize, tileSize, color1, pointList } = params
 
   noFill()
   stroke(color1)
-  strokeWeight(_tileSize * min(trDataParams[0] / 100, 0.5))
+  strokeWeight(max((tileSize * trDataParams[5]) / 400, 1))
+
   line(pointList[0].x, pointList[0].y, pointList[0].x, pointList[0].y - _tileSize)
   line(pointList[3].x, pointList[0].y, pointList[0].x + _tileSize, pointList[0].y)
 })
 
-const trDrawTilePattern2_2_4 = _trDrawTilePattern2((params) => {
-  const { x, y, _tileSize, color1, color2 } = params
+const trDrawTilePattern2_2_3_1_2 = _trDrawTilePattern2((params) => {
+  const { _tileSize, tileSize, color1, color2, pointList } = params
+
+  noFill()
+  strokeWeight(max((tileSize * trDataParams[5]) / 400, 1))
+
+  stroke(color1)
+  line(pointList[3].x, pointList[0].y, pointList[0].x + _tileSize, pointList[0].y)
+
+  stroke(color2)
+  line(pointList[0].x, pointList[0].y, pointList[0].x, pointList[0].y - _tileSize)
+})
+
+const trDrawTilePattern2_2_3_2_1 = _trDrawTilePattern2((params) => {
+  const { _tileSize, tileSize, color1, pointList } = params
+
+  noFill()
+  stroke(color1)
+  strokeWeight(max((tileSize * trDataParams[5]) / 400, 1))
+
+  line(pointList[0].x, pointList[0].y, pointList[0].x, pointList[0].y + _tileSize)
+  line(pointList[3].x, pointList[0].y, pointList[0].x + _tileSize, pointList[0].y)
+})
+
+const trDrawTilePattern2_2_3_2_2 = _trDrawTilePattern2((params) => {
+  const { _tileSize, tileSize, color1, color2, pointList } = params
+
+  noFill()
+  strokeWeight(max((tileSize * trDataParams[5]) / 400, 1))
+
+  stroke(color1)
+  line(pointList[0].x, pointList[0].y, pointList[0].x, pointList[0].y + _tileSize)
+
+  stroke(color2)
+  line(pointList[3].x, pointList[0].y, pointList[0].x + _tileSize, pointList[0].y)
+})
+
+const trDrawTilePattern2_2_4_1 = _trDrawTilePattern2((params) => {
+  const { x, y, _tileSize, tileSize, color1, color2 } = params
 
   translate(x, y)
 
   noFill()
   rectMode(CENTER)
 
-  stroke(color1)
-  strokeWeight(_tileSize * min(trDataParams[0] / 100, 0.1))
+  strokeWeight(max((tileSize * trDataParams[5]) / 400, 1))
 
   stroke(color1)
   arc(0 + _tileSize / 2, 0 + _tileSize / 2, _tileSize, _tileSize, PI, PI + HALF_PI)
@@ -906,8 +943,8 @@ const trDrawTilePattern2_2_4 = _trDrawTilePattern2((params) => {
   arc(0 - _tileSize / 2, 0 - _tileSize / 2, _tileSize, _tileSize, 0, HALF_PI)
 })
 
-const trDrawTilePattern2_2_5 = _trDrawTilePattern2((params) => {
-  const { x, y, _tileSize, color1, color2 } = params
+const trDrawTilePattern2_2_5_1 = _trDrawTilePattern2((params) => {
+  const { x, y, _tileSize, tileSize, color1, color2 } = params
 
   translate(x, y)
 
@@ -915,7 +952,7 @@ const trDrawTilePattern2_2_5 = _trDrawTilePattern2((params) => {
   rectMode(CENTER)
 
   stroke(color1)
-  strokeWeight(_tileSize * min(trDataParams[0] / 100, 0.1))
+  strokeWeight(max((tileSize * trDataParams[5]) / 400, 1))
 
   stroke(color1)
   beginShape()
@@ -939,20 +976,23 @@ const trFuncArray = [
   // trDrawTilePattern1_2_2, // 使わない
   // trDrawTilePattern1_2_3, // 使わない
   // trDrawTilePattern1_3, // 使わない
-  trDrawTilePattern1_1_nofill,
-  trDrawTilePattern1_2_1_nofill,
-  trDrawTilePattern1_2_2_nofill,
-  trDrawTilePattern1_2_3_nofill,
-  trDrawTilePattern1_3_nofill,
-  trDrawTilePattern2_1_1,
-  trDrawTilePattern2_1_2,
-  trDrawTilePattern2_1_3,
-  trDrawTilePattern2_1_4,
-  trDrawTilePattern2_2_1,
-  trDrawTilePattern2_2_2,
-  trDrawTilePattern2_2_3,
-  trDrawTilePattern2_2_4,
-  trDrawTilePattern2_2_5,
+  // trDrawTilePattern1_1_nofill,
+  // trDrawTilePattern1_2_1_nofill,
+  // trDrawTilePattern1_2_2_nofill,
+  // trDrawTilePattern1_2_3_nofill,
+  // trDrawTilePattern1_3_nofill,
+  // trDrawTilePattern2_1_1,
+  // trDrawTilePattern2_1_2,
+  // trDrawTilePattern2_1_3,
+  // trDrawTilePattern2_1_4,
+  // trDrawTilePattern2_2_1,
+  // trDrawTilePattern2_2_2,
+  trDrawTilePattern2_2_3_1_1,
+  trDrawTilePattern2_2_3_1_2,
+  trDrawTilePattern2_2_3_2_1,
+  trDrawTilePattern2_2_3_2_2,
+  trDrawTilePattern2_2_4_1,
+  trDrawTilePattern2_2_5_1,
 ]
 
 /**
