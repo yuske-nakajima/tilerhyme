@@ -13,6 +13,7 @@ function trInitial() {
   TR_COLORS.lineMain = color(0, 0, 0)
   TR_COLORS.cellMain = color(0, 0, 100)
   TR_COLORS.cellNormal = color(0, 0, 50)
+  TR_COLORS.background = color(200, 100, 20)
 
   // 横幅でセルの分割数を計算
   trCellDivNum = ceil(width / 50)

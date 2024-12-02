@@ -450,7 +450,7 @@ function trChromaticGetColor() {
   for (let i = 1; i <= 12; i++) {
     colors[`color${i}`] = color(
       map(trDataParams[0 + i], 0, 99, 0, 360),
-      map(trDataParams[1 + i], 0, 99, 50, 60),
+      map(trDataParams[1 + i], 0, 99, 30, 40),
       map(trDataParams[2 + i], 0, 99, 90, 100),
     )
   }
@@ -479,7 +479,8 @@ function _trDrawTilePattern1(func) {
     const x = _x * tileSize
     const y = _y * tileSize
 
-    const { color1, color2, color3, color4, color5 } = trChromaticGetColor()
+    const { color1, color2, color3, color4, color5, color6, color7, color8, color9, color10, color11, color12 } =
+      trChromaticGetColor()
 
     const p1 = trDataParams[_x % trDataParams.length]
     const p2 = trDataParams[_y % trDataParams.length]
@@ -515,6 +516,13 @@ function _trDrawTilePattern1(func) {
         color3,
         color4,
         color5,
+        color6,
+        color7,
+        color8,
+        color9,
+        color10,
+        color11,
+        color12,
         _tileSize,
         p1,
         p2,
@@ -525,7 +533,7 @@ function _trDrawTilePattern1(func) {
 }
 
 const trDrawTilePattern1_1 = _trDrawTilePattern1((params) => {
-  const { _x, _y, x, y, tileSize, color1, color2, color3, color4, color5, _tileSize, p1, p2, p3 } = params
+  const { x, y, tileSize, color1, color2, _tileSize, p1, p2 } = params
 
   rectMode(CENTER)
 
@@ -544,15 +552,26 @@ const trDrawTilePattern1_1 = _trDrawTilePattern1((params) => {
   }
 })
 
-const trDrawTilePattern1_1_1 = _trDrawTilePattern1((params) => {
-  const { _x, _y, x, y, tileSize, color1, color2, color3, color4, color5, _tileSize, p1, p2, p3 } = params
+const trDrawTilePattern1_1_nofill = _trDrawTilePattern1((params) => {
+  const { x, y, tileSize, color1, color2, color3, _tileSize, p1, p2 } = params
 
   rectMode(CENTER)
 
   noFill()
-  stroke(color2)
-  strokeWeight(tileSize * 0.05)
+  strokeWeight(tileSize * 0.1)
   translate(x, y)
+
+  if (trDataParams[0] % 2 === 0) {
+    if (ceil(x + y) % 3 === 0) {
+      stroke(color1)
+    } else if (ceil(x + y) % 3 === 1) {
+      stroke(color2)
+    } else {
+      stroke(color3)
+    }
+  } else {
+    stroke(color1)
+  }
 
   if (p1 % 2 === 0) {
     if (p2 % 2 === 0) {
@@ -565,38 +584,50 @@ const trDrawTilePattern1_1_1 = _trDrawTilePattern1((params) => {
 })
 
 const trDrawTilePattern1_2_1 = _trDrawTilePattern1((params) => {
-  const { _x, _y, x, y, tileSize, color1, color2, color3, color4, color5, _tileSize, p1, p2, p3 } = params
+  const { x, y, tileSize, color4, color5, _tileSize } = params
 
   rectMode(CENTER)
 
-  fill(color1)
-  stroke(color2)
+  fill(color4)
+  stroke(color5)
   strokeWeight(tileSize * 0.05)
   translate(x, y)
 
   rect(0, 0, _tileSize)
 })
 
-const trDrawTilePattern1_2_1_1 = _trDrawTilePattern1((params) => {
-  const { _x, _y, x, y, tileSize, color1, color2, color3, color4, color5, _tileSize, p1, p2, p3 } = params
+const trDrawTilePattern1_2_1_nofill = _trDrawTilePattern1((params) => {
+  const { x, y, tileSize, color1, color2, color3, _tileSize } = params
 
   rectMode(CENTER)
 
   noFill()
-  stroke(color2)
-  strokeWeight(tileSize * 0.05)
+
+  if (trDataParams[0] % 2 === 0) {
+    if (ceil(x + y) % 3 === 0) {
+      stroke(color1)
+    } else if (ceil(x + y) % 3 === 1) {
+      stroke(color2)
+    } else {
+      stroke(color3)
+    }
+  } else {
+    stroke(color1)
+  }
+
+  strokeWeight(tileSize * 0.1)
   translate(x, y)
 
   rect(0, 0, _tileSize)
 })
 
 const trDrawTilePattern1_2_2 = _trDrawTilePattern1((params) => {
-  const { _x, _y, x, y, tileSize, color1, color2, color3, color4, color5, _tileSize, p1, p2, p3 } = params
+  const { x, y, tileSize, color7, color8, _tileSize } = params
 
   rectMode(CENTER)
 
-  fill(color1)
-  stroke(color2)
+  fill(color7)
+  stroke(color8)
   strokeWeight(tileSize * 0.05)
   translate(x, y)
 
@@ -604,14 +635,26 @@ const trDrawTilePattern1_2_2 = _trDrawTilePattern1((params) => {
   rect(0, 0, _tileSize)
 })
 
-const trDrawTilePattern1_2_2_1 = _trDrawTilePattern1((params) => {
-  const { _x, _y, x, y, tileSize, color1, color2, color3, color4, color5, _tileSize, p1, p2, p3 } = params
+const trDrawTilePattern1_2_2_nofill = _trDrawTilePattern1((params) => {
+  const { x, y, tileSize, color1, color2, color3, _tileSize } = params
 
   rectMode(CENTER)
 
   noFill()
-  stroke(color2)
-  strokeWeight(tileSize * 0.05)
+
+  if (trDataParams[0] % 2 === 0) {
+    if (ceil(x + y) % 3 === 0) {
+      stroke(color1)
+    } else if (ceil(x + y) % 3 === 1) {
+      stroke(color2)
+    } else {
+      stroke(color3)
+    }
+  } else {
+    stroke(color1)
+  }
+
+  strokeWeight(tileSize * 0.1)
   translate(x, y)
 
   rotate(PI / 4)
@@ -619,12 +662,12 @@ const trDrawTilePattern1_2_2_1 = _trDrawTilePattern1((params) => {
 })
 
 const trDrawTilePattern1_2_3 = _trDrawTilePattern1((params) => {
-  const { _x, _y, x, y, tileSize, color1, color2, color3, color4, color5, _tileSize, p1, p2, p3 } = params
+  const { x, y, tileSize, color10, color11, _tileSize, p2 } = params
 
   rectMode(CENTER)
 
-  fill(color1)
-  stroke(color2)
+  fill(color10)
+  stroke(color11)
   strokeWeight(tileSize * 0.05)
   translate(x, y)
 
@@ -634,14 +677,26 @@ const trDrawTilePattern1_2_3 = _trDrawTilePattern1((params) => {
   rect(0, 0, _tileSize)
 })
 
-const trDrawTilePattern1_2_3_1 = _trDrawTilePattern1((params) => {
-  const { _x, _y, x, y, tileSize, color1, color2, color3, color4, color5, _tileSize, p1, p2, p3 } = params
+const trDrawTilePattern1_2_3_nofill = _trDrawTilePattern1((params) => {
+  const { x, y, tileSize, color1, color2, color3, _tileSize, p2 } = params
 
   rectMode(CENTER)
 
   noFill()
-  stroke(color2)
-  strokeWeight(tileSize * 0.05)
+
+  if (trDataParams[0] % 2 === 0) {
+    if (ceil(x + y) % 3 === 0) {
+      stroke(color1)
+    } else if (ceil(x + y) % 3 === 1) {
+      stroke(color2)
+    } else {
+      stroke(color3)
+    }
+  } else {
+    stroke(color1)
+  }
+
+  strokeWeight(tileSize * 0.1)
   translate(x, y)
 
   if (p2 % 2 === 0) {
@@ -651,7 +706,7 @@ const trDrawTilePattern1_2_3_1 = _trDrawTilePattern1((params) => {
 })
 
 const trDrawTilePattern1_3 = _trDrawTilePattern1((params) => {
-  const { _x, _y, x, y, tileSize, color1, color2, color3, color4, color5, _tileSize, p1, p2, p3 } = params
+  const { x, y, tileSize, color1, color2, _tileSize } = params
 
   rectMode(CENTER)
 
@@ -663,14 +718,26 @@ const trDrawTilePattern1_3 = _trDrawTilePattern1((params) => {
   ellipse(0, 0, _tileSize)
 })
 
-const trDrawTilePattern1_3_1 = _trDrawTilePattern1((params) => {
-  const { _x, _y, x, y, tileSize, color1, color2, color3, color4, color5, _tileSize, p1, p2, p3 } = params
+const trDrawTilePattern1_3_nofill = _trDrawTilePattern1((params) => {
+  const { x, y, tileSize, color1, color2, color3, _tileSize } = params
 
   rectMode(CENTER)
 
   noFill()
-  stroke(color2)
-  strokeWeight(tileSize * 0.05)
+
+  if (trDataParams[0] % 2 === 0) {
+    if (ceil(x + y) % 3 === 0) {
+      stroke(color1)
+    } else if (ceil(x + y) % 3 === 1) {
+      stroke(color2)
+    } else {
+      stroke(color3)
+    }
+  } else {
+    stroke(color1)
+  }
+
+  strokeWeight(tileSize * 0.1)
   translate(x, y)
 
   ellipse(0, 0, _tileSize)
@@ -867,16 +934,16 @@ const trDrawTilePattern2_2_5 = _trDrawTilePattern2((params) => {
 // バリーション
 
 const trFuncArray = [
-  trDrawTilePattern1_1,
-  trDrawTilePattern1_1_1,
-  trDrawTilePattern1_2_1,
-  trDrawTilePattern1_2_1_1,
-  trDrawTilePattern1_2_2,
-  trDrawTilePattern1_2_2_1,
-  trDrawTilePattern1_2_3,
-  trDrawTilePattern1_2_3_1,
-  trDrawTilePattern1_3,
-  trDrawTilePattern1_3_1,
+  // trDrawTilePattern1_1, // 使わない
+  // trDrawTilePattern1_2_1, // 使わない
+  // trDrawTilePattern1_2_2, // 使わない
+  // trDrawTilePattern1_2_3, // 使わない
+  // trDrawTilePattern1_3, // 使わない
+  trDrawTilePattern1_1_nofill,
+  trDrawTilePattern1_2_1_nofill,
+  trDrawTilePattern1_2_2_nofill,
+  trDrawTilePattern1_2_3_nofill,
+  trDrawTilePattern1_3_nofill,
   trDrawTilePattern2_1_1,
   trDrawTilePattern2_1_2,
   trDrawTilePattern2_1_3,

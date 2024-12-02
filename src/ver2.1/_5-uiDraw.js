@@ -90,13 +90,13 @@ function trUiDraw() {
   }
 
   // 有彩色
-  background(
-    color(
-      map(trDataParams[14], 0, 99, 0, 360),
-      map(trDataParams[15], 0, 99, 10, 20),
-      map(trDataParams[16], 0, 99, 90, 100),
-    ),
-  )
+  // background(
+  //   color(
+  //     map(trDataParams[14], 0, 99, 0, 360),
+  //     map(trDataParams[15], 0, 99, 10, 20),
+  //     map(trDataParams[16], 0, 99, 90, 100),
+  //   ),
+  // )
 
   // 無彩色
   // background(
@@ -106,6 +106,9 @@ function trUiDraw() {
   //     map(trDataParams[12], 0, 99, 0, 100),
   //   ),
   // )
+
+  // 背景色を静的に指定
+  background(TR_COLORS.background)
 
   // TODO: ここに描画処理を書く
   trDrawShape()
