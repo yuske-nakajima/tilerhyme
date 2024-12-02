@@ -793,6 +793,8 @@ function _trDrawTilePattern2(func) {
         p3,
         p4,
         centerPos,
+        sineValue,
+        interpolationFactor,
       })
     })
   }
@@ -860,22 +862,232 @@ const trDrawTilePattern2_1_4 = _trDrawTilePattern2((params) => {
   line(pointList[p2].x, pointList[p2].y, pointList[p2].x, pointList[p2].y + _tileSize / 2)
 })
 
-const trDrawTilePattern2_2_1 = _trDrawTilePattern2((params) => {
-  const { _tileSize, color1, pointList } = params
+const trDrawTilePattern2_2_1_1 = _trDrawTilePattern2((params) => {
+  const { _tileSize, tileSize, color1, pointList } = params
 
   noFill()
+  strokeWeight(max((tileSize * trDataParams[5]) / 400, 1))
+
   stroke(color1)
-  strokeWeight(_tileSize * min(trDataParams[0] / 100, 0.5))
   line(pointList[0].x, pointList[0].y, pointList[0].x, pointList[0].y + _tileSize)
 })
 
-const trDrawTilePattern2_2_2 = _trDrawTilePattern2((params) => {
-  const { _tileSize, color1, pointList } = params
+const trDrawTilePattern2_2_1_2 = _trDrawTilePattern2((params) => {
+  const { y, _tileSize, tileSize, color1, pointList } = params
 
   noFill()
+  strokeWeight(max((tileSize * trDataParams[5]) / 400, 1))
+
   stroke(color1)
-  strokeWeight(_tileSize * min(trDataParams[0] / 100, 0.5))
+  line(pointList[0].x, y, pointList[0].x, pointList[0].y - _tileSize)
+})
+
+const trDrawTilePattern2_2_1_3 = _trDrawTilePattern2((params) => {
+  const { _x, _y, _tileSize, tileSize, color1, color2, pointList } = params
+
+  noFill()
+  strokeWeight(max((tileSize * trDataParams[5]) / 400, 1))
+
+  if ((_x + _y) % 2 === 0) {
+    stroke(color1)
+  } else {
+    stroke(color2)
+  }
+
+  line(pointList[0].x, pointList[0].y, pointList[0].x, pointList[0].y + _tileSize)
+})
+
+const trDrawTilePattern2_2_1_4 = _trDrawTilePattern2((params) => {
+  const { _x, _y, y, _tileSize, tileSize, color1, color2, pointList } = params
+
+  noFill()
+  strokeWeight(max((tileSize * trDataParams[5]) / 400, 1))
+
+  if ((_x + _y) % 2 === 0) {
+    stroke(color1)
+  } else {
+    stroke(color2)
+  }
+
+  line(pointList[0].x, y, pointList[0].x, pointList[0].y - _tileSize)
+})
+
+const trDrawTilePattern2_2_2_1 = _trDrawTilePattern2((params) => {
+  const { _tileSize, tileSize, color1, pointList } = params
+
+  noFill()
+  strokeWeight(max((tileSize * trDataParams[5]) / 400, 1))
+
+  stroke(color1)
   line(pointList[1].x, pointList[1].y, pointList[1].x - _tileSize, pointList[1].y)
+})
+
+const trDrawTilePattern2_2_2_2 = _trDrawTilePattern2((params) => {
+  const { x, _tileSize, tileSize, color1, pointList } = params
+
+  noFill()
+  strokeWeight(max((tileSize * trDataParams[5]) / 400, 1))
+
+  stroke(color1)
+  // line(pointList[1].x, pointList[1].y, pointList[1].x - _tileSize, pointList[1].y)
+  line(x, pointList[1].y, pointList[1].x - _tileSize, pointList[1].y)
+})
+
+const trDrawTilePattern2_2_2_3 = _trDrawTilePattern2((params) => {
+  const { _x, _y, _tileSize, tileSize, color1, color2, pointList } = params
+
+  noFill()
+  strokeWeight(max((tileSize * trDataParams[5]) / 400, 1))
+
+  if ((_x + _y) % 2 === 0) {
+    stroke(color1)
+  } else {
+    stroke(color2)
+  }
+
+  line(pointList[1].x, pointList[1].y, pointList[1].x - _tileSize, pointList[1].y)
+})
+
+const trDrawTilePattern2_2_2_4 = _trDrawTilePattern2((params) => {
+  const { _x, _y, x, _tileSize, tileSize, color1, color2, pointList } = params
+
+  noFill()
+  strokeWeight(max((tileSize * trDataParams[5]) / 400, 1))
+
+  if ((_x + _y) % 2 === 0) {
+    stroke(color1)
+  } else {
+    stroke(color2)
+  }
+
+  line(x, pointList[1].y, pointList[1].x - _tileSize, pointList[1].y)
+})
+
+const trDrawTilePattern2_2_3_1 = _trDrawTilePattern2((params) => {
+  const { x, y, tileSize, color1, interpolationFactor } = params
+
+  noFill()
+  strokeWeight(max((tileSize * trDataParams[5]) / 400, 1))
+
+  const currentX = x + tileSize * interpolationFactor
+  const currentY = y + tileSize * interpolationFactor
+
+  stroke(color1)
+  line(x, y, currentX, currentY)
+})
+
+const trDrawTilePattern2_2_3_2 = _trDrawTilePattern2((params) => {
+  const { x, y, tileSize, color1, interpolationFactor } = params
+
+  noFill()
+  strokeWeight(max((tileSize * trDataParams[5]) / 400, 1))
+
+  stroke(color1)
+
+  const currentX = x + tileSize * -interpolationFactor
+  const currentY = y + tileSize * -interpolationFactor
+
+  line(x, y, currentX, currentY)
+})
+
+const trDrawTilePattern2_2_3_3 = _trDrawTilePattern2((params) => {
+  const { x, y, tileSize, color1, interpolationFactor } = params
+
+  noFill()
+  strokeWeight(max((tileSize * trDataParams[5]) / 400, 1))
+
+  stroke(color1)
+
+  const currentX = x + tileSize * -interpolationFactor
+  const currentY = y + tileSize * interpolationFactor
+
+  line(x, y, currentX, currentY)
+})
+
+const trDrawTilePattern2_2_3_4 = _trDrawTilePattern2((params) => {
+  const { x, y, tileSize, color1, interpolationFactor } = params
+
+  noFill()
+  strokeWeight(max((tileSize * trDataParams[5]) / 400, 1))
+
+  stroke(color1)
+
+  const currentX = x + tileSize * interpolationFactor
+  const currentY = y + tileSize * -interpolationFactor
+
+  line(x, y, currentX, currentY)
+})
+
+const trDrawTilePattern2_2_3_5 = _trDrawTilePattern2((params) => {
+  const { _x, _y, x, y, tileSize, color1, color2, interpolationFactor } = params
+
+  noFill()
+  strokeWeight(max((tileSize * trDataParams[5]) / 400, 1))
+
+  const currentX = x + tileSize * interpolationFactor
+  const currentY = y + tileSize * interpolationFactor
+
+  if ((_x + _y) % 2 === 0) {
+    stroke(color1)
+  } else {
+    stroke(color2)
+  }
+
+  line(x, y, currentX, currentY)
+})
+
+const trDrawTilePattern2_2_3_6 = _trDrawTilePattern2((params) => {
+  const { _x, _y, x, y, tileSize, color1, color2, interpolationFactor } = params
+
+  noFill()
+  strokeWeight(max((tileSize * trDataParams[5]) / 400, 1))
+
+  const currentX = x + tileSize * -interpolationFactor
+  const currentY = y + tileSize * -interpolationFactor
+
+  if ((_x + _y) % 2 === 0) {
+    stroke(color1)
+  } else {
+    stroke(color2)
+  }
+
+  line(x, y, currentX, currentY)
+})
+
+const trDrawTilePattern2_2_3_7 = _trDrawTilePattern2((params) => {
+  const { _x, _y, x, y, tileSize, color1, color2, interpolationFactor } = params
+
+  noFill()
+  strokeWeight(max((tileSize * trDataParams[5]) / 400, 1))
+
+  const currentX = x + tileSize * -interpolationFactor
+  const currentY = y + tileSize * interpolationFactor
+
+  if ((_x + _y) % 2 === 0) {
+    stroke(color1)
+  } else {
+    stroke(color2)
+  }
+
+  line(x, y, currentX, currentY)
+})
+
+const trDrawTilePattern2_2_3_8 = _trDrawTilePattern2((params) => {
+  const { _x, _y, x, y, tileSize, color1, color2, interpolationFactor } = params
+
+  noFill()
+  strokeWeight(max((tileSize * trDataParams[5]) / 400, 1))
+
+  const currentX = x + tileSize * interpolationFactor
+  const currentY = y + tileSize * -interpolationFactor
+
+  if ((_x + _y) % 2 === 0) {
+    stroke(color1)
+  } else {
+    stroke(color2)
+  }
+
+  line(x, y, currentX, currentY)
 })
 
 const trDrawTilePattern2_2_3_1_1 = _trDrawTilePattern2((params) => {
@@ -985,8 +1197,22 @@ const trFuncArray = [
   // trDrawTilePattern2_1_2,
   // trDrawTilePattern2_1_3,
   // trDrawTilePattern2_1_4,
-  // trDrawTilePattern2_2_1,
-  // trDrawTilePattern2_2_2,
+  trDrawTilePattern2_2_1_1,
+  trDrawTilePattern2_2_1_2,
+  trDrawTilePattern2_2_1_3,
+  trDrawTilePattern2_2_1_4,
+  trDrawTilePattern2_2_2_1,
+  trDrawTilePattern2_2_2_2,
+  trDrawTilePattern2_2_2_3,
+  trDrawTilePattern2_2_2_4,
+  trDrawTilePattern2_2_3_1,
+  trDrawTilePattern2_2_3_2,
+  trDrawTilePattern2_2_3_3,
+  trDrawTilePattern2_2_3_4,
+  trDrawTilePattern2_2_3_5,
+  trDrawTilePattern2_2_3_6,
+  trDrawTilePattern2_2_3_7,
+  trDrawTilePattern2_2_3_8,
   trDrawTilePattern2_2_3_1_1,
   trDrawTilePattern2_2_3_1_2,
   trDrawTilePattern2_2_3_2_1,
