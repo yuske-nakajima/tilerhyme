@@ -1188,23 +1188,36 @@ const trFuncArray = [
   // trDrawTilePattern1_2_2, // 使わない
   // trDrawTilePattern1_2_3, // 使わない
   // trDrawTilePattern1_3, // 使わない
-  // trDrawTilePattern1_1_nofill,
-  // trDrawTilePattern1_2_1_nofill,
-  // trDrawTilePattern1_2_2_nofill,
-  // trDrawTilePattern1_2_3_nofill,
-  // trDrawTilePattern1_3_nofill,
-  // trDrawTilePattern2_1_1,
-  // trDrawTilePattern2_1_2,
-  // trDrawTilePattern2_1_3,
-  // trDrawTilePattern2_1_4,
+  // ○△□
+  trDrawTilePattern1_1_nofill,
+  trDrawTilePattern1_2_1_nofill,
+  trDrawTilePattern1_2_2_nofill,
+  trDrawTilePattern1_2_3_nofill,
+  trDrawTilePattern1_3_nofill,
+  // □○△
+  // ---
+  // ニセホテイ
+  trDrawTilePattern2_1_1,
+  trDrawTilePattern2_1_2,
+  trDrawTilePattern2_1_3,
+  trDrawTilePattern2_1_4,
+  // ニセホテイ
+  // ---
+  // 縦
   trDrawTilePattern2_2_1_1,
   trDrawTilePattern2_2_1_2,
   trDrawTilePattern2_2_1_3,
   trDrawTilePattern2_2_1_4,
+  // 縦
+  // ---
+  // 横
   trDrawTilePattern2_2_2_1,
   trDrawTilePattern2_2_2_2,
   trDrawTilePattern2_2_2_3,
   trDrawTilePattern2_2_2_4,
+  // 横
+  // ---
+  // 斜め
   trDrawTilePattern2_2_3_1,
   trDrawTilePattern2_2_3_2,
   trDrawTilePattern2_2_3_3,
@@ -1213,12 +1226,22 @@ const trFuncArray = [
   trDrawTilePattern2_2_3_6,
   trDrawTilePattern2_2_3_7,
   trDrawTilePattern2_2_3_8,
+  // 斜め
+  // ---
+  // 格子の変形
   trDrawTilePattern2_2_3_1_1,
   trDrawTilePattern2_2_3_1_2,
   trDrawTilePattern2_2_3_2_1,
   trDrawTilePattern2_2_3_2_2,
+  // 格子の変形
+  // ---
+  // 丸の変形
   trDrawTilePattern2_2_4_1,
+  // 丸の変形
+  // ---
+  // 十字の変形
   trDrawTilePattern2_2_5_1,
+  // 十字の変形
 ]
 
 /**
