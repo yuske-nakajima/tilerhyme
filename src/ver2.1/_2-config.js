@@ -1165,6 +1165,7 @@ const trDrawTilePattern2_2_5_1 = _trDrawTilePattern2((params) => {
 
   stroke(color1)
   strokeWeight(max((tileSize * trDataParams[5]) / 400, 1))
+  // strokeWeight((map(sin(frameCount * 0.01 + x + y), -1, 1, 0.1, 1) * (tileSize * trDataParams[5])) / 400)
 
   stroke(color1)
   beginShape()
@@ -1189,11 +1190,11 @@ const trFuncArray = [
   // trDrawTilePattern1_2_3, // 使わない
   // trDrawTilePattern1_3, // 使わない
   // ○△□
-  trDrawTilePattern1_1_nofill,
-  trDrawTilePattern1_2_1_nofill,
-  trDrawTilePattern1_2_2_nofill,
-  trDrawTilePattern1_2_3_nofill,
-  trDrawTilePattern1_3_nofill,
+  // trDrawTilePattern1_1_nofill,
+  // trDrawTilePattern1_2_1_nofill,
+  // trDrawTilePattern1_2_2_nofill,
+  // trDrawTilePattern1_2_3_nofill,
+  // trDrawTilePattern1_3_nofill,
   // □○△
   // ---
   // ニセホテイ
