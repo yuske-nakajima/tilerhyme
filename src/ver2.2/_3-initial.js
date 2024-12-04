@@ -5,7 +5,15 @@ function trInitial() {
     width: windowWidth - trWindowGap,
     height: windowHeight - trWindowGap,
   }
-  trCanvas = createCanvas(windowWidth - trWindowGap, windowHeight - trWindowGap)
+
+  const _windowWidth = windowWidth - trWindowGap
+  const _windowHeight = windowHeight - trWindowGap
+
+  const windowSize = min(_windowWidth, _windowHeight)
+
+  console.log(_windowWidth, _windowHeight, windowSize)
+
+  trCanvas = createCanvas(windowSize, windowSize)
   colorMode(HSB)
   frameRate(24)
 

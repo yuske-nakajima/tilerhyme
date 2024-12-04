@@ -247,7 +247,12 @@ function trSaveWallPaper(mode = TR_WALLPAPER_MODE.FULL) {
   // すべて元に戻す
   trIsNoDevice = tempTrIsNoDevice
   trSoftUiStartPos = tempTrSoftUiStartPos
-  resizeCanvas(windowWidth - trWindowGap, windowHeight - trWindowGap)
+
+  const _windowWidth = windowWidth - trWindowGap
+  const _windowHeight = windowHeight - trWindowGap
+  const windowSize = min(_windowWidth, _windowHeight)
+  resizeCanvas(windowSize, windowSize)
+
   trCellDivNum = ceil(width / 50)
   pixelDensity(originalDensity) // 密度を元に戻す
 }
