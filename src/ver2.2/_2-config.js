@@ -1155,6 +1155,44 @@ const trDrawTilePattern2_2_3_8 = _trDrawTilePattern2((params) => {
   line(x, y, currentX, currentY)
 })
 
+const trDrawTilePattern2_2_3_9 = _trDrawTilePattern2((params) => {
+  const { _x, x, y, tileSize, color1, color2, sineValue } = params
+
+  noFill()
+  strokeWeight(max((tileSize * trDataParams[5]) / 400, 1))
+  strokeCap(SQUARE)
+
+  const currentX = x + tileSize * sineValue * 1.5
+  const currentY = y + tileSize * -sineValue * 1.5
+
+  if (_x % 2 === 0) {
+    stroke(color1)
+    line(x, y, currentX, currentY)
+
+    stroke(color2)
+    line(x + tileSize / 2, y - tileSize / 2, x - tileSize / 2, y + tileSize / 2)
+  }
+})
+
+const trDrawTilePattern2_2_3_10 = _trDrawTilePattern2((params) => {
+  const { _x, x, y, tileSize, color1, color2, sineValue } = params
+
+  noFill()
+  strokeWeight(max((tileSize * trDataParams[5]) / 400, 1))
+  strokeCap(SQUARE)
+
+  const currentX = x - tileSize * -sineValue * 1.5
+  const currentY = y + tileSize * sineValue * 1.5
+
+  if (_x % 2 === 0) {
+    stroke(color1)
+    line(x, y, currentX, currentY)
+
+    stroke(color2)
+    line(x - tileSize / 2, y - tileSize / 2, x + tileSize / 2, y + tileSize / 2)
+  }
+})
+
 const trDrawTilePattern2_2_3_1_1 = _trDrawTilePattern2((params) => {
   const { _tileSize, tileSize, color1, pointList } = params
 
@@ -1235,19 +1273,28 @@ const trDrawTilePattern2_2_5_1 = _trDrawTilePattern2((params) => {
 
   stroke(color1)
   strokeWeight(max((tileSize * trDataParams[5]) / 400, 1))
-  strokeCap(SQUARE)
   // strokeWeight((map(sin(frameCount * 0.01 + x + y), -1, 1, 0.1, 1) * (tileSize * trDataParams[5])) / 400)
 
   stroke(color1)
   beginShape()
   vertex(0, 0 + _tileSize / 2)
   vertex(0, 0)
-  vertex(0 + _tileSize / 2, 0)
   endShape()
 
   stroke(color2)
   beginShape()
+  vertex(0, 0)
+  vertex(0 + _tileSize / 2, 0)
+  endShape()
+
+  stroke(color1)
+  beginShape()
   vertex(0, 0 - _tileSize / 2)
+  vertex(0, 0)
+  endShape()
+
+  stroke(color2)
+  beginShape()
   vertex(0, 0)
   vertex(0 - _tileSize / 2, 0)
   endShape()
@@ -1300,6 +1347,8 @@ const trFuncArray = [
   // trDrawTilePattern2_2_3_6,
   // trDrawTilePattern2_2_3_7,
   // trDrawTilePattern2_2_3_8,
+  trDrawTilePattern2_2_3_9,
+  trDrawTilePattern2_2_3_10,
   // 斜め
   // ---
   // 格子の変形
@@ -1314,7 +1363,7 @@ const trFuncArray = [
   // 丸の変形
   // ---
   // 十字の変形
-  // trDrawTilePattern2_2_5_1,
+  trDrawTilePattern2_2_5_1,
   // 十字の変形
 ]
 
