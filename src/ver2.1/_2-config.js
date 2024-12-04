@@ -1190,11 +1190,11 @@ const trFuncArray = [
   // trDrawTilePattern1_2_3, // 使わない
   // trDrawTilePattern1_3, // 使わない
   // ○△□
-  // trDrawTilePattern1_1_nofill,
-  // trDrawTilePattern1_2_1_nofill,
-  // trDrawTilePattern1_2_2_nofill,
-  // trDrawTilePattern1_2_3_nofill,
-  // trDrawTilePattern1_3_nofill,
+  trDrawTilePattern1_1_nofill,
+  trDrawTilePattern1_2_1_nofill,
+  trDrawTilePattern1_2_2_nofill,
+  trDrawTilePattern1_2_3_nofill,
+  trDrawTilePattern1_3_nofill,
   // □○△
   // ---
   // ニセホテイ
