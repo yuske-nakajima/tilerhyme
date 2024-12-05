@@ -106,7 +106,7 @@ const TR_MODE = {
   AUTO: 1,
 }
 
-const TR_AUTO_MODE_INTERVAL = 20
+const TR_AUTO_MODE_INTERVAL = 60
 // ------------------------------------------------------------
 // --- 変数
 // ------------------------------------------------------------
@@ -145,6 +145,9 @@ let trModeLifeGameGrid = Array.from({ length: 64 }, () => Math.floor(Math.random
 let trModeLifeGameGridHistory = []
 
 let trDataParams = []
+
+let trSineData = []
+let trSineCount = 0
 // ------------------------------------------------------------
 // --- 関数
 // ------------------------------------------------------------
@@ -784,7 +787,26 @@ function _trDrawTilePattern2(func) {
       noiseList.push(i)
     }
 
-    const sineValue = sin(frameCount * 50 * 0.005)
+    const sineValue = sin(frameCount * 50 * 0.004)
+    // 配列に新しい値を追加
+    trSineData.push(sineValue)
+
+    // 配列が2つ以上の要素を持っている場合、ゼロクロスを検出
+    if (trSineData.length >= 2) {
+      const prevValue = trSineData[trSineData.length - 2]
+      const currentValue = trSineData[trSineData.length - 1]
+
+      // -0.99 など、少し余裕を持たせた閾値を使用
+      if (prevValue > 0.99 && currentValue <= 0.99) {
+        trSineCount++
+      }
+    }
+
+    // 必要に応じて配列のサイズを制限（メモリ管理）
+    if (trSineData.length > 1000) {
+      trSineData.shift()
+    }
+
     const interpolationFactor = map(sineValue, -1, 1, 0.01, 1)
 
     const _tileSize = tileSize * interpolationFactor
@@ -951,6 +973,47 @@ const trDrawTilePattern2_2_1_5 = _trDrawTilePattern2((params) => {
   }
 })
 
+const trDrawTilePattern2_2_1_6 = _trDrawTilePattern2((params) => {
+  const { _x, x, _y, y, tileSize, color1, color2, sineValue } = params
+
+  noFill()
+  strokeWeight(max((tileSize * trDataParams[5]) / 400, 1))
+  strokeCap(SQUARE)
+
+  const s1 = map(sineValue, -1, 1, 0, 1)
+
+  if (_y % 2 === 0) {
+    if (_y % 4 === 0) {
+      stroke(color1)
+    } else {
+      stroke(color2)
+    }
+    if (
+      ceil((_x + _y) / 2) % ceil(map(trDataParams[2], 0, 99, 2, 10)) === 0 ||
+      ceil((_x + _y) / 2) % ceil(map(trDataParams[2], 0, 99, 2, 10)) === 3 ||
+      ceil((_x + _y) / 2) % ceil(map(trDataParams[2], 0, 99, 2, 10)) === 5
+    ) {
+      switch (trSineCount % 2) {
+        case 0:
+          line(x, y, x, y + tileSize * s1)
+          line(x, y, x, y - tileSize * s1)
+          break
+        case 1:
+          // 回転
+          translate(x, y)
+          rotate(PI * sineValue)
+          line(0, 0, 0, 0 - tileSize)
+          line(0, 0, 0, 0 + tileSize)
+          break
+        default:
+          break
+      }
+    } else {
+      line(x, y - tileSize, x, y + tileSize)
+    }
+  }
+})
+
 const trDrawTilePattern2_2_2_1 = _trDrawTilePattern2((params) => {
   const { _tileSize, tileSize, color1, pointList } = params
 
@@ -1021,11 +1084,53 @@ const trDrawTilePattern2_2_2_5 = _trDrawTilePattern2((params) => {
   }
 })
 
+const trDrawTilePattern2_2_2_6 = _trDrawTilePattern2((params) => {
+  const { _x, x, _y, y, tileSize, color1, color2, sineValue } = params
+
+  noFill()
+  strokeWeight(max((tileSize * trDataParams[5]) / 400, 1))
+  strokeCap(SQUARE)
+
+  const s1 = map(sineValue, -1, 1, 0, 1)
+
+  if (_x % 2 === 0) {
+    if (_x % 4 === 0) {
+      stroke(color1)
+    } else {
+      stroke(color2)
+    }
+    if (
+      ceil((_x + _y) / 2) % ceil(map(trDataParams[2], 0, 99, 2, 10)) === 0 ||
+      ceil((_x + _y) / 2) % ceil(map(trDataParams[2], 0, 99, 2, 10)) === 3 ||
+      ceil((_x + _y) / 2) % ceil(map(trDataParams[2], 0, 99, 2, 10)) === 5
+    ) {
+      switch (trSineCount % 2) {
+        case 0:
+          line(x, y, x + tileSize * s1, y)
+          line(x, y, x - tileSize * s1, y)
+          break
+        case 1:
+          // 回転
+          translate(x, y)
+          rotate(PI * sineValue)
+          line(0, 0, 0 - tileSize, 0)
+          line(0, 0, 0 + tileSize, 0)
+          break
+        default:
+          break
+      }
+    } else {
+      line(x - tileSize, y, x + tileSize, y)
+    }
+  }
+})
+
 const trDrawTilePattern2_2_3_1 = _trDrawTilePattern2((params) => {
   const { x, y, tileSize, color1, interpolationFactor } = params
 
   noFill()
   strokeWeight(max((tileSize * trDataParams[5]) / 400, 1))
+  strokeCap(SQUARE)
 
   const currentX = x + tileSize * interpolationFactor
   const currentY = y + tileSize * interpolationFactor
@@ -1254,7 +1359,6 @@ const trDrawTilePattern2_2_4_1 = _trDrawTilePattern2((params) => {
   rectMode(CENTER)
 
   strokeWeight(max((tileSize * trDataParams[5]) / 400, 1))
-  strokeCap(SQUARE)
 
   stroke(color1)
   arc(0 + _tileSize / 2, 0 + _tileSize / 2, _tileSize, _tileSize, PI, PI + HALF_PI)
@@ -1299,6 +1403,109 @@ const trDrawTilePattern2_2_5_1 = _trDrawTilePattern2((params) => {
   vertex(0 - _tileSize / 2, 0)
   endShape()
 })
+
+const trDrawTilePattern2_2_5_2 = _trDrawTilePattern2((params) => {
+  const { _x, x, _y, y, _tileSize, tileSize, color1, color2, sineValue } = params
+
+  const s1 = map(sineValue, -1, 1, 0, 1)
+
+  translate(x, y)
+
+  noFill()
+  rectMode(CENTER)
+
+  stroke(color1)
+  strokeWeight(max((tileSize * trDataParams[5]) / 300, 1))
+  const acceleration = (tileSize / 2) * s1
+
+  if (
+    ceil((_x + _y) / 2) % ceil(map(trDataParams[2], 0, 99, 2, 10)) === 0 ||
+    ceil((_x + _y) / 2) % ceil(map(trDataParams[2], 0, 99, 2, 10)) === 3 ||
+    ceil((_x + _y) / 2) % ceil(map(trDataParams[2], 0, 99, 2, 10)) === 5
+  ) {
+    switch (trSineCount % 2) {
+      case 0:
+        stroke(color1)
+        beginShape()
+        vertex(0, 0 + _tileSize / 2)
+        vertex(0, 0)
+        endShape()
+
+        stroke(color2)
+        beginShape()
+        vertex(0, 0)
+        vertex(0 + _tileSize / 2, 0)
+        endShape()
+
+        stroke(color1)
+        beginShape()
+        vertex(0, 0 - _tileSize / 2)
+        vertex(0, 0)
+        endShape()
+
+        stroke(color2)
+        beginShape()
+        vertex(0, 0)
+        vertex(0 - _tileSize / 2, 0)
+        endShape()
+        break
+      case 1:
+        // 回転
+        rotate(PI * sineValue)
+
+        stroke(color1)
+        beginShape()
+        vertex(0, 0)
+        vertex(0, 0 + acceleration)
+        endShape()
+
+        stroke(color2)
+        beginShape()
+        vertex(0 + acceleration, 0)
+        vertex(0, 0)
+        endShape()
+
+        stroke(color1)
+        beginShape()
+        vertex(0, 0)
+        vertex(0, 0 - acceleration)
+        endShape()
+
+        stroke(color2)
+        beginShape()
+        vertex(0 - acceleration, 0)
+        vertex(0, 0)
+        endShape()
+        break
+      default:
+        break
+    }
+  } else {
+    stroke(color1)
+    beginShape()
+    vertex(0, 0 + _tileSize / 2)
+    vertex(0, 0)
+    endShape()
+
+    stroke(color2)
+    beginShape()
+    vertex(0, 0)
+    vertex(0 + _tileSize / 2, 0)
+    endShape()
+
+    stroke(color1)
+    beginShape()
+    vertex(0, 0 - _tileSize / 2)
+    vertex(0, 0)
+    endShape()
+
+    stroke(color2)
+    beginShape()
+    vertex(0, 0)
+    vertex(0 - _tileSize / 2, 0)
+    endShape()
+  }
+})
 // バリーション
 
 const trFuncArray = [
@@ -1323,30 +1530,32 @@ const trFuncArray = [
   // ニセホテイ
   // ---
   // 縦
-  // trDrawTilePattern2_2_1_1,
-  // trDrawTilePattern2_2_1_2,
-  // trDrawTilePattern2_2_1_3,
-  // trDrawTilePattern2_2_1_4,
+  trDrawTilePattern2_2_1_1,
+  trDrawTilePattern2_2_1_2,
+  trDrawTilePattern2_2_1_3,
+  trDrawTilePattern2_2_1_4,
   trDrawTilePattern2_2_1_5,
+  trDrawTilePattern2_2_1_6,
   // 縦
   // ---
   // 横
-  // trDrawTilePattern2_2_2_1,
-  // trDrawTilePattern2_2_2_2,
-  // trDrawTilePattern2_2_2_3,
-  // trDrawTilePattern2_2_2_4,
+  trDrawTilePattern2_2_2_1,
+  trDrawTilePattern2_2_2_2,
+  trDrawTilePattern2_2_2_3,
+  trDrawTilePattern2_2_2_4,
   trDrawTilePattern2_2_2_5,
+  trDrawTilePattern2_2_2_6,
   // 横
   // ---
   // 斜め
-  // trDrawTilePattern2_2_3_1,
-  // trDrawTilePattern2_2_3_2,
-  // trDrawTilePattern2_2_3_3,
-  // trDrawTilePattern2_2_3_4,
-  // trDrawTilePattern2_2_3_5,
-  // trDrawTilePattern2_2_3_6,
-  // trDrawTilePattern2_2_3_7,
-  // trDrawTilePattern2_2_3_8,
+  trDrawTilePattern2_2_3_1,
+  trDrawTilePattern2_2_3_2,
+  trDrawTilePattern2_2_3_3,
+  trDrawTilePattern2_2_3_4,
+  trDrawTilePattern2_2_3_5,
+  trDrawTilePattern2_2_3_6,
+  trDrawTilePattern2_2_3_7,
+  trDrawTilePattern2_2_3_8,
   trDrawTilePattern2_2_3_9,
   trDrawTilePattern2_2_3_10,
   // 斜め
@@ -1359,11 +1568,12 @@ const trFuncArray = [
   // 格子の変形
   // ---
   // 丸の変形
-  // trDrawTilePattern2_2_4_1,
+  trDrawTilePattern2_2_4_1,
   // 丸の変形
   // ---
   // 十字の変形
   trDrawTilePattern2_2_5_1,
+  trDrawTilePattern2_2_5_2,
   // 十字の変形
 ]
 

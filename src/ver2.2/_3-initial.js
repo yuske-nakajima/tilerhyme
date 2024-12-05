@@ -11,8 +11,6 @@ function trInitial() {
 
   const windowSize = min(_windowWidth, _windowHeight)
 
-  console.log(_windowWidth, _windowHeight, windowSize)
-
   trCanvas = createCanvas(windowSize, windowSize)
   colorMode(HSB)
   frameRate(24)
