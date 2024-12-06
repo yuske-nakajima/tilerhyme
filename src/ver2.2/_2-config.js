@@ -1530,32 +1530,32 @@ const trFuncArray = [
   // ニセホテイ
   // ---
   // 縦
-  trDrawTilePattern2_2_1_1,
-  trDrawTilePattern2_2_1_2,
-  trDrawTilePattern2_2_1_3,
-  trDrawTilePattern2_2_1_4,
+  // trDrawTilePattern2_2_1_1,
+  // trDrawTilePattern2_2_1_2,
+  // trDrawTilePattern2_2_1_3,
+  // trDrawTilePattern2_2_1_4,
   trDrawTilePattern2_2_1_5,
   trDrawTilePattern2_2_1_6,
   // 縦
   // ---
   // 横
-  trDrawTilePattern2_2_2_1,
-  trDrawTilePattern2_2_2_2,
-  trDrawTilePattern2_2_2_3,
-  trDrawTilePattern2_2_2_4,
+  // trDrawTilePattern2_2_2_1,
+  // trDrawTilePattern2_2_2_2,
+  // trDrawTilePattern2_2_2_3,
+  // trDrawTilePattern2_2_2_4,
   trDrawTilePattern2_2_2_5,
   trDrawTilePattern2_2_2_6,
   // 横
   // ---
   // 斜め
-  trDrawTilePattern2_2_3_1,
-  trDrawTilePattern2_2_3_2,
-  trDrawTilePattern2_2_3_3,
-  trDrawTilePattern2_2_3_4,
-  trDrawTilePattern2_2_3_5,
-  trDrawTilePattern2_2_3_6,
-  trDrawTilePattern2_2_3_7,
-  trDrawTilePattern2_2_3_8,
+  // trDrawTilePattern2_2_3_1,
+  // trDrawTilePattern2_2_3_2,
+  // trDrawTilePattern2_2_3_3,
+  // trDrawTilePattern2_2_3_4,
+  // trDrawTilePattern2_2_3_5,
+  // trDrawTilePattern2_2_3_6,
+  // trDrawTilePattern2_2_3_7,
+  // trDrawTilePattern2_2_3_8,
   trDrawTilePattern2_2_3_9,
   trDrawTilePattern2_2_3_10,
   // 斜め
