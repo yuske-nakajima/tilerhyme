@@ -449,6 +449,8 @@ async function trSetDataParams() {
     const part = hashHex.substr(i * 3, 3)
     trDataParams.push(parseInt(part, 16) % 100)
   }
+
+  trSineCount = 0
 }
 
 function trChromaticGetColor() {
