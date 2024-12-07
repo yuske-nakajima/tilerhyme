@@ -20,6 +20,7 @@ function trMousePressed() {
           trCreateQrCode()
           trChangePatternFrame = frameCount
           trSetDataParams()
+          trSineCount = 0
         })
       }
     }

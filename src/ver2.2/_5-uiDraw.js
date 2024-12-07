@@ -16,6 +16,7 @@ function trUiDraw() {
       trCreateQrCode()
       trChangePatternFrame = frameCount
       trSetDataParams()
+      trSineCount = 0
 
       trLpSetup(
         async (i) => {

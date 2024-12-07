@@ -458,8 +458,8 @@ function trChromaticGetColor() {
   for (let i = 1; i <= 12; i++) {
     colors[`color${i}`] = color(
       map(trDataParams[0 + i], 0, 99, 0, 360),
-      map(trDataParams[1 + i], 0, 99, 30, 40),
-      map(trDataParams[2 + i], 0, 99, 90, 100),
+      map(trDataParams[1 + i], 0, 99, 30, 100),
+      map(trDataParams[2 + i], 0, 99, 50, 100),
     )
   }
 
@@ -974,39 +974,111 @@ const trDrawTilePattern2_2_1_5 = _trDrawTilePattern2((params) => {
 })
 
 const trDrawTilePattern2_2_1_6 = _trDrawTilePattern2((params) => {
-  const { _x, x, _y, y, tileSize, color1, color2, sineValue } = params
+  const { _x, x, _y, y, tileSize, color1, color2, color3, sineValue } = params
 
   noFill()
-  strokeWeight(max((tileSize * trDataParams[5]) / 400, 1))
+  strokeWeight(max((tileSize * trDataParams[5]) / 200, 1))
   strokeCap(SQUARE)
 
   const s1 = map(sineValue, -1, 1, 0, 1)
 
-  if (_y % 2 === 0) {
-    if (_y % 4 === 0) {
+  switch (trDataParams[6] % 4) {
+    case 0:
       stroke(color1)
-    } else {
+      break
+    case 1:
       stroke(color2)
-    }
+      break
+    case 2:
+      if (_y % 2 === 0) {
+        stroke(color2)
+      } else {
+        stroke(color3)
+      }
+      break
+    default:
+      if (_x % 2 === 0) {
+        stroke(color2)
+      } else {
+        stroke(color3)
+      }
+      break
+  }
+
+  if (trSineCount < 4) {
     switch (trSineCount % 2) {
       case 0:
-        line(x, y, x, y + tileSize * s1)
-        line(x, y, x, y - tileSize * s1)
+        line(x, y - 1, x, y + (tileSize / 2) * s1)
+        line(x, y + 1, x, y - (tileSize / 2) * s1)
         break
       case 1:
         // 回転
         translate(x, y)
         rotate(PI * sineValue)
-        line(0, 0, 0, 0 - tileSize)
-        line(0, 0, 0, 0 + tileSize)
+        line(0, 0 + 1, 0, 0 - tileSize / 2)
+        line(0, 0 - 1, 0, 0 + tileSize / 2)
         break
       default:
         break
     }
+  } else {
+    line(x, y - 1, x, y + (tileSize / 2) * 1.01)
+    line(x, y + 1, x, y - (tileSize / 2) * 1.01)
   }
 })
 
 const trDrawTilePattern2_2_1_7 = _trDrawTilePattern2((params) => {
+  const { _x, x, _y, y, tileSize, color1, color2, color3, sineValue } = params
+
+  noFill()
+  strokeWeight(max((tileSize * trDataParams[5]) / 200, 1))
+  strokeCap(SQUARE)
+
+  const s1 = map(sineValue, -1, 1, 0, 1)
+
+  switch (trDataParams[7] % 4) {
+    case 0:
+      stroke(color1)
+      break
+    case 1:
+      stroke(color2)
+      break
+    case 2:
+      if (_y % 2 === 0) {
+        stroke(color2)
+      } else {
+        stroke(color3)
+      }
+      break
+    default:
+      if (_x % 2 === 0) {
+        stroke(color2)
+      } else {
+        stroke(color3)
+      }
+      break
+  }
+
+  if (trDataParams[10] % 2 === 0) {
+    stroke(color1)
+  } else {
+    if (_y % 4 === 0) {
+      stroke(color2)
+    } else {
+      stroke(color3)
+    }
+  }
+
+  if (trSineCount < 4) {
+    line(x, y - 1, x, y + (tileSize / 2) * 1.01 * s1)
+    line(x, y + 1, x, y - (tileSize / 2) * 1.01 * s1)
+  } else {
+    line(x, y - 1, x, y + (tileSize / 2) * 1.01)
+    line(x, y + 1, x, y - (tileSize / 2) * 1.01)
+  }
+})
+
+const trDrawTilePattern2_2_1_8 = _trDrawTilePattern2((params) => {
   const { _x, x, _y, y, tileSize, color1, color2, sineValue } = params
 
   noFill()
@@ -1118,40 +1190,87 @@ const trDrawTilePattern2_2_2_5 = _trDrawTilePattern2((params) => {
 })
 
 const trDrawTilePattern2_2_2_6 = _trDrawTilePattern2((params) => {
-  const { _x, x, y, tileSize, color1, color2, sineValue } = params
+  const { x, _y, y, tileSize, color1, color2, color3, sineValue } = params
 
   noFill()
-  strokeWeight(max((tileSize * trDataParams[5]) / 400, 1))
+  strokeWeight(max((tileSize * trDataParams[5]) / 200, 1))
   strokeCap(SQUARE)
 
   const s1 = map(sineValue, -1, 1, 0, 1)
 
-  if (_x % 2 === 0) {
-    if (_x % 4 === 0) {
+  switch (trDataParams[12] % 3) {
+    case 0:
       stroke(color1)
-    } else {
+      break
+    case 1:
       stroke(color2)
-    }
+      break
+    default:
+      if (_y % 2 === 0) {
+        stroke(color2)
+      } else {
+        stroke(color3)
+      }
+      break
+  }
 
+  if (trSineCount < 4) {
     switch (trSineCount % 2) {
       case 0:
-        line(x, y, x + tileSize * s1, y)
-        line(x, y, x - tileSize * s1, y)
+        line(x - 1, y, x + (tileSize / 2) * s1, y)
+        line(x + 1, y, x - (tileSize / 2) * s1, y)
         break
       case 1:
         // 回転
         translate(x, y)
         rotate(PI * sineValue)
-        line(0, 0, 0 - tileSize, 0)
-        line(0, 0, 0 + tileSize, 0)
+        line(0 + 1, 0, 0 - tileSize / 2, 0)
+        line(0 - 1, 0, 0 + tileSize / 2, 0)
         break
       default:
         break
     }
+  } else {
+    line(x - 1, y, x + (tileSize / 2) * 1.01, y)
+    line(x + 1, y, x - (tileSize / 2) * 1.01, y)
   }
 })
 
 const trDrawTilePattern2_2_2_7 = _trDrawTilePattern2((params) => {
+  const { x, _y, y, tileSize, color1, color2, color3, sineValue } = params
+
+  noFill()
+  strokeWeight(max((tileSize * trDataParams[5]) / 200, 1))
+  strokeCap(SQUARE)
+
+  const s1 = map(sineValue, -1, 1, 0, 1)
+
+  switch (trDataParams[4] % 3) {
+    case 0:
+      stroke(color1)
+      break
+    case 1:
+      stroke(color2)
+      break
+    default:
+      if (_y % 2 === 0) {
+        stroke(color2)
+      } else {
+        stroke(color3)
+      }
+      break
+  }
+
+  if (trSineCount < 4) {
+    line(x - 1, y, x + (tileSize / 2) * 1.01 * s1, y)
+    line(x + 1, y, x - (tileSize / 2) * 1.01 * s1, y)
+  } else {
+    line(x - 1, y, x + (tileSize / 2) * 1.01, y)
+    line(x + 1, y, x - (tileSize / 2) * 1.01, y)
+  }
+})
+
+const trDrawTilePattern2_2_2_8 = _trDrawTilePattern2((params) => {
   const { _x, x, _y, y, tileSize, color1, color2, sineValue } = params
 
   noFill()
@@ -1408,7 +1527,7 @@ const trDrawTilePattern2_2_3_12 = _trDrawTilePattern2((params) => {
 })
 
 const trDrawTilePattern2_2_3_13 = _trDrawTilePattern2((params) => {
-  const { _x, x, y, tileSize, color1, color2, sineValue } = params
+  const { _x, x, _y, y, tileSize, color1, color2, sineValue } = params
 
   noFill()
   strokeWeight(max((tileSize * trDataParams[5]) / 400, 1))
@@ -1417,7 +1536,7 @@ const trDrawTilePattern2_2_3_13 = _trDrawTilePattern2((params) => {
   const currentX = x + tileSize * sineValue * 2
   const currentY = y + tileSize * -sineValue * 2
 
-  if (_x % 2 === 0) {
+  if (_x % 2 === 0 && _y % 2 === 0) {
     if (_x % 4 === 0) {
       stroke(color1)
     } else {
@@ -1439,7 +1558,7 @@ const trDrawTilePattern2_2_3_13 = _trDrawTilePattern2((params) => {
 })
 
 const trDrawTilePattern2_2_3_14 = _trDrawTilePattern2((params) => {
-  const { _x, x, y, tileSize, color1, color2, sineValue } = params
+  const { _x, x, _y, y, tileSize, color1, color2, sineValue } = params
 
   noFill()
   strokeWeight(max((tileSize * trDataParams[5]) / 400, 1))
@@ -1448,7 +1567,7 @@ const trDrawTilePattern2_2_3_14 = _trDrawTilePattern2((params) => {
   const currentX = x - tileSize * -sineValue * 2
   const currentY = y + tileSize * sineValue * 2
 
-  if (_x % 2 === 0) {
+  if (_x % 2 === 0 && _y % 2 === 0) {
     if (_x % 4 === 0) {
       stroke(color1)
     } else {
@@ -1578,7 +1697,7 @@ const trDrawTilePattern2_2_5_1 = _trDrawTilePattern2((params) => {
 
   stroke(color1)
   strokeWeight(max((tileSize * trDataParams[5]) / 400, 1))
-  // strokeWeight((map(sin(frameCount * 0.01 + x + y), -1, 1, 0.1, 1) * (tileSize * trDataParams[5])) / 400)
+  strokeCap(SQUARE)
 
   stroke(color1)
   beginShape()
@@ -1586,16 +1705,16 @@ const trDrawTilePattern2_2_5_1 = _trDrawTilePattern2((params) => {
   vertex(0, 0)
   endShape()
 
-  stroke(color2)
-  beginShape()
-  vertex(0, 0)
-  vertex(0 + _tileSize / 2, 0)
-  endShape()
-
   stroke(color1)
   beginShape()
   vertex(0, 0 - _tileSize / 2)
   vertex(0, 0)
+  endShape()
+
+  stroke(color2)
+  beginShape()
+  vertex(0, 0)
+  vertex(0 + _tileSize / 2, 0)
   endShape()
 
   stroke(color2)
@@ -1615,7 +1734,8 @@ const trDrawTilePattern2_2_5_2 = _trDrawTilePattern2((params) => {
 
   stroke(color1)
   strokeWeight(max((tileSize * trDataParams[5]) / 300, 1))
-  // const acceleration = (tileSize / 2) * s1
+  strokeCap(SQUARE)
+
   const acceleration = tileSize * 0.4
 
   switch (trSineCount % 2) {
@@ -1626,16 +1746,16 @@ const trDrawTilePattern2_2_5_2 = _trDrawTilePattern2((params) => {
       vertex(0, 0)
       endShape()
 
-      stroke(color2)
-      beginShape()
-      vertex(0, 0)
-      vertex(0 + _tileSize / 2, 0)
-      endShape()
-
       stroke(color1)
       beginShape()
       vertex(0, 0 - _tileSize / 2)
       vertex(0, 0)
+      endShape()
+
+      stroke(color2)
+      beginShape()
+      vertex(0, 0)
+      vertex(0 + _tileSize / 2, 0)
       endShape()
 
       stroke(color2)
@@ -1654,16 +1774,16 @@ const trDrawTilePattern2_2_5_2 = _trDrawTilePattern2((params) => {
       vertex(0, 0 + acceleration)
       endShape()
 
-      stroke(color2)
-      beginShape()
-      vertex(0 + acceleration, 0)
-      vertex(0, 0)
-      endShape()
-
       stroke(color1)
       beginShape()
       vertex(0, 0)
       vertex(0, 0 - acceleration)
+      endShape()
+
+      stroke(color2)
+      beginShape()
+      vertex(0 + acceleration, 0)
+      vertex(0, 0)
       endShape()
 
       stroke(color2)
@@ -1807,9 +1927,10 @@ const trFuncArray = [
   // trDrawTilePattern2_2_1_2,
   // trDrawTilePattern2_2_1_3,
   // trDrawTilePattern2_2_1_4,
-  trDrawTilePattern2_2_1_5,
-  trDrawTilePattern2_2_1_6,
-  // trDrawTilePattern2_2_1_7,
+  // trDrawTilePattern2_2_1_5,
+  trDrawTilePattern2_2_1_6, // 回転
+  trDrawTilePattern2_2_1_7, // 上下運動
+  // trDrawTilePattern2_2_1_8,
   // 縦
   // ---
   // 横
@@ -1817,9 +1938,10 @@ const trFuncArray = [
   // trDrawTilePattern2_2_2_2,
   // trDrawTilePattern2_2_2_3,
   // trDrawTilePattern2_2_2_4,
-  trDrawTilePattern2_2_2_5,
-  trDrawTilePattern2_2_2_6,
-  // trDrawTilePattern2_2_2_7,
+  // trDrawTilePattern2_2_2_5,
+  trDrawTilePattern2_2_2_6, // 回転
+  trDrawTilePattern2_2_2_7, // 左右運動
+  // trDrawTilePattern2_2_2_8,
   // 横
   // ---
   // 斜め
