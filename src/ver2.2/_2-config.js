@@ -1397,28 +1397,28 @@ const trFuncArray = [
   // ---
   // 縦
   trDrawVerticalRotate, // 回転
-  trDrawVerticalBounce, // 上下運動
+  // trDrawVerticalBounce, // 上下運動
   // 縦
   // ---
   // 横
   trDrawHorizontalRotate, // 回転
-  trDrawHorizontalBounce, // 左右運動
+  // trDrawHorizontalBounce, // 左右運動
   // 横
   // ---
   // 斜め
-  trDrawDiagonalRightBounce, // 右斜め上下運動
-  trDrawDiagonalLeftBounce, // 左斜め上下運動
+  // trDrawDiagonalRightBounce, // 右斜め上下運動
+  // trDrawDiagonalLeftBounce, // 左斜め上下運動
   trDrawDiagonalRightRotate, // 右斜め回転
   trDrawDiagonalLeftRotate, // 左斜め回転
   // 斜め
   // ---
   // 丸の変形
-  trDrawEllipseStrokeBounce, // 大小運動
+  // trDrawEllipseStrokeBounce, // 大小運動
   trDrawEllipseStrokeRotate, // 回転
   // 丸の変形
   // ---
   // 十字の変形
-  trDrawCrossBounce, // 大小運動
+  // trDrawCrossBounce, // 大小運動
   trDrawCrossRotate, // 回転
   // 十字の変形
 ]
