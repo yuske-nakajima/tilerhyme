@@ -641,24 +641,44 @@ const trDrawRect = _trDrawTilePattern1((params) => {
 
   rectMode(CENTER)
 
-  noStroke()
-
-  switch (trDataParams[5] % 5) {
-    case 0:
-      fill(color1)
-      break
-    case 1:
-      fill(color2)
-      break
-    case 2:
-      fill([color1, color2][v1 % 2])
-      break
-    case 3:
-      fill([color2, color1][_x % 2])
-      break
-    default:
-      fill([color1, color2][_y % 2])
-      break
+  if (trDataParams[9] % 2 === 0) {
+    noStroke()
+    switch (trDataParams[5] % 5) {
+      case 0:
+        fill(color1)
+        break
+      case 1:
+        fill(color2)
+        break
+      case 2:
+        fill([color1, color2][v1 % 2])
+        break
+      case 3:
+        fill([color2, color1][_x % 2])
+        break
+      default:
+        fill([color1, color2][_y % 2])
+        break
+    }
+  } else {
+    noFill()
+    switch (trDataParams[5] % 5) {
+      case 0:
+        stroke(color1)
+        break
+      case 1:
+        stroke(color2)
+        break
+      case 2:
+        stroke([color1, color2][v1 % 2])
+        break
+      case 3:
+        stroke([color2, color1][_x % 2])
+        break
+      default:
+        stroke([color1, color2][_y % 2])
+        break
+    }
   }
 
   translate(x, y)
@@ -667,6 +687,30 @@ const trDrawRect = _trDrawTilePattern1((params) => {
     rect(0, 0, _tileSize2)
   } else {
     rect(0, 0, tileSize2)
+  }
+})
+
+const trDrawRectBig = _trDrawTilePattern1((params) => {
+  const { x, y, tileSize, color1, color2, sineValue } = params
+  rectMode(CENTER)
+
+  noFill()
+
+  switch (trDataParams[5] % 2) {
+    case 0:
+      stroke(color1)
+      break
+    default:
+      stroke(color2)
+      break
+  }
+
+  translate(x, y)
+
+  if (trSineCount < TR_SINE_ROOP_COUNT) {
+    rect(0, 0, tileSize * 1.2 * sineValue)
+  } else {
+    rect(0, 0, tileSize * 1.2)
   }
 })
 
@@ -1391,6 +1435,7 @@ const trFuncArray = [
   // ○△□
   trDrawRectEllipseSquare, // □○ひし形混合
   trDrawRect, // □オンリー
+  trDrawRectBig, // □大-線のみ
   trDrawSquare, // ひし形オンリー
   trDrawEllipse, // ◯オンリー
   // □○△
