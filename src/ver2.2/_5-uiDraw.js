@@ -107,10 +107,13 @@ function trUiDraw() {
   //   ),
   // )
 
-  // 背景色を静的に指定
-  background(TR_COLORS.background)
+  // ダーク TODO: ライトモードに切り替えるように変更できるようにしたい
+  background(
+    map(trDataParams[14], 0, 99, 0, 360),
+    map(trDataParams[15], 0, 99, 10, 20),
+    map(trDataParams[16], 0, 99, 10, 20),
+  )
 
-  // TODO: ここに描画処理を書く
   trDrawShape()
 
   trDeviceDraw()

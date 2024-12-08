@@ -459,11 +459,11 @@ function trChromaticGetColor() {
   const colors = {}
 
   // カラー
-  for (let i = 1; i <= 12; i++) {
+  for (let i = 1; i <= 5; i++) {
     colors[`color${i}`] = color(
       map(trDataParams[0 + i], 0, 99, 0, 360),
-      map(trDataParams[1 + i], 0, 99, 30, 100),
-      map(trDataParams[2 + i], 0, 99, 50, 100),
+      map(trDataParams[3 + i], 0, 99, 30, 100),
+      map(trDataParams[6 + i], 0, 99, 50, 100),
     )
   }
 
@@ -512,8 +512,7 @@ function _trDrawTilePattern1(func) {
     const x = _x * tileSize
     const y = _y * tileSize
 
-    const { color1, color2, color3, color4, color5, color6, color7, color8, color9, color10, color11, color12 } =
-      trChromaticGetColor()
+    const { color1, color2, color3, color4, color5 } = trChromaticGetColor()
 
     const p1 = trDataParams[_x % trDataParams.length]
     const p2 = trDataParams[_y % trDataParams.length]
@@ -564,13 +563,6 @@ function _trDrawTilePattern1(func) {
         color3,
         color4,
         color5,
-        color6,
-        color7,
-        color8,
-        color9,
-        color10,
-        color11,
-        color12,
         sineValue,
         p1,
         p2,
