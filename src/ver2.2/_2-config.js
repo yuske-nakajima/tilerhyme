@@ -810,24 +810,44 @@ const trDrawEllipse = _trDrawTilePattern1((params) => {
 
   rectMode(CENTER)
 
-  noStroke()
-
-  switch (trDataParams[5] % 5) {
-    case 0:
-      fill(color1)
-      break
-    case 1:
-      fill(color2)
-      break
-    case 2:
-      fill([color1, color2][v1 % 2])
-      break
-    case 3:
-      fill([color2, color1][_x % 2])
-      break
-    default:
-      fill([color1, color2][_y % 2])
-      break
+  if (trDataParams[9] % 2 === 0) {
+    noStroke()
+    switch (trDataParams[5] % 5) {
+      case 0:
+        fill(color1)
+        break
+      case 1:
+        fill(color2)
+        break
+      case 2:
+        fill([color1, color2][v1 % 2])
+        break
+      case 3:
+        fill([color2, color1][_x % 2])
+        break
+      default:
+        fill([color1, color2][_y % 2])
+        break
+    }
+  } else {
+    noFill()
+    switch (trDataParams[5] % 5) {
+      case 0:
+        stroke(color1)
+        break
+      case 1:
+        stroke(color2)
+        break
+      case 2:
+        stroke([color1, color2][v1 % 2])
+        break
+      case 3:
+        stroke([color2, color1][_x % 2])
+        break
+      default:
+        stroke([color1, color2][_y % 2])
+        break
+    }
   }
 
   translate(x, y)
@@ -836,6 +856,39 @@ const trDrawEllipse = _trDrawTilePattern1((params) => {
     ellipse(0, 0, _tileSize2)
   } else {
     ellipse(0, 0, tileSize2)
+  }
+})
+
+const trDrawEllipseBig = _trDrawTilePattern1((params) => {
+  const { _x, x, _y, y, tileSize, _tileSize, color1, color2, v1 } = params
+
+  rectMode(CENTER)
+
+  noFill()
+  switch (trDataParams[5] % 5) {
+    case 0:
+      stroke(color1)
+      break
+    case 1:
+      stroke(color2)
+      break
+    case 2:
+      stroke([color1, color2][v1 % 2])
+      break
+    case 3:
+      stroke([color2, color1][_x % 2])
+      break
+    default:
+      stroke([color1, color2][_y % 2])
+      break
+  }
+
+  translate(x, y)
+
+  if (trSineCount < TR_SINE_ROOP_COUNT) {
+    ellipse(0, 0, _tileSize * 1.2)
+  } else {
+    ellipse(0, 0, tileSize * 1.2)
   }
 })
 
@@ -1494,6 +1547,7 @@ const trFuncArray = [
   trDrawSquare, // ひし形オンリー
   trDrawSquareBig, // ひし形大-線のみ
   trDrawEllipse, // ◯オンリー
+  trDrawEllipseBig, // ◯大-線のみ
   // □○△
   // ---
   // 縦
