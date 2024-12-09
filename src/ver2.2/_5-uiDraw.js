@@ -90,13 +90,13 @@ function trUiDraw() {
   }
 
   // 有彩色
-  background(
-    color(
-      map(trDataParams[14], 0, 99, 0, 360),
-      map(trDataParams[15], 0, 99, 10, 40),
-      map(trDataParams[16], 0, 99, 20, 98),
-    ),
-  )
+  // background(
+  //   color(
+  //     map(trDataParams[14], 0, 99, 0, 360),
+  //     map(trDataParams[15], 0, 99, 10, 40),
+  //     map(trDataParams[16], 0, 99, 20, 98),
+  //   ),
+  // )
 
   // 無彩色
   // background(
@@ -107,12 +107,14 @@ function trUiDraw() {
   //   ),
   // )
 
-  // ダーク TODO: ライトモードに切り替えるように変更できるようにしたい
   // background(
   //   map(trDataParams[14], 0, 99, 0, 360),
   //   map(trDataParams[15], 0, 99, 10, 20),
   //   map(trDataParams[16], 0, 99, 10, 20),
   // )
+
+  // ダーク TODO: ライトモードに切り替えるように変更できるようにしたい
+  background(0)
 
   trDrawShape()
 
