@@ -700,7 +700,7 @@ const trDrawRectEllipseSquare28 = _trDrawRectEllipseSquare((params) => {
   stroke([color5, color1][_y % 2])
 })
 
-function _trDrawRect(func) {
+function _trDrawRect(func, func2) {
   return _trDrawTilePattern1((params) => {
     const { x, y, tileSize2, _tileSize2 } = params
 
@@ -713,6 +713,10 @@ function _trDrawRect(func) {
       rect(0, 0, _tileSize2)
     } else {
       rect(0, 0, tileSize2)
+    }
+
+    if (func2) {
+      func2(params)
     }
   })
 }
@@ -760,6 +764,29 @@ const trDrawRect18 = _trDrawRect((params) => {
   fill([color5, color1][_y % 2])
 })
 
+const trDrawRect19 = _trDrawRect(
+  (params) => {
+    noStroke()
+    fill(params.color1)
+  },
+  (params) => {
+    if (trSineCount >= TR_SINE_ROOP_COUNT) {
+      // 文字を描画
+      const { _x, _y, tileSize } = params
+
+      //上下左右真ん中寄せ
+      textAlign(CENTER, CENTER)
+      textSize(tileSize / 2)
+      fill(params.color2)
+      const aList = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('')
+      const index = ceil(trDataParams[_x % trDataParams.length] + trDataParams[_y % trDataParams.length]) % aList.length
+      const a = aList[index]
+
+      text(a, 0, 0)
+    }
+  },
+)
+
 const trDrawRect21 = _trDrawRect((params) => {
   noFill()
   stroke(params.color1)
@@ -802,6 +829,29 @@ const trDrawRect28 = _trDrawRect((params) => {
   noFill()
   stroke([color5, color1][_y % 2])
 })
+
+const trDrawRect29 = _trDrawRect(
+  (params) => {
+    noFill()
+    stroke(params.color1)
+  },
+  (params) => {
+    if (trSineCount >= TR_SINE_ROOP_COUNT) {
+      // 文字を描画
+      const { _x, _y, tileSize } = params
+
+      //上下左右真ん中寄せ
+      textAlign(CENTER, CENTER)
+      textSize(tileSize / 2)
+      fill(params.color2)
+      const aList = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('')
+      const index = ceil(trDataParams[_x % trDataParams.length] + trDataParams[_y % trDataParams.length]) % aList.length
+      const a = aList[index]
+
+      text(a, 0, 0)
+    }
+  },
+)
 
 function _trDrawRectBig(func) {
   return _trDrawTilePattern1((params) => {
@@ -1776,6 +1826,7 @@ const trFuncArray = [
   trDrawRect16, // □-2色交互
   trDrawRect17, // □-2色縦
   trDrawRect18, // □-2色横
+  trDrawRect19, // □-文字-単色1-文字
   trDrawRect21, // □-線のみ-単色1
   trDrawRect22, // □-線のみ-単色2
   trDrawRect23, // □-線のみ-単色3
@@ -1784,6 +1835,7 @@ const trFuncArray = [
   trDrawRect26, // □-線のみ-2色交互
   trDrawRect27, // □-線のみ-2色縦
   trDrawRect28, // □-線のみ-2色横
+  trDrawRect29, // □-文字-線のみ-文字
   trDrawRectBig21, // □大-線のみ-単色1
   trDrawRectBig22, // □大-線のみ-単色2
   trDrawRectBig23, // □大-線のみ-単色3

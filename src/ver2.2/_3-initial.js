@@ -25,4 +25,6 @@ function trInitial() {
   trCellDivNum = ceil(width / 50)
 
   trSoftUiStartPos = createVector(width / 2 - TR_SOFT_UI_WIDTH / 2, height / 2 - TR_SOFT_UI_WIDTH / 2)
+
+  textFont('Silkscreen')
 }
