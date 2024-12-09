@@ -1229,124 +1229,168 @@ function _trDrawTilePattern2(func) {
   }
 }
 
-const trDrawVerticalRotate = _trDrawTilePattern2((params) => {
-  const { _x, x, _y, y, tileSize, color1, color2, color3, sineValue } = params
+function _trDrawVerticalRotate(func) {
+  return _trDrawTilePattern2((params) => {
+    const { _x, x, _y, y, tileSize, color1, color2, color3, sineValue } = params
 
-  noFill()
-  strokeWeight(max((tileSize * trDataParams[5]) / 400, 1))
-  strokeCap(SQUARE)
+    noFill()
+    strokeWeight(max((tileSize * trDataParams[5]) / 400, 1))
+    strokeCap(SQUARE)
 
-  const s1 = map(sineValue, -1, 1, 0, 1)
+    const s1 = map(sineValue, -1, 1, 0, 1)
+    func(params)
 
-  switch (trDataParams[6] % 4) {
-    case 0:
-      stroke(color1)
-      break
-    case 1:
-      stroke(color2)
-      break
-    case 2:
-      if (_y % 2 === 0) {
-        stroke(color2)
-      } else {
-        stroke(color3)
+    if (trSineCount < TR_SINE_ROOP_COUNT) {
+      switch (trSineCount % 2) {
+        case 0:
+          line(x, y - 1, x, y + (tileSize / 2) * s1)
+          line(x, y + 1, x, y - (tileSize / 2) * s1)
+          break
+        case 1:
+          // 回転
+          translate(x, y)
+          rotate(PI * sineValue)
+          line(0, 0 + 1, 0, 0 - tileSize / 2)
+          line(0, 0 - 1, 0, 0 + tileSize / 2)
+          break
+        default:
+          break
       }
-      break
-    default:
-      if (_x % 2 === 0) {
-        stroke(color2)
-      } else {
-        stroke(color3)
-      }
-      break
-  }
+    } else {
+      line(x, y - 1, x, y + (tileSize / 2) * 1.01)
+      line(x, y + 1, x, y - (tileSize / 2) * 1.01)
 
-  if (trSineCount < TR_SINE_ROOP_COUNT) {
-    switch (trSineCount % 2) {
-      case 0:
-        line(x, y - 1, x, y + (tileSize / 2) * s1)
-        line(x, y + 1, x, y - (tileSize / 2) * s1)
-        break
-      case 1:
-        // 回転
-        translate(x, y)
-        rotate(PI * sineValue)
-        line(0, 0 + 1, 0, 0 - tileSize / 2)
-        line(0, 0 - 1, 0, 0 + tileSize / 2)
-        break
-      default:
-        break
+      if (trDataParams[3] % 2 === 0) {
+        for (let i = 0; i < 4; i++) {
+          strokeWeight(1)
+          const currentX = x + (tileSize / 4) * i
+
+          line(currentX, y - 1, currentX, y + (tileSize / 2) * 1.01)
+          line(currentX, y + 1, currentX, y - (tileSize / 2) * 1.01)
+        }
+      }
     }
+  })
+}
+
+const trDrawVerticalRotate11 = _trDrawVerticalRotate((params) => {
+  stroke(params.color1)
+})
+
+const trDrawVerticalRotate12 = _trDrawVerticalRotate((params) => {
+  stroke(params.color2)
+})
+
+const trDrawVerticalRotate13 = _trDrawVerticalRotate((params) => {
+  stroke(params.color3)
+})
+
+const trDrawVerticalRotate14 = _trDrawVerticalRotate((params) => {
+  stroke(params.color4)
+})
+
+const trDrawVerticalRotate15 = _trDrawVerticalRotate((params) => {
+  stroke(params.color5)
+})
+
+const trDrawVerticalRotate16 = _trDrawVerticalRotate((params) => {
+  const { _y, color1, color2 } = params
+  if (_y % 2 === 0) {
+    stroke(color1)
   } else {
-    line(x, y - 1, x, y + (tileSize / 2) * 1.01)
-    line(x, y + 1, x, y - (tileSize / 2) * 1.01)
-
-    if (trDataParams[3] % 2 === 0) {
-      for (let i = 0; i < 4; i++) {
-        strokeWeight(1)
-        const currentX = x + (tileSize / 4) * i
-
-        line(currentX, y - 1, currentX, y + (tileSize / 2) * 1.01)
-        line(currentX, y + 1, currentX, y - (tileSize / 2) * 1.01)
-      }
-    }
+    stroke(color2)
   }
 })
 
-const trDrawHorizontalRotate = _trDrawTilePattern2((params) => {
-  const { x, _y, y, tileSize, color1, color2, color3, sineValue } = params
-
-  noFill()
-  strokeWeight(max((tileSize * trDataParams[5]) / 400, 1))
-  strokeCap(SQUARE)
-
-  const s1 = map(sineValue, -1, 1, 0, 1)
-
-  switch (trDataParams[12] % 3) {
-    case 0:
-      stroke(color1)
-      break
-    case 1:
-      stroke(color2)
-      break
-    default:
-      if (_y % 2 === 0) {
-        stroke(color2)
-      } else {
-        stroke(color3)
-      }
-      break
-  }
-
-  if (trSineCount < TR_SINE_ROOP_COUNT) {
-    switch (trSineCount % 2) {
-      case 0:
-        line(x - 1, y, x + (tileSize / 2) * s1, y)
-        line(x + 1, y, x - (tileSize / 2) * s1, y)
-        break
-      case 1:
-        // 回転
-        translate(x, y)
-        rotate(PI * sineValue)
-        line(0 + 1, 0, 0 - tileSize / 2, 0)
-        line(0 - 1, 0, 0 + tileSize / 2, 0)
-        break
-      default:
-        break
-    }
+const trDrawVerticalRotate17 = _trDrawVerticalRotate((params) => {
+  const { _x, color3, color4 } = params
+  if (_x % 2 === 0) {
+    stroke(color3)
   } else {
-    line(x - 1, y, x + (tileSize / 2) * 1.01, y)
-    line(x + 1, y, x - (tileSize / 2) * 1.01, y)
+    stroke(color4)
+  }
+})
 
-    if (trDataParams[3] % 2 === 0) {
-      for (let i = 0; i < 4; i++) {
-        strokeWeight(1)
-        const currentY = y + (tileSize / 4) * i
+function trDrawHorizontalRotate(func) {
+  return _trDrawTilePattern2((params) => {
+    const { x, y, tileSize, sineValue } = params
 
-        line(x - 1, currentY, x + (tileSize / 2) * 1.01, currentY)
-        line(x + 1, currentY, x - (tileSize / 2) * 1.01, currentY)
+    noFill()
+    strokeWeight(max((tileSize * trDataParams[5]) / 400, 1))
+    strokeCap(SQUARE)
+
+    const s1 = map(sineValue, -1, 1, 0, 1)
+
+    func(params)
+
+    if (trSineCount < TR_SINE_ROOP_COUNT) {
+      switch (trSineCount % 2) {
+        case 0:
+          line(x - 1, y, x + (tileSize / 2) * s1, y)
+          line(x + 1, y, x - (tileSize / 2) * s1, y)
+          break
+        case 1:
+          // 回転
+          translate(x, y)
+          rotate(PI * sineValue)
+          line(0 + 1, 0, 0 - tileSize / 2, 0)
+          line(0 - 1, 0, 0 + tileSize / 2, 0)
+          break
+        default:
+          break
+      }
+    } else {
+      line(x - 1, y, x + (tileSize / 2) * 1.01, y)
+      line(x + 1, y, x - (tileSize / 2) * 1.01, y)
+
+      if (trDataParams[3] % 2 === 0) {
+        for (let i = 0; i < 4; i++) {
+          strokeWeight(1)
+          const currentY = y + (tileSize / 4) * i
+
+          line(x - 1, currentY, x + (tileSize / 2) * 1.01, currentY)
+          line(x + 1, currentY, x - (tileSize / 2) * 1.01, currentY)
+        }
       }
     }
+  })
+}
+
+const trDrawHorizontalRotate11 = trDrawHorizontalRotate((params) => {
+  stroke(params.color1)
+})
+
+const trDrawHorizontalRotate12 = trDrawHorizontalRotate((params) => {
+  stroke(params.color2)
+})
+
+const trDrawHorizontalRotate13 = trDrawHorizontalRotate((params) => {
+  stroke(params.color3)
+})
+
+const trDrawHorizontalRotate14 = trDrawHorizontalRotate((params) => {
+  stroke(params.color4)
+})
+
+const trDrawHorizontalRotate15 = trDrawHorizontalRotate((params) => {
+  stroke(params.color5)
+})
+
+const trDrawHorizontalRotate16 = trDrawHorizontalRotate((params) => {
+  const { _y, color1, color2 } = params
+  if (_y % 2 === 0) {
+    stroke(color1)
+  } else {
+    stroke(color2)
+  }
+})
+
+const trDrawHorizontalRotate17 = trDrawHorizontalRotate((params) => {
+  const { _x, color3, color4 } = params
+  if (_x % 2 === 0) {
+    stroke(color3)
+  } else {
+    stroke(color4)
   }
 })
 
@@ -1729,8 +1773,20 @@ const trFuncArray = [
   trDrawEllipseBig26, // ◯大-線のみ-2色交互
   trDrawEllipseBig27, // ◯大-線のみ-2色縦
   trDrawEllipseBig28, // ◯大-線のみ-2色横
-  trDrawVerticalRotate, // 縦-回転
-  trDrawHorizontalRotate, // 横-回転
+  trDrawVerticalRotate11, // 縦-回転-単色1
+  trDrawVerticalRotate12, // 縦-回転-単色2
+  trDrawVerticalRotate13, // 縦-回転-単色3
+  trDrawVerticalRotate14, // 縦-回転-単色4
+  trDrawVerticalRotate15, // 縦-回転-単色5
+  trDrawVerticalRotate16, // 縦-回転-2色縦
+  trDrawVerticalRotate17, // 縦-回転-2色横
+  trDrawHorizontalRotate11, // 横-回転-単色1
+  trDrawHorizontalRotate12, // 横-回転-単色2
+  trDrawHorizontalRotate13, // 横-回転-単色3
+  trDrawHorizontalRotate14, // 横-回転-単色4
+  trDrawHorizontalRotate15, // 横-回転-単色5
+  trDrawHorizontalRotate16, // 横-回転-2色縦
+  trDrawHorizontalRotate17, // 横-回転-2色横
   trDrawDiagonalRightRotate, // 右斜め回転
   trDrawDiagonalLeftRotate, // 左斜め回転
   trDrawEllipseStrokeRotate, // 丸-回転
