@@ -1200,7 +1200,7 @@ const trDrawDiagonalLeftRotate = _trDrawTilePattern2((params) => {
         for (let i = 0; i < 4; i++) {
           strokeWeight(1)
           const _currentX = _x * tileSize - (tileSize / 4) * i + (tileSize / 4) * i
-          const _currentY = _y * tileSize - (tileSize / 4) * i
+          const _currentY = _y * tileSize + (tileSize / 4) * i
 
           line(_currentX, _currentY, _currentX - tileSize * 1.01, _currentY - tileSize * 1.01)
         }
