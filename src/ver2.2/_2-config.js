@@ -807,10 +807,9 @@ function _trDrawRectBig(func) {
   return _trDrawTilePattern1((params) => {
     const { x, y, tileSize, sineValue } = params
     rectMode(CENTER)
+    noFill()
     func(params)
-
     translate(x, y)
-
     if (trSineCount < TR_SINE_ROOP_COUNT) {
       rect(0, 0, tileSize * 1.2 * sineValue)
     } else {
@@ -820,45 +819,37 @@ function _trDrawRectBig(func) {
 }
 
 const trDrawRectBig21 = _trDrawRectBig((params) => {
-  noFill()
   stroke(params.color1)
 })
 
 const trDrawRectBig22 = _trDrawRectBig((params) => {
-  noFill()
   stroke(params.color2)
 })
 
 const trDrawRectBig23 = _trDrawRectBig((params) => {
-  noFill()
   stroke(params.color3)
 })
 
 const trDrawRectBig24 = _trDrawRectBig((params) => {
-  noFill()
   stroke(params.color4)
 })
 
 const trDrawRectBig25 = _trDrawRectBig((params) => {
-  noFill()
   stroke(params.color5)
 })
 
 const trDrawRectBig26 = _trDrawRectBig((params) => {
   const { color1, color2, v1 } = params
-  noFill()
   stroke([color1, color2][v1 % 2])
 })
 
 const trDrawRectBig27 = _trDrawRectBig((params) => {
   const { color3, color4, _x } = params
-  noFill()
   stroke([color3, color4][_x % 2])
 })
 
 const trDrawRectBig28 = _trDrawRectBig((params) => {
   const { color1, color5, _y } = params
-  noFill()
   stroke([color5, color1][_y % 2])
 })
 
@@ -953,91 +944,160 @@ const trDrawSquareBig = _trDrawTilePattern1((params) => {
   }
 })
 
-const trDrawEllipse = _trDrawTilePattern1((params) => {
-  const { _x, x, _y, y, tileSize2, _tileSize2, color1, color2, v1 } = params
+function _trDrawEllipse(func) {
+  return _trDrawTilePattern1((params) => {
+    const { x, y, tileSize2, _tileSize2 } = params
 
-  rectMode(CENTER)
+    rectMode(CENTER)
+    func(params)
 
-  if (trDataParams[9] % 2 === 0) {
-    noStroke()
-    switch (trDataParams[5] % 5) {
-      case 0:
-        fill(color1)
-        break
-      case 1:
-        fill(color2)
-        break
-      case 2:
-        fill([color1, color2][v1 % 2])
-        break
-      case 3:
-        fill([color2, color1][_x % 2])
-        break
-      default:
-        fill([color1, color2][_y % 2])
-        break
+    translate(x, y)
+
+    if (trSineCount < TR_SINE_ROOP_COUNT) {
+      ellipse(0, 0, _tileSize2)
+    } else {
+      ellipse(0, 0, tileSize2)
     }
-  } else {
-    noFill()
-    switch (trDataParams[5] % 5) {
-      case 0:
-        stroke(color1)
-        break
-      case 1:
-        stroke(color2)
-        break
-      case 2:
-        stroke([color1, color2][v1 % 2])
-        break
-      case 3:
-        stroke([color2, color1][_x % 2])
-        break
-      default:
-        stroke([color1, color2][_y % 2])
-        break
-    }
-  }
+  })
+}
 
-  translate(x, y)
-
-  if (trSineCount < TR_SINE_ROOP_COUNT) {
-    ellipse(0, 0, _tileSize2)
-  } else {
-    ellipse(0, 0, tileSize2)
-  }
+const trDrawEllipse11 = _trDrawEllipse((params) => {
+  noStroke()
+  fill(params.color1)
 })
 
-const trDrawEllipseBig = _trDrawTilePattern1((params) => {
-  const { _x, x, _y, y, tileSize, _tileSize, color1, color2, v1 } = params
+const trDrawEllipse12 = _trDrawEllipse((params) => {
+  noStroke()
+  fill(params.color2)
+})
 
-  rectMode(CENTER)
+const trDrawEllipse13 = _trDrawEllipse((params) => {
+  noStroke()
+  fill(params.color3)
+})
 
+const trDrawEllipse14 = _trDrawEllipse((params) => {
+  noStroke()
+  fill(params.color4)
+})
+
+const trDrawEllipse15 = _trDrawEllipse((params) => {
+  noStroke()
+  fill(params.color5)
+})
+
+const trDrawEllipse16 = _trDrawEllipse((params) => {
+  const { color1, color2, v1 } = params
+  noStroke()
+  fill([color1, color2][v1 % 2])
+})
+
+const trDrawEllipse17 = _trDrawEllipse((params) => {
+  const { color3, color4, _x } = params
+  noStroke()
+  fill([color3, color4][_x % 2])
+})
+
+const trDrawEllipse18 = _trDrawEllipse((params) => {
+  const { color1, color5, _y } = params
+  noStroke()
+  fill([color5, color1][_y % 2])
+})
+
+const trDrawEllipse21 = _trDrawEllipse((params) => {
   noFill()
-  switch (trDataParams[5] % 5) {
-    case 0:
-      stroke(color1)
-      break
-    case 1:
-      stroke(color2)
-      break
-    case 2:
-      stroke([color1, color2][v1 % 2])
-      break
-    case 3:
-      stroke([color2, color1][_x % 2])
-      break
-    default:
-      stroke([color1, color2][_y % 2])
-      break
-  }
+  stroke(params.color1)
+})
 
-  translate(x, y)
+const trDrawEllipse22 = _trDrawEllipse((params) => {
+  noFill()
+  stroke(params.color2)
+})
 
-  if (trSineCount < TR_SINE_ROOP_COUNT) {
-    ellipse(0, 0, _tileSize * 1.2)
-  } else {
-    ellipse(0, 0, tileSize * 1.2)
-  }
+const trDrawEllipse23 = _trDrawEllipse((params) => {
+  noFill()
+  stroke(params.color3)
+})
+
+const trDrawEllipse24 = _trDrawEllipse((params) => {
+  noFill()
+  stroke(params.color4)
+})
+
+const trDrawEllipse25 = _trDrawEllipse((params) => {
+  noFill()
+  stroke(params.color5)
+})
+
+const trDrawEllipse26 = _trDrawEllipse((params) => {
+  const { color1, color2, v1 } = params
+  noFill()
+  stroke([color1, color2][v1 % 2])
+})
+
+const trDrawEllipse27 = _trDrawEllipse((params) => {
+  const { color3, color4, _x } = params
+  noFill()
+  stroke([color3, color4][_x % 2])
+})
+
+const trDrawEllipse28 = _trDrawEllipse((params) => {
+  const { color1, color5, _y } = params
+  noFill()
+  stroke([color5, color1][_y % 2])
+})
+
+function _trDrawEllipseBig(func) {
+  return _trDrawTilePattern1((params) => {
+    const { _x, x, _y, y, tileSize, _tileSize, color1, color2, v1 } = params
+
+    rectMode(CENTER)
+    noFill()
+    func(params)
+
+    translate(x, y)
+
+    if (trSineCount < TR_SINE_ROOP_COUNT) {
+      ellipse(0, 0, _tileSize * 1.2)
+    } else {
+      ellipse(0, 0, tileSize * 1.2)
+    }
+  })
+}
+
+const trDrawEllipseBig21 = _trDrawEllipseBig((params) => {
+  stroke(params.color1)
+})
+
+const trDrawEllipseBig22 = _trDrawEllipseBig((params) => {
+  stroke(params.color2)
+})
+
+const trDrawEllipseBig23 = _trDrawEllipseBig((params) => {
+  stroke(params.color3)
+})
+
+const trDrawEllipseBig24 = _trDrawEllipseBig((params) => {
+  stroke(params.color4)
+})
+
+const trDrawEllipseBig25 = _trDrawEllipseBig((params) => {
+  stroke(params.color5)
+})
+
+const trDrawEllipseBig26 = _trDrawEllipseBig((params) => {
+  const { color1, color2, v1 } = params
+  stroke([color1, color2][v1 % 2])
+})
+
+const trDrawEllipseBig27 = _trDrawEllipseBig((params) => {
+  const { color3, color4, _x } = params
+  stroke([color3, color4][_x % 2])
+})
+
+const trDrawEllipseBig28 = _trDrawEllipseBig((params) => {
+  const { color1, color5, _y } = params
+  stroke([color5, color1][_y % 2])
 })
 
 function _trDrawTilePattern2(func) {
@@ -1556,8 +1616,30 @@ const trFuncArray = [
   trDrawRectBig28, // □大-線のみ-2色横
   trDrawSquare, // ひし形オンリー
   trDrawSquareBig, // ひし形大-線のみ
-  trDrawEllipse, // ◯オンリー
-  trDrawEllipseBig, // ◯大-線のみ
+  trDrawEllipse11, // ◯オンリー-単色1
+  trDrawEllipse12, // ◯オンリー-単色2
+  trDrawEllipse13, // ◯オンリー-単色3
+  trDrawEllipse14, // ◯オンリー-単色4
+  trDrawEllipse15, // ◯オンリー-単色5
+  trDrawEllipse16, // ◯オンリー-2色交互
+  trDrawEllipse17, // ◯オンリー-2色縦
+  trDrawEllipse18, // ◯オンリー-2色横
+  trDrawEllipse21, // ◯-線のみ-単色1
+  trDrawEllipse22, // ◯-線のみ-単色2
+  trDrawEllipse23, // ◯-線のみ-単色3
+  trDrawEllipse24, // ◯-線のみ-単色4
+  trDrawEllipse25, // ◯-線のみ-単色5
+  trDrawEllipse26, // ◯-線のみ-2色交互
+  trDrawEllipse27, // ◯-線のみ-2色縦
+  trDrawEllipse28, // ◯-線のみ-2色横
+  trDrawEllipseBig21, // ◯大-線のみ-単色1
+  trDrawEllipseBig22, // ◯大-線のみ-単色2
+  trDrawEllipseBig23, // ◯大-線のみ-単色3
+  trDrawEllipseBig24, // ◯大-線のみ-単色4
+  trDrawEllipseBig25, // ◯大-線のみ-単色5
+  trDrawEllipseBig26, // ◯大-線のみ-2色交互
+  trDrawEllipseBig27, // ◯大-線のみ-2色縦
+  trDrawEllipseBig28, // ◯大-線のみ-2色横
   trDrawVerticalRotate, // 縦-回転
   trDrawHorizontalRotate, // 横-回転
   trDrawDiagonalRightRotate, // 右斜め回転
