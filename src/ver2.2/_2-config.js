@@ -853,95 +853,164 @@ const trDrawRectBig28 = _trDrawRectBig((params) => {
   stroke([color5, color1][_y % 2])
 })
 
-const trDrawSquare = _trDrawTilePattern1((params) => {
-  const { _x, x, _y, y, squareSize, _squareSize, color1, color2, v1 } = params
+function _trDrawSquare(func) {
+  return _trDrawTilePattern1((params) => {
+    const { x, y, squareSize, _squareSize } = params
 
-  rectMode(CENTER)
+    rectMode(CENTER)
+    func(params)
 
-  if (trDataParams[9] % 2 === 0) {
-    noStroke()
-    switch (trDataParams[5] % 5) {
-      case 0:
-        fill(color1)
-        break
-      case 1:
-        fill(color2)
-        break
-      case 2:
-        fill([color1, color2][v1 % 2])
-        break
-      case 3:
-        fill([color2, color1][_x % 2])
-        break
-      default:
-        fill([color1, color2][_y % 2])
-        break
+    translate(x, y)
+
+    rotate(PI / 4)
+
+    if (trSineCount < TR_SINE_ROOP_COUNT) {
+      rect(0, 0, _squareSize)
+    } else {
+      rect(0, 0, squareSize)
     }
-  } else {
-    noFill()
-    switch (trDataParams[5] % 5) {
-      case 0:
-        stroke(color1)
-        break
-      case 1:
-        stroke(color2)
-        break
-      case 2:
-        stroke([color1, color2][v1 % 2])
-        break
-      case 3:
-        stroke([color2, color1][_x % 2])
-        break
-      default:
-        stroke([color1, color2][_y % 2])
-        break
-    }
-  }
+  })
+}
 
-  translate(x, y)
-
-  rotate(PI / 4)
-
-  if (trSineCount < TR_SINE_ROOP_COUNT) {
-    rect(0, 0, _squareSize)
-  } else {
-    rect(0, 0, squareSize)
-  }
+const trDrawSquare11 = _trDrawSquare((params) => {
+  noStroke()
+  fill(params.color1)
 })
 
-const trDrawSquareBig = _trDrawTilePattern1((params) => {
-  const { _x, x, _y, y, squareSize, _squareSize, color1, color2, v1 } = params
+const trDrawSquare12 = _trDrawSquare((params) => {
+  noStroke()
+  fill(params.color2)
+})
 
-  rectMode(CENTER)
+const trDrawSquare13 = _trDrawSquare((params) => {
+  noStroke()
+  fill(params.color3)
+})
 
+const trDrawSquare14 = _trDrawSquare((params) => {
+  noStroke()
+  fill(params.color4)
+})
+
+const trDrawSquare15 = _trDrawSquare((params) => {
+  noStroke()
+  fill(params.color5)
+})
+
+const trDrawSquare16 = _trDrawSquare((params) => {
+  const { color1, color2, v1 } = params
+  noStroke()
+  fill([color1, color2][v1 % 2])
+})
+
+const trDrawSquare17 = _trDrawSquare((params) => {
+  const { color3, color4, _x } = params
+  noStroke()
+  fill([color3, color4][_x % 2])
+})
+
+const trDrawSquare18 = _trDrawSquare((params) => {
+  const { color1, color5, _y } = params
+  noStroke()
+  fill([color5, color1][_y % 2])
+})
+
+const trDrawSquare21 = _trDrawSquare((params) => {
   noFill()
-  switch (trDataParams[5] % 5) {
-    case 0:
-      stroke(color1)
-      break
-    case 1:
-      stroke(color2)
-      break
-    case 2:
-      stroke([color1, color2][v1 % 2])
-      break
-    case 3:
-      stroke([color2, color1][_x % 2])
-      break
-    default:
-      stroke([color1, color2][_y % 2])
-      break
-  }
+  stroke(params.color1)
+})
 
-  translate(x, y)
+const trDrawSquare22 = _trDrawSquare((params) => {
+  noFill()
+  stroke(params.color2)
+})
 
-  rotate(PI / 4)
+const trDrawSquare23 = _trDrawSquare((params) => {
+  noFill()
+  stroke(params.color3)
+})
 
-  if (trSineCount < TR_SINE_ROOP_COUNT) {
-    rect(0, 0, _squareSize * 1.5)
-  } else {
-    rect(0, 0, squareSize * 1.5)
-  }
+const trDrawSquare24 = _trDrawSquare((params) => {
+  noFill()
+  stroke(params.color4)
+})
+
+const trDrawSquare25 = _trDrawSquare((params) => {
+  noFill()
+  stroke(params.color5)
+})
+
+const trDrawSquare26 = _trDrawSquare((params) => {
+  const { color1, color2, v1 } = params
+  noFill()
+  stroke([color1, color2][v1 % 2])
+})
+
+const trDrawSquare27 = _trDrawSquare((params) => {
+  const { color3, color4, _x } = params
+  noFill()
+  stroke([color3, color4][_x % 2])
+})
+
+const trDrawSquare28 = _trDrawSquare((params) => {
+  const { color1, color5, _y } = params
+  noFill()
+  stroke([color5, color1][_y % 2])
+})
+
+function trDrawSquareBig(func) {
+  return _trDrawTilePattern1((params) => {
+    const { _x, x, _y, y, squareSize, _squareSize, color1, color2, v1 } = params
+
+    rectMode(CENTER)
+    noFill()
+    func(params)
+
+    translate(x, y)
+
+    rotate(PI / 4)
+
+    if (trSineCount < TR_SINE_ROOP_COUNT) {
+      rect(0, 0, _squareSize * 1.5)
+    } else {
+      rect(0, 0, squareSize * 1.5)
+    }
+  })
+}
+
+const trDrawSquareBig21 = trDrawSquareBig((params) => {
+  stroke(params.color1)
+})
+
+const trDrawSquareBig22 = trDrawSquareBig((params) => {
+  stroke(params.color2)
+})
+
+const trDrawSquareBig23 = trDrawSquareBig((params) => {
+  stroke(params.color3)
+})
+
+const trDrawSquareBig24 = trDrawSquareBig((params) => {
+  stroke(params.color4)
+})
+
+const trDrawSquareBig25 = trDrawSquareBig((params) => {
+  stroke(params.color5)
+})
+
+const trDrawSquareBig26 = trDrawSquareBig((params) => {
+  const { color1, color2, v1 } = params
+  stroke([color1, color2][v1 % 2])
+})
+
+const trDrawSquareBig27 = trDrawSquareBig((params) => {
+  const { color3, color4, _x } = params
+  stroke([color3, color4][_x % 2])
+})
+
+const trDrawSquareBig28 = trDrawSquareBig((params) => {
+  const { color1, color5, _y } = params
+  stroke([color5, color1][_y % 2])
 })
 
 function _trDrawEllipse(func) {
@@ -1574,8 +1643,6 @@ const trDrawCrossRotate = _trDrawTilePattern2((params) => {
 // バリーション
 
 const trFuncArray = [
-  trDrawRectEllipseSquare11, // □○ひし形混合-単色1
-  trDrawRectEllipseSquare12, // □○ひし形混合-単色2
   trDrawRectEllipseSquare13, // □○ひし形混合-単色3
   trDrawRectEllipseSquare14, // □○ひし形混合-単色4
   trDrawRectEllipseSquare15, // □○ひし形混合-単色5
@@ -1614,8 +1681,30 @@ const trFuncArray = [
   trDrawRectBig26, // □大-線のみ-2色交互
   trDrawRectBig27, // □大-線のみ-2色縦
   trDrawRectBig28, // □大-線のみ-2色横
-  trDrawSquare, // ひし形オンリー
-  trDrawSquareBig, // ひし形大-線のみ
+  trDrawSquare11, // ひし形オンリー-単色1
+  trDrawSquare12, // ひし形オンリー-単色2
+  trDrawSquare13, // ひし形オンリー-単色3
+  trDrawSquare14, // ひし形オンリー-単色4
+  trDrawSquare15, // ひし形オンリー-単色5
+  trDrawSquare16, // ひし形オンリー-2色交互
+  trDrawSquare17, // ひし形オンリー-2色縦
+  trDrawSquare18, // ひし形オンリー-2色横
+  trDrawSquare21, // ひし形-線のみ-単色1
+  trDrawSquare22, // ひし形-線のみ-単色2
+  trDrawSquare23, // ひし形-線のみ-単色3
+  trDrawSquare24, // ひし形-線のみ-単色4
+  trDrawSquare25, // ひし形-線のみ-単色5
+  trDrawSquare26, // ひし形-線のみ-2色交互
+  trDrawSquare27, // ひし形-線のみ-2色縦
+  trDrawSquare28, // ひし形-線のみ-2色横
+  trDrawSquareBig21, // ひし形大-線のみ-単色1
+  trDrawSquareBig22, // ひし形大-線のみ-単色2
+  trDrawSquareBig23, // ひし形大-線のみ-単色3
+  trDrawSquareBig24, // ひし形大-線のみ-単色4
+  trDrawSquareBig25, // ひし形大-線のみ-単色5
+  trDrawSquareBig26, // ひし形大-線のみ-2色交互
+  trDrawSquareBig27, // ひし形大-線のみ-2色縦
+  trDrawSquareBig28, // ひし形大-線のみ-2色横
   trDrawEllipse11, // ◯オンリー-単色1
   trDrawEllipse12, // ◯オンリー-単色2
   trDrawEllipse13, // ◯オンリー-単色3
