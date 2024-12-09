@@ -803,28 +803,63 @@ const trDrawRect28 = _trDrawRect((params) => {
   stroke([color5, color1][_y % 2])
 })
 
-const trDrawRectBig = _trDrawTilePattern1((params) => {
-  const { x, y, tileSize, color1, color2, sineValue } = params
-  rectMode(CENTER)
+function _trDrawRectBig(func) {
+  return _trDrawTilePattern1((params) => {
+    const { x, y, tileSize, sineValue } = params
+    rectMode(CENTER)
+    func(params)
 
+    translate(x, y)
+
+    if (trSineCount < TR_SINE_ROOP_COUNT) {
+      rect(0, 0, tileSize * 1.2 * sineValue)
+    } else {
+      rect(0, 0, tileSize * 1.2)
+    }
+  })
+}
+
+const trDrawRectBig21 = _trDrawRectBig((params) => {
   noFill()
+  stroke(params.color1)
+})
 
-  switch (trDataParams[5] % 2) {
-    case 0:
-      stroke(color1)
-      break
-    default:
-      stroke(color2)
-      break
-  }
+const trDrawRectBig22 = _trDrawRectBig((params) => {
+  noFill()
+  stroke(params.color2)
+})
 
-  translate(x, y)
+const trDrawRectBig23 = _trDrawRectBig((params) => {
+  noFill()
+  stroke(params.color3)
+})
 
-  if (trSineCount < TR_SINE_ROOP_COUNT) {
-    rect(0, 0, tileSize * 1.2 * sineValue)
-  } else {
-    rect(0, 0, tileSize * 1.2)
-  }
+const trDrawRectBig24 = _trDrawRectBig((params) => {
+  noFill()
+  stroke(params.color4)
+})
+
+const trDrawRectBig25 = _trDrawRectBig((params) => {
+  noFill()
+  stroke(params.color5)
+})
+
+const trDrawRectBig26 = _trDrawRectBig((params) => {
+  const { color1, color2, v1 } = params
+  noFill()
+  stroke([color1, color2][v1 % 2])
+})
+
+const trDrawRectBig27 = _trDrawRectBig((params) => {
+  const { color3, color4, _x } = params
+  noFill()
+  stroke([color3, color4][_x % 2])
+})
+
+const trDrawRectBig28 = _trDrawRectBig((params) => {
+  const { color1, color5, _y } = params
+  noFill()
+  stroke([color5, color1][_y % 2])
 })
 
 const trDrawSquare = _trDrawTilePattern1((params) => {
@@ -1511,7 +1546,14 @@ const trFuncArray = [
   trDrawRect26, // □-線のみ-2色交互
   trDrawRect27, // □-線のみ-2色縦
   trDrawRect28, // □-線のみ-2色横
-  trDrawRectBig, // □大-線のみ
+  trDrawRectBig21, // □大-線のみ-単色1
+  trDrawRectBig22, // □大-線のみ-単色2
+  trDrawRectBig23, // □大-線のみ-単色3
+  trDrawRectBig24, // □大-線のみ-単色4
+  trDrawRectBig25, // □大-線のみ-単色5
+  trDrawRectBig26, // □大-線のみ-2色交互
+  trDrawRectBig27, // □大-線のみ-2色縦
+  trDrawRectBig28, // □大-線のみ-2色横
   trDrawSquare, // ひし形オンリー
   trDrawSquareBig, // ひし形大-線のみ
   trDrawEllipse, // ◯オンリー
