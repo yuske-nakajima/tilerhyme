@@ -700,58 +700,107 @@ const trDrawRectEllipseSquare28 = _trDrawRectEllipseSquare((params) => {
   stroke([color5, color1][_y % 2])
 })
 
-const trDrawRect = _trDrawTilePattern1((params) => {
-  const { _x, x, _y, y, tileSize2, _tileSize2, color1, color2, v1 } = params
+function _trDrawRect(func) {
+  return _trDrawTilePattern1((params) => {
+    const { x, y, tileSize2, _tileSize2 } = params
 
-  rectMode(CENTER)
+    rectMode(CENTER)
+    func(params)
 
-  if (trDataParams[9] % 2 === 0) {
-    noStroke()
-    switch (trDataParams[5] % 5) {
-      case 0:
-        fill(color1)
-        break
-      case 1:
-        fill(color2)
-        break
-      case 2:
-        fill([color1, color2][v1 % 2])
-        break
-      case 3:
-        fill([color2, color1][_x % 2])
-        break
-      default:
-        fill([color1, color2][_y % 2])
-        break
+    translate(x, y)
+
+    if (trSineCount < TR_SINE_ROOP_COUNT) {
+      rect(0, 0, _tileSize2)
+    } else {
+      rect(0, 0, tileSize2)
     }
-  } else {
-    noFill()
-    switch (trDataParams[5] % 5) {
-      case 0:
-        stroke(color1)
-        break
-      case 1:
-        stroke(color2)
-        break
-      case 2:
-        stroke([color1, color2][v1 % 2])
-        break
-      case 3:
-        stroke([color2, color1][_x % 2])
-        break
-      default:
-        stroke([color1, color2][_y % 2])
-        break
-    }
-  }
+  })
+}
 
-  translate(x, y)
+const trDrawRect11 = _trDrawRect((params) => {
+  noStroke()
+  fill(params.color1)
+})
 
-  if (trSineCount < TR_SINE_ROOP_COUNT) {
-    rect(0, 0, _tileSize2)
-  } else {
-    rect(0, 0, tileSize2)
-  }
+const trDrawRect12 = _trDrawRect((params) => {
+  noStroke()
+  fill(params.color1)
+})
+
+const trDrawRect13 = _trDrawRect((params) => {
+  noStroke()
+  fill(params.color1)
+})
+
+const trDrawRect14 = _trDrawRect((params) => {
+  noStroke()
+  fill(params.color1)
+})
+
+const trDrawRect15 = _trDrawRect((params) => {
+  noStroke()
+  fill(params.color1)
+})
+
+const trDrawRect16 = _trDrawRect((params) => {
+  const { color1, color2, v1 } = params
+  noStroke()
+  fill([color1, color2][v1 % 2])
+})
+
+const trDrawRect17 = _trDrawRect((params) => {
+  const { color3, color4, _x } = params
+  noStroke()
+  fill([color3, color4][_x % 2])
+})
+
+const trDrawRect18 = _trDrawRect((params) => {
+  const { color1, color5, _y } = params
+  noStroke()
+  fill([color5, color1][_y % 2])
+})
+
+const trDrawRect21 = _trDrawRect((params) => {
+  noFill()
+  stroke(params.color1)
+})
+
+const trDrawRect22 = _trDrawRect((params) => {
+  noFill()
+  stroke(params.color1)
+})
+
+const trDrawRect23 = _trDrawRect((params) => {
+  noFill()
+  stroke(params.color1)
+})
+
+const trDrawRect24 = _trDrawRect((params) => {
+  noFill()
+  stroke(params.color1)
+})
+
+const trDrawRect25 = _trDrawRect((params) => {
+  noFill()
+  stroke(params.color1)
+})
+
+const trDrawRect26 = _trDrawRect((params) => {
+  const { color1, color2, v1 } = params
+  noFill()
+  stroke([color1, color2][v1 % 2])
+})
+
+const trDrawRect27 = _trDrawRect((params) => {
+  const { color3, color4, _x } = params
+  noFill()
+  stroke([color3, color4][_x % 2])
+})
+
+const trDrawRect28 = _trDrawRect((params) => {
+  const { color1, color5, _y } = params
+  noFill()
+  stroke([color5, color1][_y % 2])
 })
 
 const trDrawRectBig = _trDrawTilePattern1((params) => {
@@ -1446,7 +1495,22 @@ const trFuncArray = [
   trDrawRectEllipseSquare26, // □○ひし形混合-線のみ-2色交互
   trDrawRectEllipseSquare27, // □○ひし形混合-線のみ-2色縦
   trDrawRectEllipseSquare28, // □○ひし形混合-線のみ-2色横
-  trDrawRect, // □オンリー
+  trDrawRect11, // □-単色1
+  trDrawRect12, // □-単色2
+  trDrawRect13, // □-単色3
+  trDrawRect14, // □-単色4
+  trDrawRect15, // □-単色5
+  trDrawRect16, // □-2色交互
+  trDrawRect17, // □-2色縦
+  trDrawRect18, // □-2色横
+  trDrawRect21, // □-線のみ-単色1
+  trDrawRect22, // □-線のみ-単色2
+  trDrawRect23, // □-線のみ-単色3
+  trDrawRect24, // □-線のみ-単色4
+  trDrawRect25, // □-線のみ-単色5
+  trDrawRect26, // □-線のみ-2色交互
+  trDrawRect27, // □-線のみ-2色縦
+  trDrawRect28, // □-線のみ-2色横
   trDrawRectBig, // □大-線のみ
   trDrawSquare, // ひし形オンリー
   trDrawSquareBig, // ひし形大-線のみ
