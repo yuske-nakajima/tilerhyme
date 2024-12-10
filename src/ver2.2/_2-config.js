@@ -505,3 +505,47 @@ function trCalcSineCount(sineValue) {
     trSineData.shift()
   }
 }
+
+/**
+ * 指定されたパラメータを使用して分散値を計算します。
+ *
+ * @param {number} x - 基本となる値。
+ * @param {number[]} params - 計算に使用するパラメータの配列。
+ *   - params[2]: モジュロ演算に使用する値。
+ *   - params[3]: 最後の調整に使用する値。
+ *   - params[5]: モジュロ演算に使用する値。
+ *   - params[8]: 加算に使用する値。
+ *   - params[10]: 乗算に使用する値。
+ *   - params[15]: XOR演算に使用する値。
+ * @returns {number} 計算された分散値。結果が0の場合は1を返します。
+ */
+function trGetDistributedValue(x, params) {
+  // 大きな素数を使用してより良い分散を得る
+  const PRIME1 = 31
+  const PRIME2 = 83
+  const PRIME3 = 97
+
+  // パラメータの値を利用して複数の演算を組み合わせる
+  let value = x
+
+  // 1. 乗算でばらつきを作る
+  value = value * params[10] * PRIME1
+
+  // 2. 加算でオフセットを付ける
+  value = value + params[8] * PRIME2
+
+  // 3. XORで分布を更に複雑にする
+  value = value ^ (params[15] * PRIME3)
+
+  // 4. モジュロで範囲を制限しながら、さらにばらつきを加える
+  value = value % (params[5] * params[2])
+
+  // 5. 最後の調整
+  value = Math.abs(Math.ceil(value / params[3]))
+
+  // 6. 結果が0の場合は1を返す
+  if (!isFinite(value)) {
+    return 1
+  }
+  return Math.ceil(value) || 1
+}

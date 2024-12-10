@@ -130,12 +130,12 @@ const trFuncArray = [
   trDrawArc11, // 半円-縦
   trDrawArc12, // 半円-横
   trDrawArc13, // 半円-混合
+  trDrawTriangle, // 三角形-混合
+  trDrawTriangle, // 三角形-混合
 ]
 
 // const trFuncArray = [
-//   trDrawArc11, // 縦
-//   trDrawArc12, // 横
-//   trDrawArc13, // 混合
+//   trDrawTriangle, // 三角形
 // ]
 
 /**

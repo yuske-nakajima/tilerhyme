@@ -1350,3 +1350,59 @@ const trDrawArc12 = _trDrawArc((params) => {
 const trDrawArc13 = _trDrawArc((params) => {
   return params._x * params._y
 })
+
+const trDrawTriangle = _trDrawTilePattern2((params) => {
+  const { _x, x, _y, y, tileSize, _tileSize, color1, color2, color3, color4, color5 } = params
+
+  let t
+  if (trSineCount < TR_SINE_ROOP_COUNT) {
+    t = _tileSize
+  } else {
+    t = tileSize
+  }
+
+  const rectPointList = [
+    { x, y },
+    { x: x + t, y },
+    { x: x + t, y: y + t },
+    { x, y: y + t },
+  ]
+
+  trDrawBlock(() => {
+    noStroke()
+    if ((_x + _y) % 2 === 0) {
+      fill(color1)
+      rect(x, y, tileSize * 1.01)
+    } else {
+      fill(color2)
+      rect(x, y, tileSize * 1.01)
+    }
+  })
+
+  // 三角形
+  const drawTriangle = (startIndex, _color) => {
+    trDrawBlock(() => {
+      noStroke()
+      fill(_color)
+      beginShape()
+      for (let i = 0; i < 3; i++) {
+        const index = (startIndex + i) % rectPointList.length
+        vertex(rectPointList[index].x, rectPointList[index].y)
+      }
+      endShape(CLOSE)
+    })
+  }
+
+  let a
+  if (_x % 2 === 0) {
+    a = ceil(_x + _y)
+  } else {
+    a = ceil(_x - _y < 0 ? 0 : _x - _y)
+  }
+
+  const colorList = [color3, color4, color5]
+  drawTriangle(
+    trGetDistributedValue(a, trDataParams),
+    colorList[trGetDistributedValue(_x, trDataParams) % colorList.length],
+  )
+})
