@@ -1290,3 +1290,63 @@ const trDrawCrossRotate14 = _trDrawCrossRotate((params) => {
 const trDrawCrossRotate15 = _trDrawCrossRotate((params) => {
   return { color1: params.color5, color2: params.color1 }
 })
+
+function _trDrawArc(func) {
+  return _trDrawTilePattern2((params) => {
+    const { x, y, centerPos, tileSize, _tileSize, color1, color2, color3, color4, color5 } = params
+
+    rectMode(CENTER)
+
+    const v = func(params)
+
+    trDrawBlock(() => {
+      noStroke()
+      if (v % 2 === 0) {
+        fill(color1)
+        rect(centerPos.x, centerPos.y, tileSize * 1.01, tileSize * 1.01)
+      } else {
+        fill(color2)
+        rect(centerPos.x, centerPos.y, tileSize * 1.01, tileSize * 1.01)
+      }
+
+      translate(x, y)
+
+      let t
+      if (trSineCount < TR_SINE_ROOP_COUNT) {
+        t = _tileSize
+      } else {
+        t = tileSize
+      }
+
+      if (v % 2 === 0) {
+        rotate(PI)
+        fill(color4)
+        arc(0, 0 + t / 2, t, t, HALF_PI, PI + HALF_PI)
+
+        rotate(0)
+        fill(color5)
+        arc(0, 0 - t / 2, t, t, -HALF_PI, HALF_PI)
+      } else {
+        rotate(PI)
+        fill(color3)
+        arc(0, 0 - t / 2, t, t, -HALF_PI, HALF_PI)
+
+        rotate(0)
+        fill(color2)
+        arc(0, 0 + t / 2, t, t, HALF_PI, PI + HALF_PI)
+      }
+    })
+  })
+}
+
+const trDrawArc11 = _trDrawArc((params) => {
+  return params._x
+})
+
+const trDrawArc12 = _trDrawArc((params) => {
+  return params._y
+})
+
+const trDrawArc13 = _trDrawArc((params) => {
+  return params._x * params._y
+})

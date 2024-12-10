@@ -106,7 +106,7 @@ const TR_MODE = {
   AUTO: 1,
 }
 
-const TR_AUTO_MODE_INTERVAL = 120
+const TR_AUTO_MODE_INTERVAL = 90
 
 const TR_SINE_ROOP_COUNT = 2
 // ------------------------------------------------------------
