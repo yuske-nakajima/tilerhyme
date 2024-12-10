@@ -146,7 +146,7 @@ const trFuncArray = [
 function trDrawShape() {
   // 画面全体をタイルで埋める
   // const tileSize = width / map(trDataParams[15], 0, 99, 5, 20) // タイルの基本サイズ
-  const tileSize = width / 20 // タイルの基本サイズ
+  const tileSize = width / 8 // タイルの基本サイズ
   const w = ceil(width / tileSize)
   const h = ceil(height / tileSize)
 
