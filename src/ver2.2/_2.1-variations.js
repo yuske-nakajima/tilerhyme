@@ -1135,7 +1135,7 @@ const trDrawDiagonalLeftRotate17 = _trDrawDiagonalLeftRotate((params) => {
   stroke((_x + _y) % 2 ? color3 : color4)
 })
 
-function trDrawEllipseStrokeRotate(func) {
+function trDrawEllipseStrokeRightRotate(func) {
   return _trDrawTilePattern2((params) => {
     trDrawBlock(() => {
       const { x, y, _tileSize, tileSize, sineValue } = params
@@ -1179,24 +1179,16 @@ function trDrawEllipseStrokeRotate(func) {
   })
 }
 
-const trDrawEllipseStrokeRotate11 = trDrawEllipseStrokeRotate((params) => {
+const trDrawEllipseStrokeRightRotate11 = trDrawEllipseStrokeRightRotate((params) => {
   return { color1: params.color1, color2: params.color2 }
 })
 
-const trDrawEllipseStrokeRotate12 = trDrawEllipseStrokeRotate((params) => {
+const trDrawEllipseStrokeRightRotate12 = trDrawEllipseStrokeRightRotate((params) => {
   return { color1: params.color2, color2: params.color3 }
 })
 
-const trDrawEllipseStrokeRotate13 = trDrawEllipseStrokeRotate((params) => {
+const trDrawEllipseStrokeRightRotate13 = trDrawEllipseStrokeRightRotate((params) => {
   return { color1: params.color3, color2: params.color4 }
-})
-
-const trDrawEllipseStrokeRotate14 = trDrawEllipseStrokeRotate((params) => {
-  return { color1: params.color4, color2: params.color5 }
-})
-
-const trDrawEllipseStrokeRotate15 = trDrawEllipseStrokeRotate((params) => {
-  return { color1: params.color5, color2: params.color1 }
 })
 
 function _trDrawCrossRotate(func) {
