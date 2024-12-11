@@ -1191,6 +1191,62 @@ const trDrawEllipseStrokeRightRotate13 = trDrawEllipseStrokeRightRotate((params)
   return { color1: params.color3, color2: params.color4 }
 })
 
+function trDrawEllipseStrokeLeftRotate(func) {
+  return _trDrawTilePattern2((params) => {
+    trDrawBlock(() => {
+      const { x, y, _tileSize, tileSize, sineValue } = params
+
+      translate(x, y)
+
+      noFill()
+      rectMode(CENTER)
+
+      const { color1, color2 } = func(params)
+
+      strokeWeight(max((tileSize * trDataParams[5]) / 400, 1))
+
+      if (trSineCount < TR_SINE_ROOP_COUNT) {
+        switch (trSineCount % 2) {
+          case 0:
+            stroke(color1)
+            arc(0 - _tileSize / 2, 0 + _tileSize / 2, _tileSize, _tileSize, PI + HALF_PI, TWO_PI)
+
+            stroke(color2)
+            arc(0 + _tileSize / 2, 0 - _tileSize / 2, _tileSize, _tileSize, HALF_PI, PI)
+            break
+          default:
+            rotate(-PI * sineValue) // 回転方向を反転
+
+            stroke(color1)
+            arc(0 - tileSize / 2, 0 + tileSize / 2, tileSize, tileSize, PI + HALF_PI, TWO_PI)
+
+            stroke(color2)
+            arc(0 + tileSize / 2, 0 - tileSize / 2, tileSize, tileSize, HALF_PI, PI)
+            break
+        }
+      } else {
+        stroke(color1)
+        arc(0 + tileSize / 2, 0 - tileSize / 2, tileSize, tileSize, HALF_PI, PI)
+
+        stroke(color2)
+        arc(0 - tileSize / 2, 0 + tileSize / 2, tileSize, tileSize, PI + HALF_PI, TWO_PI)
+      }
+    })
+  })
+}
+
+const trDrawEllipseStrokeLeftRotate11 = trDrawEllipseStrokeLeftRotate((params) => {
+  return { color1: params.color1, color2: params.color2 }
+})
+
+const trDrawEllipseStrokeLeftRotate12 = trDrawEllipseStrokeLeftRotate((params) => {
+  return { color1: params.color2, color2: params.color3 }
+})
+
+const trDrawEllipseStrokeLeftRotate13 = trDrawEllipseStrokeLeftRotate((params) => {
+  return { color1: params.color3, color2: params.color4 }
+})
+
 function _trDrawCrossRotate(func) {
   return _trDrawTilePattern2((params) => {
     trDrawBlock(() => {
