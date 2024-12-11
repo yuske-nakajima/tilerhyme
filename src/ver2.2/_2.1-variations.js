@@ -310,27 +310,31 @@ const trDrawRect25 = _trDrawRect((params) => {
 })
 
 const trDrawRect26 = _trDrawRect((params) => {
-  const { color1, color2, v1 } = params
+  const { tileSize, color1, color2, v1 } = params
   noFill()
   stroke([color1, color2][v1 % 2])
+  strokeWeight(max((tileSize * trDataParams[5]) / 800, 1))
 })
 
 const trDrawRect27 = _trDrawRect((params) => {
-  const { color3, color4, _x } = params
+  const { tileSize, color3, color4, _x } = params
   noFill()
   stroke([color3, color4][_x % 2])
+  strokeWeight(max((tileSize * trDataParams[5]) / 800, 1))
 })
 
 const trDrawRect28 = _trDrawRect((params) => {
-  const { color1, color5, _y } = params
+  const { tileSize, color1, color5, _y } = params
   noFill()
   stroke([color5, color1][_y % 2])
+  strokeWeight(max((tileSize * trDataParams[5]) / 800, 1))
 })
 
 const trDrawRect29 = _trDrawRect(
   (params) => {
     noFill()
     stroke(params.color1)
+    strokeWeight(max((params.tileSize * trDataParams[5]) / 800, 1))
   },
   (params) => {
     if (trSineCount >= TR_SINE_ROOP_COUNT) {
@@ -345,6 +349,7 @@ const trDrawRect29 = _trDrawRect(
       const index = ceil(trDataParams[_x % trDataParams.length] + trDataParams[_y % trDataParams.length]) % aList.length
       const a = aList[index]
 
+      noStroke()
       text(a, 0, 0)
     }
   },
@@ -388,18 +393,21 @@ const trDrawRectBig25 = _trDrawRectBig((params) => {
 })
 
 const trDrawRectBig26 = _trDrawRectBig((params) => {
-  const { color1, color2, v1 } = params
+  const { tileSize, color1, color2, v1 } = params
   stroke([color1, color2][v1 % 2])
+  strokeWeight(max((tileSize * trDataParams[5]) / 800, 1))
 })
 
 const trDrawRectBig27 = _trDrawRectBig((params) => {
-  const { color3, color4, _x } = params
+  const { tileSize, color3, color4, _x } = params
   stroke([color3, color4][_x % 2])
+  strokeWeight(max((tileSize * trDataParams[5]) / 800, 1))
 })
 
 const trDrawRectBig28 = _trDrawRectBig((params) => {
-  const { color1, color5, _y } = params
+  const { tileSize, color1, color5, _y } = params
   stroke([color5, color1][_y % 2])
+  strokeWeight(max((tileSize * trDataParams[5]) / 800, 1))
 })
 
 function _trDrawSquare(func) {
@@ -492,21 +500,24 @@ const trDrawSquare25 = _trDrawSquare((params) => {
 })
 
 const trDrawSquare26 = _trDrawSquare((params) => {
-  const { color1, color2, v1 } = params
+  const { tileSize, color1, color2, v1 } = params
   noFill()
   stroke([color1, color2][v1 % 2])
+  strokeWeight(max((tileSize * trDataParams[5]) / 1600, 1))
 })
 
 const trDrawSquare27 = _trDrawSquare((params) => {
-  const { color3, color4, _x } = params
+  const { tileSize, color3, color4, _x } = params
   noFill()
   stroke([color3, color4][_x % 2])
+  strokeWeight(max((tileSize * trDataParams[5]) / 1600))
 })
 
 const trDrawSquare28 = _trDrawSquare((params) => {
-  const { color1, color5, _y } = params
+  const { tileSize, color1, color5, _y } = params
   noFill()
   stroke([color5, color1][_y % 2])
+  strokeWeight(max((tileSize * trDataParams[5]) / 1600))
 })
 
 function trDrawSquareBig(func) {
@@ -552,18 +563,21 @@ const trDrawSquareBig25 = trDrawSquareBig((params) => {
 })
 
 const trDrawSquareBig26 = trDrawSquareBig((params) => {
-  const { color1, color2, v1 } = params
+  const { tileSize, color1, color2, v1 } = params
   stroke([color1, color2][v1 % 2])
+  strokeWeight(max((tileSize * trDataParams[5]) / 800))
 })
 
 const trDrawSquareBig27 = trDrawSquareBig((params) => {
-  const { color3, color4, _x } = params
+  const { tileSize, color3, color4, _x } = params
   stroke([color3, color4][_x % 2])
+  strokeWeight(max((tileSize * trDataParams[5]) / 800))
 })
 
 const trDrawSquareBig28 = trDrawSquareBig((params) => {
-  const { color1, color5, _y } = params
+  const { tileSize, color1, color5, _y } = params
   stroke([color5, color1][_y % 2])
+  strokeWeight(max((tileSize * trDataParams[5]) / 800))
 })
 
 function _trDrawEllipse(func) {
@@ -654,21 +668,24 @@ const trDrawEllipse25 = _trDrawEllipse((params) => {
 })
 
 const trDrawEllipse26 = _trDrawEllipse((params) => {
-  const { color1, color2, v1 } = params
+  const { tileSize, color1, color2, v1 } = params
   noFill()
   stroke([color1, color2][v1 % 2])
+  strokeWeight(max((tileSize * trDataParams[5]) / 800))
 })
 
 const trDrawEllipse27 = _trDrawEllipse((params) => {
-  const { color3, color4, _x } = params
+  const { tileSize, color3, color4, _x } = params
   noFill()
   stroke([color3, color4][_x % 2])
+  strokeWeight(max((tileSize * trDataParams[5]) / 800))
 })
 
 const trDrawEllipse28 = _trDrawEllipse((params) => {
-  const { color1, color5, _y } = params
+  const { tileSize, color1, color5, _y } = params
   noFill()
   stroke([color5, color1][_y % 2])
+  strokeWeight(max((tileSize * trDataParams[5]) / 800))
 })
 
 function _trDrawEllipseBig(func) {
@@ -712,18 +729,21 @@ const trDrawEllipseBig25 = _trDrawEllipseBig((params) => {
 })
 
 const trDrawEllipseBig26 = _trDrawEllipseBig((params) => {
-  const { color1, color2, v1 } = params
+  const { tileSize, color1, color2, v1 } = params
   stroke([color1, color2][v1 % 2])
+  strokeWeight(max((tileSize * trDataParams[5]) / 1600))
 })
 
 const trDrawEllipseBig27 = _trDrawEllipseBig((params) => {
-  const { color3, color4, _x } = params
+  const { tileSize, color3, color4, _x } = params
   stroke([color3, color4][_x % 2])
+  strokeWeight(max((tileSize * trDataParams[5]) / 1600))
 })
 
 const trDrawEllipseBig28 = _trDrawEllipseBig((params) => {
-  const { color1, color5, _y } = params
+  const { tileSize, color1, color5, _y } = params
   stroke([color5, color1][_y % 2])
+  strokeWeight(max((tileSize * trDataParams[5]) / 1600))
 })
 
 function _trDrawTilePattern2(func) {
