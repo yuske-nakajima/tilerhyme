@@ -55,6 +55,12 @@ const trFuncArray = [
   trDrawArc12, // 半円-横
   trDrawArc13, // 半円-混合
   trDrawTriangle11, // 三角形-混合
+  trDrawSquareStrokeEllipse, // ひし形-◯混合-線のみ
+  trDrawSquareEllipse, // ひし形-◯混合
+  trDrawRectEllipse, // □◯混合
+  trDrawRectStrokeEllipse, // □◯混合-線のみ
+  trDrawEllipseStrokeRightEllipse, // 丸-右-◯混合-線のみ
+  trDrawEllipseStrokeLeftEllipse, // 丸-左-◯混合-線のみ
 ]
 
 /**
@@ -78,12 +84,14 @@ function trDrawShape() {
   const value3 = trDataParams.filter((x) => x % 3 === 2).reduce((acc, cur) => acc + cur, 0)
   const mode3 = value3 % trFuncArray.length
 
+  const mode = trDataParams.reduce((acc, cur) => acc + cur, 0) % trFuncArray.length
+
   const v1 = value1 + value2
   const v2 = value2 + value3
 
   for (let y = 0; y <= h; y++) {
     for (let x = 0; x <= w; x++) {
-      trFuncArray[mode1](x, y, tileSize)
+      trFuncArray[mode](x, y, tileSize)
     }
   }
 
