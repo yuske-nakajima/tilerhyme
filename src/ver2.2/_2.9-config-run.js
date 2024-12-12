@@ -61,6 +61,8 @@ const trFuncArray = [
   trDrawRectStrokeEllipse, // □◯混合-線のみ
   trDrawEllipseStrokeRightEllipse, // 丸-右-◯混合-線のみ
   trDrawEllipseStrokeLeftEllipse, // 丸-左-◯混合-線のみ
+  trDrawDiagonalRight, // 右斜め混合
+  trDrawDiagonalLeft, // 左斜め混合
 ]
 
 /**

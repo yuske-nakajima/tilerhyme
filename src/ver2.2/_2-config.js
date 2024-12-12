@@ -462,8 +462,8 @@ function trChromaticGetColor() {
   for (let i = 1; i <= 5; i++) {
     colors[`color${i}`] = color(
       map(trDataParams[0 + i], 0, 99, 0, 360),
-      map(trDataParams[3 + i], 0, 99, 30, 100),
-      map(trDataParams[6 + i], 0, 99, 50, 100),
+      map(trDataParams[3 + i], 0, 99, 20, 40),
+      map(trDataParams[6 + i], 0, 99, 80, 100),
     )
   }
 

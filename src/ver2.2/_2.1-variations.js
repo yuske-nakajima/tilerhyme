@@ -1580,3 +1580,108 @@ const trDrawEllipseStrokeLeftEllipse = (x, y, tileSize) => {
   trDrawEllipseSmall11(x, y, tileSize)
   trDrawEllipseStrokeLeftRotate11(x, y, tileSize)
 }
+
+function trColorSetQ() {
+  const value = 360 / 8
+  const colorList = []
+  const start = map(trDataParams[0], 0, 99, 0, 360)
+  for (let i = 0; i < 4; i++) {
+    const hue = (start + i * value) % 360
+    colorList.push(color(hue, 20, 100))
+  }
+
+  return colorList
+}
+
+function _trDrawTilePattern(func) {
+  return function (xi, yi, tileSize) {
+    const { color1, color2, color3, color4, color5 } = trChromaticGetColor()
+
+    const sineValue = sin(frameCount * 50 * 0.004)
+    trCalcSineCount(sineValue)
+    const _tileSize = tileSize * map(sineValue, -1, 1, 0.01, 1)
+
+    let tileSizeAdjusted
+    if (trSineCount < TR_SINE_ROOP_COUNT) {
+      tileSizeAdjusted = _tileSize
+    } else {
+      tileSizeAdjusted = tileSize
+    }
+
+    const x = xi * tileSize
+    const y = yi * tileSize
+
+    const tileSize2 = tileSizeAdjusted / 2
+
+    noStroke()
+    fill(color5)
+    rect(x, y, tileSizeAdjusted)
+
+    const patternIndex = func(xi, yi)
+    switch (patternIndex % 4) {
+      case 0:
+        trDrawBlock(() => {
+          noStroke()
+
+          if ((trDataParams[3] + xi) % 2 === 0) {
+            fill(color2)
+            arc(x, y, tileSizeAdjusted * 2, tileSizeAdjusted * 2, 0, PI * (1 / 2))
+          } else {
+            fill(color1)
+            rect(x, y, tileSizeAdjusted)
+          }
+        })
+        break
+      case 1:
+        trDrawBlock(() => {
+          noStroke()
+          fill(color4)
+          rect(x, y, tileSizeAdjusted)
+
+          if ((trDataParams[4] + xi) % 2 === 0) {
+            fill(color3)
+            arc(x + tileSizeAdjusted, y, tileSizeAdjusted * 2, tileSizeAdjusted * 2, HALF_PI, PI)
+          } else {
+            fill(color2)
+            ellipseMode(CORNER)
+            ellipse(x, y, tileSizeAdjusted, tileSizeAdjusted)
+          }
+        })
+        break
+      case 2:
+        trDrawBlock(() => {
+          noStroke()
+          // 半円
+          if ((trDataParams[2] + xi) % 2 === 0) {
+            fill(color5)
+            arc(x, y, tileSizeAdjusted * 2, tileSizeAdjusted * 2, PI, PI * (3 / 2))
+          }
+        })
+        break
+      default:
+        for (let xj = 0; xj < 2; xj++) {
+          for (let yj = 0; yj < 2; yj++) {
+            trDrawBlock(() => {
+              noStroke()
+              fill(
+                [
+                  [color1, color2],
+                  [color3, color4],
+                ][xj][yj],
+              )
+              rect(x + xj * tileSize2, y + yj * tileSize2, tileSize2)
+            })
+          }
+        }
+        break
+    }
+  }
+}
+
+const trDrawDiagonalRight = _trDrawTilePattern((xi, yi) => {
+  return trDataParams[0] + trDataParams[1] + xi + yi
+})
+
+const trDrawDiagonalLeft = _trDrawTilePattern((xi, yi) => {
+  return abs(trDataParams[0] + trDataParams[1] + xi - yi)
+})
