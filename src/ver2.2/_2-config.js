@@ -178,13 +178,13 @@ function trDeviceDraw() {
   if (trIsNoDevice) {
     trDrawBlock(() => {
       const gap = 10
-      fill(TR_COLORS.lineMain)
+      fill(TR_COLORS.device)
       noStroke()
       rect(trSoftUiStartPos.x - gap / 2, trSoftUiStartPos.y - gap / 2, TR_SOFT_UI_WIDTH + gap)
     })
     trDrawBlock(() => {
       stroke(TR_COLORS.lineMain)
-      strokeWeight(1)
+      strokeWeight(2)
       for (let xi = 0; xi < TR_DEVICE_GRID_NUM; xi++) {
         for (let yi = 0; yi < TR_DEVICE_GRID_NUM; yi++) {
           const value = TR_MAPPING_GRID[yi][xi]
@@ -200,7 +200,8 @@ function trDeviceDraw() {
               fill(TR_COLORS.cellNormal)
             }
 
-            rect(
+            ellipseMode(CORNER)
+            ellipse(
               trSoftUiStartPos.x + TR_SOFT_UI_CELL_WIDTH * xi,
               trSoftUiStartPos.y + TR_SOFT_UI_CELL_WIDTH * yi,
               TR_SOFT_UI_CELL_WIDTH,
@@ -306,7 +307,6 @@ function trInfoDraw() {
   trDrawBlock(() => {
     fill(TR_COLORS.lineMain)
     textSize(12)
-    textFont('sans-serif')
 
     // データ情報
     textAlign(LEFT, CENTER)
