@@ -63,6 +63,7 @@ const trFuncArray = [
   trDrawEllipseStrokeLeftEllipse, // 丸-左-◯混合-線のみ
   trDrawDiagonalRight, // 右斜め混合
   trDrawDiagonalLeft, // 左斜め混合
+  trDrawEllipseParts, // 丸-部分
 ]
 
 /**
@@ -96,38 +97,4 @@ function trDrawShape() {
       trFuncArray[mode](x, y, tileSize)
     }
   }
-
-  // for (let y = 0; y <= h; y++) {
-  //   for (let x = 0; x <= w; x++) {
-  //     switch (v1 % 3) {
-  //       case 0:
-  //         trFuncArray[mode1](x, y, tileSize)
-  //         break
-  //       case 1:
-  //         trFuncArray[mode2](x, y, tileSize)
-  //         break
-  //       default:
-  //         trFuncArray[mode3](x, y, tileSize)
-  //         break
-  //     }
-  //   }
-  // }
-
-  // for (let y = 0; y <= h; y++) {
-  //   for (let x = 0; x <= w; x++) {
-  //     switch (v2 % 4) {
-  //       case 0:
-  //         trFuncArray[mode3](x, y, tileSize)
-  //         break
-  //       case 1:
-  //         trFuncArray[mode2](x, y, tileSize)
-  //         break
-  //       case 2:
-  //         trFuncArray[mode1](x, y, tileSize)
-  //         break
-  //       default:
-  //         break
-  //     }
-  //   }
-  // }
 }

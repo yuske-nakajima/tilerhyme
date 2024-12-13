@@ -1685,3 +1685,47 @@ const trDrawDiagonalRight = _trDrawTilePattern((xi, yi) => {
 const trDrawDiagonalLeft = _trDrawTilePattern((xi, yi) => {
   return abs(trDataParams[0] + trDataParams[1] + xi - yi)
 })
+
+function trDrawEllipseParts(xi, yi, tileSize) {
+  const { color1, color2, color3, color5 } = trChromaticGetColor()
+  const centerPos = createVector(xi * tileSize + tileSize / 2, yi * tileSize + tileSize / 2)
+
+  const sineValue = sin(frameCount * 50 * 0.004)
+  trCalcSineCount(sineValue)
+  const _tileSize = tileSize * map(sineValue, -1, 1, 0.01, 1)
+
+  let tileSizeAdjusted = tileSize
+  if (trSineCount < TR_SINE_ROOP_COUNT) {
+    tileSizeAdjusted = _tileSize
+  } else {
+    tileSizeAdjusted = tileSize
+  }
+
+  trDrawBlock(() => {
+    noStroke()
+
+    fill(xi % 2 === yi % 2 ? color1 : color5)
+    ellipse(centerPos.x, centerPos.y, tileSizeAdjusted / 2)
+  })
+
+  trDrawBlock(() => {
+    noFill()
+    stroke(color3)
+    strokeWeight(tileSizeAdjusted / 4)
+
+    let startAngle
+
+    startAngle = (trDataParams[3] + xi + yi) % 2 === 0 ? HALF_PI : PI + HALF_PI
+    endAngle = startAngle + PI
+    arc(centerPos.x, centerPos.y, tileSizeAdjusted, tileSizeAdjusted, startAngle, endAngle)
+    arc(centerPos.x, centerPos.y, tileSizeAdjusted, tileSizeAdjusted, PI + HALF_PI, TWO_PI + HALF_PI)
+  })
+
+  if ((xi + yi) % 2 === 0) {
+    trDrawBlock(() => {
+      noStroke()
+      fill(color2)
+      ellipse(centerPos.x, centerPos.y, tileSizeAdjusted / 4)
+    })
+  }
+}
