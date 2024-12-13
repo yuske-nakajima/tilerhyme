@@ -1729,3 +1729,40 @@ function trDrawEllipseParts(xi, yi, tileSize) {
     })
   }
 }
+
+function trDrawSimpleLine(centerPos, angle, length) {
+  const x1 = centerPos.x + cos(angle) * length
+  const y1 = centerPos.y + sin(angle) * length
+  const x2 = centerPos.x - cos(angle) * length
+  const y2 = centerPos.y - sin(angle) * length
+  line(x1, y1, x2, y2)
+}
+
+function trDrawRectAndStroke(xi, yi, tileSize) {
+  const { color1, color2, color3, color4, color5 } = trChromaticGetColor()
+  const centerPos = createVector(xi * tileSize + tileSize / 2, yi * tileSize + tileSize / 2)
+
+  const sineValue = sin(frameCount * 50 * 0.004)
+  trCalcSineCount(sineValue)
+  let _sineValue = 1
+  if (trSineCount < TR_SINE_ROOP_COUNT) {
+    _sineValue = sineValue
+  }
+
+  trDrawBlock(() => {
+    rectMode(CENTER)
+    noFill()
+    stroke(color2)
+    strokeWeight(tileSize / 16)
+    rect(centerPos.x, centerPos.y, tileSize * 0.8, tileSize * 0.8)
+
+    // 真ん中(centerPos)から左上に向かって線を引く cos/sin を使って
+    let angle = PI / trDataParams[0] + trDataParams[1] + trDataParams[1] + xi + yi * _sineValue
+    const length = tileSize * 0.3
+    trDrawSimpleLine(centerPos, angle, length)
+    angle = PI / trDataParams[3] + trDataParams[4] + trDataParams[5] + trDataParams[6] + xi + yi * _sineValue
+    trDrawSimpleLine(centerPos, angle, length)
+    angle = PI / trDataParams[7] + trDataParams[8] + trDataParams[9] + trDataParams[10] + xi + yi * _sineValue
+    trDrawSimpleLine(centerPos, angle, length)
+  })
+}

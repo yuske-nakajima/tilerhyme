@@ -459,11 +459,11 @@ function trChromaticGetColor() {
   const colors = {}
 
   // カラー
-  for (let i = 1; i <= 5; i++) {
+  for (let i = 1; i <= 14; i++) {
     colors[`color${i}`] = color(
-      map(trDataParams[0 + i], 0, 99, 0, 360),
-      map(trDataParams[3 + i], 0, 99, 20, 40),
-      map(trDataParams[6 + i], 0, 99, 80, 100),
+      map(trDataParams[0 + i] * 4, 0, 99 * 4, 0, 360),
+      map(trDataParams[1 + i], 0, 99, 20, 80),
+      map(trDataParams[2 + i], 0, 99, 80, 100),
     )
   }
 

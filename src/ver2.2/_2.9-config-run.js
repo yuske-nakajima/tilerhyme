@@ -64,6 +64,7 @@ const trFuncArray = [
   trDrawDiagonalRight, // 右斜め混合
   trDrawDiagonalLeft, // 左斜め混合
   trDrawEllipseParts, // 丸-部分
+  trDrawRectAndStroke, // 四角形と線
 ]
 
 /**
