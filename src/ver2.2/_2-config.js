@@ -8,6 +8,8 @@ const TR_VERSION_NAME = 'KICK'
 const TR_FUNCTION_CODE = {
   IS_LIGHT: 19,
   IS_CHROMATIC: 29,
+  STROKE_WEIGHT_UP: 91,
+  STROKE_WEIGHT_DOWN: 92,
 }
 
 const TR_DATA_GRID_SIZE = 64
@@ -124,8 +126,6 @@ const TR_WALLPAPER_SIZE = 1080
 
 const TR_ROTATE_NUM = 4
 
-const TR_CYCLE_FRAME = 60 / TR_ROTATE_NUM
-
 const TR_DEVICE_GRID_NUM = 8
 
 const TR_MODE = {
@@ -135,18 +135,18 @@ const TR_MODE = {
 
 const TR_AUTO_MODE_INTERVAL = 90
 
-const TR_SINE_ROOP_COUNT = 2
+const TR_SINE_LOOP_COUNT = 2
 
 const TR_BACKGROUND_MODE = {
   LIGHT: 0,
   DARK: 1,
   CHROMATIC: 2,
 }
+
+const TR_STROKE_WEIGHT_STEP = 1
 // ------------------------------------------------------------
 // --- 変数
 // ------------------------------------------------------------
-let lastTapTime = 0
-
 let trCanvas
 
 let trWindowSize
@@ -164,8 +164,6 @@ let trDataGrid = TR_INIT_DATA_GRID
 let trIsDataGridClickable = true
 
 let trChangePatternFrame = 0
-
-let trBlockFrameCount = 0
 
 let trRotateValue = 0
 
@@ -186,12 +184,16 @@ let trSineCount = 0
 
 // light | dark | chromatic
 let trBackgroundMode = TR_BACKGROUND_MODE.DARK
+
+// 線幅の係数
+let trStrokeWeight = 4
 // ------------------------------------------------------------
 // --- 関数
 // ------------------------------------------------------------
 
 const trProgrammerModeSetup = createLaunchpadSetup({
   noteRange: { min: 11, max: 99 },
+  incrementButtonCodeList: [TR_FUNCTION_CODE.STROKE_WEIGHT_UP, TR_FUNCTION_CODE.STROKE_WEIGHT_DOWN],
 })
 
 /**
@@ -225,6 +227,15 @@ function trUtilityDataGridIsPressed(value, isPressed) {
       case TR_FUNCTION_CODE.IS_CHROMATIC:
         trBackgroundMode = TR_BACKGROUND_MODE.CHROMATIC
         break
+      case TR_FUNCTION_CODE.STROKE_WEIGHT_UP:
+        trStrokeWeight += TR_STROKE_WEIGHT_STEP
+        break
+      case TR_FUNCTION_CODE.STROKE_WEIGHT_DOWN:
+        trStrokeWeight -= TR_STROKE_WEIGHT_STEP
+        if (trStrokeWeight <= 0) {
+          trStrokeWeight = 1
+        }
+        break
       default:
         break
     }
@@ -242,6 +253,15 @@ function trUtilityDataGridIsPressed(value, isPressed) {
         trBackgroundMode = trDataGrid.find((item) => item.value === TR_FUNCTION_CODE.IS_LIGHT).isPressed
           ? TR_BACKGROUND_MODE.LIGHT
           : TR_BACKGROUND_MODE.DARK
+        break
+      case TR_FUNCTION_CODE.STROKE_WEIGHT_UP:
+        trStrokeWeight += TR_STROKE_WEIGHT_STEP
+        break
+      case TR_FUNCTION_CODE.STROKE_WEIGHT_DOWN:
+        trStrokeWeight -= TR_STROKE_WEIGHT_STEP
+        if (trStrokeWeight <= 0) {
+          trStrokeWeight = 1
+        }
         break
       default:
         break
@@ -370,7 +390,6 @@ function trHideDialog() {
 
 /**
  * 画像を保存する関数
- * @param {p5.Image} img - 保存する画像
  */
 function trSaveImageClick(dialog) {
   return (e) => {
@@ -463,7 +482,7 @@ function trUrlToData() {
   const isValidData = data && data.length === 64 && /^[01]+$/.test(data)
 
   if (isValidData) {
-    const dataGrid = data.split('').map((item) => (item === '1' ? true : false))
+    const dataGrid = data.split('').map((item) => item === '1')
     for (let i = 0; i < trDataGrid.length; i++) {
       trDataGrid[i].isPressed = dataGrid[i]
     }
@@ -557,24 +576,9 @@ function trChromaticGetColor() {
   // カラー
   for (let i = 1; i <= 14; i++) {
     colors[`color${i}`] = color(
-      map(trDataParams[0 + i] * 4, 0, 99 * 4, 0, 360),
+      map(trDataParams[i] * 4, 0, 99 * 4, 0, 360),
       map(trDataParams[1 + i], 0, 99, 20, 80),
       map(trDataParams[2 + i], 0, 99, 80, 100),
-    )
-  }
-
-  return colors
-}
-
-function trAchromaticGetColor() {
-  const colors = {}
-
-  // 無彩色
-  for (let i = 1; i <= 12; i++) {
-    colors[`color${i}`] = color(
-      map(trDataParams[0 + i], 0, 99, 0, 360),
-      map(trDataParams[1 + i], 0, 99, 0, 0),
-      map(trDataParams[2 + i], 0, 99, 0, 100),
     )
   }
 

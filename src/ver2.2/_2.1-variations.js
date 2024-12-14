@@ -13,11 +13,6 @@ function _trDrawTilePattern1(func) {
       const v1 = ceil(_x + _y)
       const v2 = ceil(_x - _y) < 0 ? ceil(_x - _y) * -1 : ceil(_x - _y)
 
-      const noiseList = []
-      for (let i = 0.1; i <= 1; i += 0.1) {
-        noiseList.push(i)
-      }
-
       // frameCount で 0.1 から 1 から 0.1 までの範囲の値を取得
       // 0.1 から 1 まで
       // 1 から 0.1 まで
@@ -83,7 +78,7 @@ function _trDrawRectEllipseSquare(func) {
 
       func(params)
 
-      if (trSineCount < TR_SINE_ROOP_COUNT) {
+      if (trSineCount < TR_SINE_LOOP_COUNT) {
         switch ((p1 + p2) % 3) {
           case 0:
             rect(0, 0, _t)
@@ -114,93 +109,17 @@ function _trDrawRectEllipseSquare(func) {
   })
 }
 
-const trDrawRectEllipseSquare11 = _trDrawRectEllipseSquare((params) => {
-  noStroke()
-  fill(params.color1)
-})
-
-const trDrawRectEllipseSquare12 = _trDrawRectEllipseSquare((params) => {
-  noStroke()
-  fill(params.color2)
-})
-
-const trDrawRectEllipseSquare13 = _trDrawRectEllipseSquare((params) => {
-  noStroke()
-  fill(params.color3)
-})
-
-const trDrawRectEllipseSquare14 = _trDrawRectEllipseSquare((params) => {
-  noStroke()
-  fill(params.color4)
-})
-
-const trDrawRectEllipseSquare15 = _trDrawRectEllipseSquare((params) => {
-  noStroke()
-  fill(params.color5)
-})
-
 const trDrawRectEllipseSquare16 = _trDrawRectEllipseSquare((params) => {
   const { color1, color2, v1 } = params
   noStroke()
   fill([color1, color2][v1 % 2])
 })
 
-const trDrawRectEllipseSquare17 = _trDrawRectEllipseSquare((params) => {
-  const { color3, color4, _x } = params
-  noStroke()
-  fill([color3, color4][_x % 2])
-})
-
-const trDrawRectEllipseSquare18 = _trDrawRectEllipseSquare((params) => {
-  const { color1, color5, _y } = params
-  noStroke()
-  fill([color5, color1][_y % 2])
-})
-
-const trDrawRectEllipseSquare21 = _trDrawRectEllipseSquare((params) => {
-  noFill()
-  stroke(params.color1)
-})
-
-const trDrawRectEllipseSquare22 = _trDrawRectEllipseSquare((params) => {
-  noFill()
-  stroke(params.color2)
-})
-
-const trDrawRectEllipseSquare23 = _trDrawRectEllipseSquare((params) => {
-  noFill()
-  stroke(params.color3)
-})
-
-const trDrawRectEllipseSquare24 = _trDrawRectEllipseSquare((params) => {
-  noFill()
-  stroke(params.color4)
-})
-
-const trDrawRectEllipseSquare25 = _trDrawRectEllipseSquare((params) => {
-  noFill()
-  stroke(params.color5)
-})
-
 const trDrawRectEllipseSquare26 = _trDrawRectEllipseSquare((params) => {
   const { color1, color2, v1 } = params
   noFill()
   stroke([color1, color2][v1 % 2])
-  strokeWeight(max((params.tileSize * trDataParams[5]) / 800, 1))
-})
-
-const trDrawRectEllipseSquare27 = _trDrawRectEllipseSquare((params) => {
-  const { color3, color4, _x } = params
-  noFill()
-  stroke([color3, color4][_x % 2])
-  strokeWeight(max((params.tileSize * trDataParams[5]) / 800, 1))
-})
-
-const trDrawRectEllipseSquare28 = _trDrawRectEllipseSquare((params) => {
-  const { color1, color5, _y } = params
-  noFill()
-  stroke([color5, color1][_y % 2])
-  strokeWeight(max((params.tileSize * trDataParams[5]) / 800, 1))
+  strokeWeight(min((params.tileSize * trDataParams[5]) / 400, trStrokeWeight))
 })
 
 function _trDrawRect(func, func2) {
@@ -213,7 +132,7 @@ function _trDrawRect(func, func2) {
 
       translate(x, y)
 
-      if (trSineCount < TR_SINE_ROOP_COUNT) {
+      if (trSineCount < TR_SINE_LOOP_COUNT) {
         rect(0, 0, _tileSize2)
       } else {
         rect(0, 0, tileSize2)
@@ -231,42 +150,10 @@ const trDrawRect11 = _trDrawRect((params) => {
   fill(params.color1)
 })
 
-const trDrawRect12 = _trDrawRect((params) => {
-  noStroke()
-  fill(params.color2)
-})
-
-const trDrawRect13 = _trDrawRect((params) => {
-  noStroke()
-  fill(params.color3)
-})
-
-const trDrawRect14 = _trDrawRect((params) => {
-  noStroke()
-  fill(params.color4)
-})
-
-const trDrawRect15 = _trDrawRect((params) => {
-  noStroke()
-  fill(params.color5)
-})
-
 const trDrawRect16 = _trDrawRect((params) => {
   const { color1, color2, v1 } = params
   noStroke()
   fill([color1, color2][v1 % 2])
-})
-
-const trDrawRect17 = _trDrawRect((params) => {
-  const { color3, color4, _x } = params
-  noStroke()
-  fill([color3, color4][_x % 2])
-})
-
-const trDrawRect18 = _trDrawRect((params) => {
-  const { color1, color5, _y } = params
-  noStroke()
-  fill([color5, color1][_y % 2])
 })
 
 const trDrawRect19 = _trDrawRect(
@@ -275,7 +162,7 @@ const trDrawRect19 = _trDrawRect(
     fill(params.color1)
   },
   (params) => {
-    if (trSineCount >= TR_SINE_ROOP_COUNT) {
+    if (trSineCount >= TR_SINE_LOOP_COUNT) {
       // 文字を描画
       const { _x, _y, tileSize } = params
 
@@ -295,57 +182,25 @@ const trDrawRect19 = _trDrawRect(
 const trDrawRect21 = _trDrawRect((params) => {
   noFill()
   stroke(params.color1)
-})
-
-const trDrawRect22 = _trDrawRect((params) => {
-  noFill()
-  stroke(params.color2)
-})
-
-const trDrawRect23 = _trDrawRect((params) => {
-  noFill()
-  stroke(params.color3)
-})
-
-const trDrawRect24 = _trDrawRect((params) => {
-  noFill()
-  stroke(params.color4)
-})
-
-const trDrawRect25 = _trDrawRect((params) => {
-  noFill()
-  stroke(params.color5)
+  strokeWeight(min((params.tileSize * trDataParams[5]) / 1600, trStrokeWeight))
 })
 
 const trDrawRect26 = _trDrawRect((params) => {
-  const { tileSize, color1, color2, v1 } = params
+  const { color1, color2, v1 } = params
   noFill()
   stroke([color1, color2][v1 % 2])
-  strokeWeight(max((tileSize * trDataParams[5]) / 800, 1))
-})
-
-const trDrawRect27 = _trDrawRect((params) => {
-  const { tileSize, color3, color4, _x } = params
-  noFill()
-  stroke([color3, color4][_x % 2])
-  strokeWeight(max((tileSize * trDataParams[5]) / 800, 1))
-})
-
-const trDrawRect28 = _trDrawRect((params) => {
-  const { tileSize, color1, color5, _y } = params
-  noFill()
-  stroke([color5, color1][_y % 2])
-  strokeWeight(max((tileSize * trDataParams[5]) / 800, 1))
+  strokeWeight(min((params.tileSize * trDataParams[5]) / 400, trStrokeWeight))
 })
 
 const trDrawRect29 = _trDrawRect(
   (params) => {
+    const { color1, tileSize } = params
     noFill()
-    stroke(params.color1)
-    strokeWeight(max((params.tileSize * trDataParams[5]) / 800, 1))
+    stroke(color1)
+    strokeWeight(min((tileSize * trDataParams[5]) / 400, trStrokeWeight))
   },
   (params) => {
-    if (trSineCount >= TR_SINE_ROOP_COUNT) {
+    if (trSineCount >= TR_SINE_LOOP_COUNT) {
       // 文字を描画
       const { _x, _y, tileSize } = params
 
@@ -371,7 +226,7 @@ function _trDrawRectBig(func) {
       noFill()
       func(params)
       translate(x, y)
-      if (trSineCount < TR_SINE_ROOP_COUNT) {
+      if (trSineCount < TR_SINE_LOOP_COUNT) {
         rect(0, 0, tileSize * 1.2 * sineValue)
       } else {
         rect(0, 0, tileSize * 1.2)
@@ -380,42 +235,10 @@ function _trDrawRectBig(func) {
   })
 }
 
-const trDrawRectBig21 = _trDrawRectBig((params) => {
-  stroke(params.color1)
-})
-
-const trDrawRectBig22 = _trDrawRectBig((params) => {
-  stroke(params.color2)
-})
-
-const trDrawRectBig23 = _trDrawRectBig((params) => {
-  stroke(params.color3)
-})
-
-const trDrawRectBig24 = _trDrawRectBig((params) => {
-  stroke(params.color4)
-})
-
-const trDrawRectBig25 = _trDrawRectBig((params) => {
-  stroke(params.color5)
-})
-
 const trDrawRectBig26 = _trDrawRectBig((params) => {
   const { tileSize, color1, color2, v1 } = params
   stroke([color1, color2][v1 % 2])
-  strokeWeight(max((tileSize * trDataParams[5]) / 800, 1))
-})
-
-const trDrawRectBig27 = _trDrawRectBig((params) => {
-  const { tileSize, color3, color4, _x } = params
-  stroke([color3, color4][_x % 2])
-  strokeWeight(max((tileSize * trDataParams[5]) / 800, 1))
-})
-
-const trDrawRectBig28 = _trDrawRectBig((params) => {
-  const { tileSize, color1, color5, _y } = params
-  stroke([color5, color1][_y % 2])
-  strokeWeight(max((tileSize * trDataParams[5]) / 800, 1))
+  strokeWeight(min((tileSize * trDataParams[5]) / 400, trStrokeWeight))
 })
 
 function _trDrawSquare(func) {
@@ -430,7 +253,7 @@ function _trDrawSquare(func) {
 
       rotate(PI / 4)
 
-      if (trSineCount < TR_SINE_ROOP_COUNT) {
+      if (trSineCount < TR_SINE_LOOP_COUNT) {
         rect(0, 0, _squareSize)
       } else {
         rect(0, 0, squareSize)
@@ -444,67 +267,16 @@ const trDrawSquare11 = _trDrawSquare((params) => {
   fill(params.color1)
 })
 
-const trDrawSquare12 = _trDrawSquare((params) => {
-  noStroke()
-  fill(params.color2)
-})
-
-const trDrawSquare13 = _trDrawSquare((params) => {
-  noStroke()
-  fill(params.color3)
-})
-
-const trDrawSquare14 = _trDrawSquare((params) => {
-  noStroke()
-  fill(params.color4)
-})
-
-const trDrawSquare15 = _trDrawSquare((params) => {
-  noStroke()
-  fill(params.color5)
-})
-
 const trDrawSquare16 = _trDrawSquare((params) => {
   const { color1, color2, v1 } = params
   noStroke()
   fill([color1, color2][v1 % 2])
 })
 
-const trDrawSquare17 = _trDrawSquare((params) => {
-  const { color3, color4, _x } = params
-  noStroke()
-  fill([color3, color4][_x % 2])
-})
-
-const trDrawSquare18 = _trDrawSquare((params) => {
-  const { color1, color5, _y } = params
-  noStroke()
-  fill([color5, color1][_y % 2])
-})
-
 const trDrawSquare21 = _trDrawSquare((params) => {
   noFill()
   stroke(params.color1)
-})
-
-const trDrawSquare22 = _trDrawSquare((params) => {
-  noFill()
-  stroke(params.color2)
-})
-
-const trDrawSquare23 = _trDrawSquare((params) => {
-  noFill()
-  stroke(params.color3)
-})
-
-const trDrawSquare24 = _trDrawSquare((params) => {
-  noFill()
-  stroke(params.color4)
-})
-
-const trDrawSquare25 = _trDrawSquare((params) => {
-  noFill()
-  stroke(params.color5)
+  strokeWeight(min((params.tileSize * trDataParams[5]) / 1600, trStrokeWeight))
 })
 
 const trDrawSquare26 = _trDrawSquare((params) => {
@@ -512,20 +284,6 @@ const trDrawSquare26 = _trDrawSquare((params) => {
   noFill()
   stroke([color1, color2][v1 % 2])
   strokeWeight(max((tileSize * trDataParams[5]) / 1600, 1))
-})
-
-const trDrawSquare27 = _trDrawSquare((params) => {
-  const { tileSize, color3, color4, _x } = params
-  noFill()
-  stroke([color3, color4][_x % 2])
-  strokeWeight(max((tileSize * trDataParams[5]) / 1600))
-})
-
-const trDrawSquare28 = _trDrawSquare((params) => {
-  const { tileSize, color1, color5, _y } = params
-  noFill()
-  stroke([color5, color1][_y % 2])
-  strokeWeight(max((tileSize * trDataParams[5]) / 1600))
 })
 
 function trDrawSquareBig(func) {
@@ -541,7 +299,7 @@ function trDrawSquareBig(func) {
 
       rotate(PI / 4)
 
-      if (trSineCount < TR_SINE_ROOP_COUNT) {
+      if (trSineCount < TR_SINE_LOOP_COUNT) {
         rect(0, 0, _squareSize * 1.5)
       } else {
         rect(0, 0, squareSize * 1.5)
@@ -550,42 +308,10 @@ function trDrawSquareBig(func) {
   })
 }
 
-const trDrawSquareBig21 = trDrawSquareBig((params) => {
-  stroke(params.color1)
-})
-
-const trDrawSquareBig22 = trDrawSquareBig((params) => {
-  stroke(params.color2)
-})
-
-const trDrawSquareBig23 = trDrawSquareBig((params) => {
-  stroke(params.color3)
-})
-
-const trDrawSquareBig24 = trDrawSquareBig((params) => {
-  stroke(params.color4)
-})
-
-const trDrawSquareBig25 = trDrawSquareBig((params) => {
-  stroke(params.color5)
-})
-
 const trDrawSquareBig26 = trDrawSquareBig((params) => {
   const { tileSize, color1, color2, v1 } = params
   stroke([color1, color2][v1 % 2])
-  strokeWeight(max((tileSize * trDataParams[5]) / 800))
-})
-
-const trDrawSquareBig27 = trDrawSquareBig((params) => {
-  const { tileSize, color3, color4, _x } = params
-  stroke([color3, color4][_x % 2])
-  strokeWeight(max((tileSize * trDataParams[5]) / 800))
-})
-
-const trDrawSquareBig28 = trDrawSquareBig((params) => {
-  const { tileSize, color1, color5, _y } = params
-  stroke([color5, color1][_y % 2])
-  strokeWeight(max((tileSize * trDataParams[5]) / 800))
+  strokeWeight(min((tileSize * trDataParams[5]) / 400, trStrokeWeight))
 })
 
 function _trDrawEllipse(func) {
@@ -598,7 +324,7 @@ function _trDrawEllipse(func) {
 
       translate(x, y)
 
-      if (trSineCount < TR_SINE_ROOP_COUNT) {
+      if (trSineCount < TR_SINE_LOOP_COUNT) {
         ellipse(0, 0, _tileSize2)
       } else {
         ellipse(0, 0, tileSize2)
@@ -607,93 +333,17 @@ function _trDrawEllipse(func) {
   })
 }
 
-const trDrawEllipse11 = _trDrawEllipse((params) => {
-  noStroke()
-  fill(params.color1)
-})
-
-const trDrawEllipse12 = _trDrawEllipse((params) => {
-  noStroke()
-  fill(params.color2)
-})
-
-const trDrawEllipse13 = _trDrawEllipse((params) => {
-  noStroke()
-  fill(params.color3)
-})
-
-const trDrawEllipse14 = _trDrawEllipse((params) => {
-  noStroke()
-  fill(params.color4)
-})
-
-const trDrawEllipse15 = _trDrawEllipse((params) => {
-  noStroke()
-  fill(params.color5)
-})
-
 const trDrawEllipse16 = _trDrawEllipse((params) => {
   const { color1, color2, v1 } = params
   noStroke()
   fill([color1, color2][v1 % 2])
 })
 
-const trDrawEllipse17 = _trDrawEllipse((params) => {
-  const { color3, color4, _x } = params
-  noStroke()
-  fill([color3, color4][_x % 2])
-})
-
-const trDrawEllipse18 = _trDrawEllipse((params) => {
-  const { color1, color5, _y } = params
-  noStroke()
-  fill([color5, color1][_y % 2])
-})
-
-const trDrawEllipse21 = _trDrawEllipse((params) => {
-  noFill()
-  stroke(params.color1)
-})
-
-const trDrawEllipse22 = _trDrawEllipse((params) => {
-  noFill()
-  stroke(params.color2)
-})
-
-const trDrawEllipse23 = _trDrawEllipse((params) => {
-  noFill()
-  stroke(params.color3)
-})
-
-const trDrawEllipse24 = _trDrawEllipse((params) => {
-  noFill()
-  stroke(params.color4)
-})
-
-const trDrawEllipse25 = _trDrawEllipse((params) => {
-  noFill()
-  stroke(params.color5)
-})
-
 const trDrawEllipse26 = _trDrawEllipse((params) => {
   const { tileSize, color1, color2, v1 } = params
   noFill()
   stroke([color1, color2][v1 % 2])
-  strokeWeight(max((tileSize * trDataParams[5]) / 800))
-})
-
-const trDrawEllipse27 = _trDrawEllipse((params) => {
-  const { tileSize, color3, color4, _x } = params
-  noFill()
-  stroke([color3, color4][_x % 2])
-  strokeWeight(max((tileSize * trDataParams[5]) / 800))
-})
-
-const trDrawEllipse28 = _trDrawEllipse((params) => {
-  const { tileSize, color1, color5, _y } = params
-  noFill()
-  stroke([color5, color1][_y % 2])
-  strokeWeight(max((tileSize * trDataParams[5]) / 800))
+  strokeWeight(min((tileSize * trDataParams[5]) / 400, trStrokeWeight))
 })
 
 function _trDrawEllipseSmall(func) {
@@ -706,7 +356,7 @@ function _trDrawEllipseSmall(func) {
 
       translate(x, y)
 
-      if (trSineCount < TR_SINE_ROOP_COUNT) {
+      if (trSineCount < TR_SINE_LOOP_COUNT) {
         ellipse(0, 0, _tileSize * 0.5)
       } else {
         ellipse(0, 0, tileSize * 0.5)
@@ -732,7 +382,7 @@ function _trDrawEllipseBig(func) {
 
       translate(x, y)
 
-      if (trSineCount < TR_SINE_ROOP_COUNT) {
+      if (trSineCount < TR_SINE_LOOP_COUNT) {
         ellipse(0, 0, _tileSize * 1.2)
       } else {
         ellipse(0, 0, tileSize * 1.2)
@@ -741,42 +391,10 @@ function _trDrawEllipseBig(func) {
   })
 }
 
-const trDrawEllipseBig21 = _trDrawEllipseBig((params) => {
-  stroke(params.color1)
-})
-
-const trDrawEllipseBig22 = _trDrawEllipseBig((params) => {
-  stroke(params.color2)
-})
-
-const trDrawEllipseBig23 = _trDrawEllipseBig((params) => {
-  stroke(params.color3)
-})
-
-const trDrawEllipseBig24 = _trDrawEllipseBig((params) => {
-  stroke(params.color4)
-})
-
-const trDrawEllipseBig25 = _trDrawEllipseBig((params) => {
-  stroke(params.color5)
-})
-
 const trDrawEllipseBig26 = _trDrawEllipseBig((params) => {
   const { tileSize, color1, color2, v1 } = params
   stroke([color1, color2][v1 % 2])
-  strokeWeight(max((tileSize * trDataParams[5]) / 1600))
-})
-
-const trDrawEllipseBig27 = _trDrawEllipseBig((params) => {
-  const { tileSize, color3, color4, _x } = params
-  stroke([color3, color4][_x % 2])
-  strokeWeight(max((tileSize * trDataParams[5]) / 1600))
-})
-
-const trDrawEllipseBig28 = _trDrawEllipseBig((params) => {
-  const { tileSize, color1, color5, _y } = params
-  stroke([color5, color1][_y % 2])
-  strokeWeight(max((tileSize * trDataParams[5]) / 1600))
+  strokeWeight(min((tileSize * trDataParams[5]) / 1600, trStrokeWeight))
 })
 
 function _trDrawTilePattern2(func) {
@@ -801,11 +419,6 @@ function _trDrawTilePattern2(func) {
       const p2 = (p1 + 1) % pointList.length
       const p3 = (p1 + 2) % pointList.length
       const p4 = (p1 + 3) % pointList.length
-
-      const noiseList = []
-      for (let i = 0.1; i <= 1; i += 0.1) {
-        noiseList.push(i)
-      }
 
       const sineValue = sin(frameCount * 50 * 0.004)
 
@@ -842,181 +455,12 @@ function _trDrawTilePattern2(func) {
   }
 }
 
-function _trDrawVerticalRotate(func) {
-  return _trDrawTilePattern2((params) => {
-    trDrawBlock(() => {
-      const { x, y, tileSize, sineValue } = params
-
-      noFill()
-      strokeWeight(max((tileSize * trDataParams[5]) / 400, 1))
-      strokeCap(SQUARE)
-
-      const s1 = map(sineValue, -1, 1, 0, 1)
-      func(params)
-
-      if (trSineCount < TR_SINE_ROOP_COUNT) {
-        switch (trSineCount % 2) {
-          case 0:
-            line(x, y - 1, x, y + (tileSize / 2) * s1)
-            line(x, y + 1, x, y - (tileSize / 2) * s1)
-            break
-          case 1:
-            // 回転
-            translate(x, y)
-            rotate(PI * sineValue)
-            line(0, 0 + 1, 0, 0 - tileSize / 2)
-            line(0, 0 - 1, 0, 0 + tileSize / 2)
-            break
-          default:
-            break
-        }
-      } else {
-        line(x, y - 1, x, y + (tileSize / 2) * 1.01)
-        line(x, y + 1, x, y - (tileSize / 2) * 1.01)
-
-        if (trDataParams[3] % 2 === 0) {
-          for (let i = 0; i < 4; i++) {
-            strokeWeight(1)
-            const currentX = x + (tileSize / 4) * i
-
-            line(currentX, y - 1, currentX, y + (tileSize / 2) * 1.01)
-            line(currentX, y + 1, currentX, y - (tileSize / 2) * 1.01)
-          }
-        }
-      }
-    })
-  })
-}
-
-const trDrawVerticalRotate11 = _trDrawVerticalRotate((params) => {
-  stroke(params.color1)
-})
-
-const trDrawVerticalRotate12 = _trDrawVerticalRotate((params) => {
-  stroke(params.color2)
-})
-
-const trDrawVerticalRotate13 = _trDrawVerticalRotate((params) => {
-  stroke(params.color3)
-})
-
-const trDrawVerticalRotate14 = _trDrawVerticalRotate((params) => {
-  stroke(params.color4)
-})
-
-const trDrawVerticalRotate15 = _trDrawVerticalRotate((params) => {
-  stroke(params.color5)
-})
-
-const trDrawVerticalRotate16 = _trDrawVerticalRotate((params) => {
-  const { _y, color1, color2 } = params
-  if (_y % 2 === 0) {
-    stroke(color1)
-  } else {
-    stroke(color2)
-  }
-})
-
-const trDrawVerticalRotate17 = _trDrawVerticalRotate((params) => {
-  const { _x, color3, color4 } = params
-  if (_x % 2 === 0) {
-    stroke(color3)
-  } else {
-    stroke(color4)
-  }
-})
-
-function trDrawHorizontalRotate(func) {
-  return _trDrawTilePattern2((params) => {
-    trDrawBlock(() => {
-      const { x, y, tileSize, sineValue } = params
-
-      noFill()
-      strokeWeight(max((tileSize * trDataParams[5]) / 400, 1))
-      strokeCap(SQUARE)
-
-      const s1 = map(sineValue, -1, 1, 0, 1)
-
-      func(params)
-
-      if (trSineCount < TR_SINE_ROOP_COUNT) {
-        switch (trSineCount % 2) {
-          case 0:
-            line(x - 1, y, x + (tileSize / 2) * s1, y)
-            line(x + 1, y, x - (tileSize / 2) * s1, y)
-            break
-          case 1:
-            // 回転
-            translate(x, y)
-            rotate(PI * sineValue)
-            line(0 + 1, 0, 0 - tileSize / 2, 0)
-            line(0 - 1, 0, 0 + tileSize / 2, 0)
-            break
-          default:
-            break
-        }
-      } else {
-        line(x - 1, y, x + (tileSize / 2) * 1.01, y)
-        line(x + 1, y, x - (tileSize / 2) * 1.01, y)
-
-        if (trDataParams[3] % 2 === 0) {
-          for (let i = 0; i < 4; i++) {
-            strokeWeight(1)
-            const currentY = y + (tileSize / 4) * i
-
-            line(x - 1, currentY, x + (tileSize / 2) * 1.01, currentY)
-            line(x + 1, currentY, x - (tileSize / 2) * 1.01, currentY)
-          }
-        }
-      }
-    })
-  })
-}
-
-const trDrawHorizontalRotate11 = trDrawHorizontalRotate((params) => {
-  stroke(params.color1)
-})
-
-const trDrawHorizontalRotate12 = trDrawHorizontalRotate((params) => {
-  stroke(params.color2)
-})
-
-const trDrawHorizontalRotate13 = trDrawHorizontalRotate((params) => {
-  stroke(params.color3)
-})
-
-const trDrawHorizontalRotate14 = trDrawHorizontalRotate((params) => {
-  stroke(params.color4)
-})
-
-const trDrawHorizontalRotate15 = trDrawHorizontalRotate((params) => {
-  stroke(params.color5)
-})
-
-const trDrawHorizontalRotate16 = trDrawHorizontalRotate((params) => {
-  const { _y, color1, color2 } = params
-  if (_y % 2 === 0) {
-    stroke(color1)
-  } else {
-    stroke(color2)
-  }
-})
-
-const trDrawHorizontalRotate17 = trDrawHorizontalRotate((params) => {
-  const { _x, color3, color4 } = params
-  if (_x % 2 === 0) {
-    stroke(color3)
-  } else {
-    stroke(color4)
-  }
-})
-
 function trDrawDiagonalRightRotate(func) {
   return _trDrawTilePattern2((params) => {
     trDrawBlock(() => {
-      const { _x, x, _y, y, tileSize, color1, color2, sineValue } = params
+      const { _x, x, _y, y, tileSize, sineValue } = params
 
-      const _strokeWeight = max((tileSize * trDataParams[5]) / 400, 1)
+      const _strokeWeight = min((tileSize * trDataParams[5]) / 400, trStrokeWeight)
 
       noFill()
       strokeWeight(_strokeWeight)
@@ -1027,7 +471,7 @@ function trDrawDiagonalRightRotate(func) {
 
       func(params)
 
-      if (trSineCount < TR_SINE_ROOP_COUNT) {
+      if (trSineCount < TR_SINE_LOOP_COUNT) {
         switch (trSineCount % 2) {
           case 0:
             line(x, y, currentX, currentY)
@@ -1036,7 +480,7 @@ function trDrawDiagonalRightRotate(func) {
             // 回転
             translate(x, y)
             rotate(PI * 0.75 + PI * -sineValue)
-            line(0 - tileSize * 0.5, 0, 0 + tileSize * 0.5, 0)
+            line(0 - tileSize * 0.5, 0, tileSize * 0.5, 0)
             break
         }
       } else {
@@ -1070,40 +514,15 @@ function trDrawDiagonalRightRotate(func) {
   })
 }
 
-const trDrawDiagonalRightRotate11 = trDrawDiagonalRightRotate((params) => {
-  stroke(params.color1)
-})
-
-const trDrawDiagonalRightRotate12 = trDrawDiagonalRightRotate((params) => {
-  stroke(params.color2)
-})
-
-const trDrawDiagonalRightRotate13 = trDrawDiagonalRightRotate((params) => {
-  stroke(params.color3)
-})
-
-const trDrawDiagonalRightRotate14 = trDrawDiagonalRightRotate((params) => {
-  stroke(params.color4)
-})
-
-const trDrawDiagonalRightRotate15 = trDrawDiagonalRightRotate((params) => {
-  stroke(params.color5)
-})
-
 const trDrawDiagonalRightRotate16 = trDrawDiagonalRightRotate((params) => {
   const { _x, color1, color2 } = params
   stroke(_x % 2 ? color1 : color2)
 })
 
-const trDrawDiagonalRightRotate17 = trDrawDiagonalRightRotate((params) => {
-  const { _x, _y, color3, color4 } = params
-  stroke((_x + _y) % 2 ? color3 : color4)
-})
-
 function _trDrawDiagonalLeftRotate(func) {
   return _trDrawTilePattern2((params) => {
     trDrawBlock(() => {
-      const { _x, x, _y, y, tileSize, color1, color2, sineValue } = params
+      const { _x, x, _y, y, tileSize, sineValue } = params
 
       const _strokeWeight = max((tileSize * trDataParams[5]) / 400, 1)
 
@@ -1116,7 +535,7 @@ function _trDrawDiagonalLeftRotate(func) {
 
       func(params)
 
-      if (trSineCount < TR_SINE_ROOP_COUNT) {
+      if (trSineCount < TR_SINE_LOOP_COUNT) {
         switch (trSineCount % 2) {
           case 0:
             line(x, y, currentX, currentY)
@@ -1125,7 +544,7 @@ function _trDrawDiagonalLeftRotate(func) {
             // 回転
             translate(x, y)
             rotate(PI * 0.25 - PI * sineValue)
-            line(0 - tileSize * 0.5, 0, 0 + tileSize * 0.5, 0)
+            line(0 - tileSize * 0.5, 0, tileSize * 0.5, 0)
             break
         }
       } else {
@@ -1158,34 +577,9 @@ function _trDrawDiagonalLeftRotate(func) {
   })
 }
 
-const trDrawDiagonalLeftRotate11 = _trDrawDiagonalLeftRotate((params) => {
-  stroke(params.color1)
-})
-
-const trDrawDiagonalLeftRotate12 = _trDrawDiagonalLeftRotate((params) => {
-  stroke(params.color2)
-})
-
-const trDrawDiagonalLeftRotate13 = _trDrawDiagonalLeftRotate((params) => {
-  stroke(params.color3)
-})
-
-const trDrawDiagonalLeftRotate14 = _trDrawDiagonalLeftRotate((params) => {
-  stroke(params.color4)
-})
-
-const trDrawDiagonalLeftRotate15 = _trDrawDiagonalLeftRotate((params) => {
-  stroke(params.color5)
-})
-
 const trDrawDiagonalLeftRotate16 = _trDrawDiagonalLeftRotate((params) => {
   const { _x, color1, color2 } = params
   stroke(_x % 2 ? color1 : color2)
-})
-
-const trDrawDiagonalLeftRotate17 = _trDrawDiagonalLeftRotate((params) => {
-  const { _x, _y, color3, color4 } = params
-  stroke((_x + _y) % 2 ? color3 : color4)
 })
 
 function trDrawEllipseStrokeRightRotate(func) {
@@ -1200,13 +594,13 @@ function trDrawEllipseStrokeRightRotate(func) {
 
       const { color1, color2 } = func(params)
 
-      strokeWeight(max((tileSize * trDataParams[5]) / 400, 1))
+      strokeWeight(min((tileSize * trDataParams[5]) / 400, trStrokeWeight))
 
-      if (trSineCount < TR_SINE_ROOP_COUNT) {
+      if (trSineCount < TR_SINE_LOOP_COUNT) {
         switch (trSineCount % 2) {
           case 0:
             stroke(color1)
-            arc(0 + _tileSize / 2, 0 + _tileSize / 2, _tileSize, _tileSize, PI, PI + HALF_PI)
+            arc(_tileSize / 2, _tileSize / 2, _tileSize, _tileSize, PI, PI + HALF_PI)
 
             stroke(color2)
             arc(0 - _tileSize / 2, 0 - _tileSize / 2, _tileSize, _tileSize, 0, HALF_PI)
@@ -1215,7 +609,7 @@ function trDrawEllipseStrokeRightRotate(func) {
             rotate(PI * sineValue)
 
             stroke(color1)
-            arc(0 + tileSize / 2, 0 + tileSize / 2, tileSize, tileSize, PI, PI + HALF_PI)
+            arc(tileSize / 2, tileSize / 2, tileSize, tileSize, PI, PI + HALF_PI)
 
             stroke(color2)
             arc(0 - tileSize / 2, 0 - tileSize / 2, tileSize, tileSize, 0, HALF_PI)
@@ -1226,7 +620,7 @@ function trDrawEllipseStrokeRightRotate(func) {
         arc(0 - tileSize / 2, 0 - tileSize / 2, tileSize, tileSize, 0, HALF_PI)
 
         stroke(color2)
-        arc(0 + tileSize / 2, 0 + tileSize / 2, tileSize, tileSize, PI, PI + HALF_PI)
+        arc(tileSize / 2, tileSize / 2, tileSize, tileSize, PI, PI + HALF_PI)
       }
     })
   })
@@ -1234,14 +628,6 @@ function trDrawEllipseStrokeRightRotate(func) {
 
 const trDrawEllipseStrokeRightRotate11 = trDrawEllipseStrokeRightRotate((params) => {
   return { color1: params.color1, color2: params.color2 }
-})
-
-const trDrawEllipseStrokeRightRotate12 = trDrawEllipseStrokeRightRotate((params) => {
-  return { color1: params.color2, color2: params.color3 }
-})
-
-const trDrawEllipseStrokeRightRotate13 = trDrawEllipseStrokeRightRotate((params) => {
-  return { color1: params.color3, color2: params.color4 }
 })
 
 function trDrawEllipseStrokeLeftRotate(func) {
@@ -1256,33 +642,33 @@ function trDrawEllipseStrokeLeftRotate(func) {
 
       const { color1, color2 } = func(params)
 
-      strokeWeight(max((tileSize * trDataParams[5]) / 400, 1))
+      strokeWeight(min((tileSize * trDataParams[5]) / 400, trStrokeWeight))
 
-      if (trSineCount < TR_SINE_ROOP_COUNT) {
+      if (trSineCount < TR_SINE_LOOP_COUNT) {
         switch (trSineCount % 2) {
           case 0:
             stroke(color1)
-            arc(0 - _tileSize / 2, 0 + _tileSize / 2, _tileSize, _tileSize, PI + HALF_PI, TWO_PI)
+            arc(0 - _tileSize / 2, _tileSize / 2, _tileSize, _tileSize, PI + HALF_PI, TWO_PI)
 
             stroke(color2)
-            arc(0 + _tileSize / 2, 0 - _tileSize / 2, _tileSize, _tileSize, HALF_PI, PI)
+            arc(_tileSize / 2, 0 - _tileSize / 2, _tileSize, _tileSize, HALF_PI, PI)
             break
           default:
             rotate(-PI * sineValue) // 回転方向を反転
 
             stroke(color1)
-            arc(0 - tileSize / 2, 0 + tileSize / 2, tileSize, tileSize, PI + HALF_PI, TWO_PI)
+            arc(0 - tileSize / 2, tileSize / 2, tileSize, tileSize, PI + HALF_PI, TWO_PI)
 
             stroke(color2)
-            arc(0 + tileSize / 2, 0 - tileSize / 2, tileSize, tileSize, HALF_PI, PI)
+            arc(tileSize / 2, 0 - tileSize / 2, tileSize, tileSize, HALF_PI, PI)
             break
         }
       } else {
         stroke(color1)
-        arc(0 + tileSize / 2, 0 - tileSize / 2, tileSize, tileSize, HALF_PI, PI)
+        arc(tileSize / 2, 0 - tileSize / 2, tileSize, tileSize, HALF_PI, PI)
 
         stroke(color2)
-        arc(0 - tileSize / 2, 0 + tileSize / 2, tileSize, tileSize, PI + HALF_PI, TWO_PI)
+        arc(0 - tileSize / 2, tileSize / 2, tileSize, tileSize, PI + HALF_PI, TWO_PI)
       }
     })
   })
@@ -1290,14 +676,6 @@ function trDrawEllipseStrokeLeftRotate(func) {
 
 const trDrawEllipseStrokeLeftRotate11 = trDrawEllipseStrokeLeftRotate((params) => {
   return { color1: params.color1, color2: params.color2 }
-})
-
-const trDrawEllipseStrokeLeftRotate12 = trDrawEllipseStrokeLeftRotate((params) => {
-  return { color1: params.color2, color2: params.color3 }
-})
-
-const trDrawEllipseStrokeLeftRotate13 = trDrawEllipseStrokeLeftRotate((params) => {
-  return { color1: params.color3, color2: params.color4 }
 })
 
 function _trDrawCrossRotate(func) {
@@ -1313,15 +691,15 @@ function _trDrawCrossRotate(func) {
       noFill()
 
       stroke(color1)
-      strokeWeight(max((tileSize * trDataParams[5]) / 300, 1))
+      strokeWeight(min((tileSize * trDataParams[5]) / 300, trStrokeWeight))
       strokeCap(SQUARE)
 
-      if (trSineCount < TR_SINE_ROOP_COUNT) {
+      if (trSineCount < TR_SINE_LOOP_COUNT) {
         switch (trSineCount % 2) {
           case 0:
             stroke(color1)
             beginShape()
-            vertex(0, 0 + _tileSize / 2)
+            vertex(0, _tileSize / 2)
             vertex(0, 0)
             endShape()
 
@@ -1334,7 +712,7 @@ function _trDrawCrossRotate(func) {
             stroke(color2)
             beginShape()
             vertex(0, 0)
-            vertex(0 + _tileSize / 2, 0)
+            vertex(_tileSize / 2, 0)
             endShape()
 
             stroke(color2)
@@ -1350,7 +728,7 @@ function _trDrawCrossRotate(func) {
             stroke(color1)
             beginShape()
             vertex(0, 0)
-            vertex(0, 0 + acceleration)
+            vertex(0, acceleration)
             endShape()
 
             stroke(color1)
@@ -1361,7 +739,7 @@ function _trDrawCrossRotate(func) {
 
             stroke(color2)
             beginShape()
-            vertex(0 + acceleration, 0)
+            vertex(acceleration, 0)
             vertex(0, 0)
             endShape()
 
@@ -1377,7 +755,7 @@ function _trDrawCrossRotate(func) {
       } else {
         stroke(color1)
         beginShape()
-        vertex(0, 0 + tileSize / 2)
+        vertex(0, tileSize / 2)
         vertex(0, 0)
         endShape()
 
@@ -1390,7 +768,7 @@ function _trDrawCrossRotate(func) {
         stroke(color2)
         beginShape()
         vertex(0, 0)
-        vertex(0 + tileSize / 2, 0)
+        vertex(tileSize / 2, 0)
         endShape()
 
         stroke(color2)
@@ -1405,22 +783,6 @@ function _trDrawCrossRotate(func) {
 
 const trDrawCrossRotate11 = _trDrawCrossRotate((params) => {
   return { color1: params.color1, color2: params.color2 }
-})
-
-const trDrawCrossRotate12 = _trDrawCrossRotate((params) => {
-  return { color1: params.color2, color2: params.color3 }
-})
-
-const trDrawCrossRotate13 = _trDrawCrossRotate((params) => {
-  return { color1: params.color3, color2: params.color4 }
-})
-
-const trDrawCrossRotate14 = _trDrawCrossRotate((params) => {
-  return { color1: params.color4, color2: params.color5 }
-})
-
-const trDrawCrossRotate15 = _trDrawCrossRotate((params) => {
-  return { color1: params.color5, color2: params.color1 }
 })
 
 function _trDrawArc(func) {
@@ -1445,7 +807,7 @@ function _trDrawArc(func) {
         translate(x, y)
 
         let t
-        if (trSineCount < TR_SINE_ROOP_COUNT) {
+        if (trSineCount < TR_SINE_LOOP_COUNT) {
           t = _tileSize
         } else {
           t = tileSize
@@ -1454,7 +816,7 @@ function _trDrawArc(func) {
         if (v % 2 === 0) {
           rotate(PI)
           fill(color4)
-          arc(0, 0 + t / 2, t, t, HALF_PI, PI + HALF_PI)
+          arc(0, t / 2, t, t, HALF_PI, PI + HALF_PI)
 
           rotate(0)
           fill(color5)
@@ -1466,20 +828,12 @@ function _trDrawArc(func) {
 
           rotate(0)
           fill(color2)
-          arc(0, 0 + t / 2, t, t, HALF_PI, PI + HALF_PI)
+          arc(0, t / 2, t, t, HALF_PI, PI + HALF_PI)
         }
       })
     })
   })
 }
-
-const trDrawArc11 = _trDrawArc((params) => {
-  return params._x
-})
-
-const trDrawArc12 = _trDrawArc((params) => {
-  return params._y
-})
 
 const trDrawArc13 = _trDrawArc((params) => {
   return params._x * params._y
@@ -1504,7 +858,7 @@ function _trDrawTriangle(func) {
       const { _x, x, _y, y, tileSize, _tileSize, color1, color2 } = params
 
       let t
-      if (trSineCount < TR_SINE_ROOP_COUNT) {
+      if (trSineCount < TR_SINE_LOOP_COUNT) {
         t = _tileSize
       } else {
         t = tileSize
@@ -1581,18 +935,6 @@ const trDrawEllipseStrokeLeftEllipse = (x, y, tileSize) => {
   trDrawEllipseStrokeLeftRotate11(x, y, tileSize)
 }
 
-function trColorSetQ() {
-  const value = 360 / 8
-  const colorList = []
-  const start = map(trDataParams[0], 0, 99, 0, 360)
-  for (let i = 0; i < 4; i++) {
-    const hue = (start + i * value) % 360
-    colorList.push(color(hue, 20, 100))
-  }
-
-  return colorList
-}
-
 function _trDrawTilePattern(func) {
   return function (xi, yi, tileSize) {
     const { color1, color2, color3, color4, color5 } = trChromaticGetColor()
@@ -1602,7 +944,7 @@ function _trDrawTilePattern(func) {
     const _tileSize = tileSize * map(sineValue, -1, 1, 0.01, 1)
 
     let tileSizeAdjusted
-    if (trSineCount < TR_SINE_ROOP_COUNT) {
+    if (trSineCount < TR_SINE_LOOP_COUNT) {
       tileSizeAdjusted = _tileSize
     } else {
       tileSizeAdjusted = tileSize
@@ -1695,7 +1037,7 @@ function trDrawEllipseParts(xi, yi, tileSize) {
   const _tileSize = tileSize * map(sineValue, -1, 1, 0.01, 1)
 
   let tileSizeAdjusted = tileSize
-  if (trSineCount < TR_SINE_ROOP_COUNT) {
+  if (trSineCount < TR_SINE_LOOP_COUNT) {
     tileSizeAdjusted = _tileSize
   } else {
     tileSizeAdjusted = tileSize
@@ -1713,10 +1055,8 @@ function trDrawEllipseParts(xi, yi, tileSize) {
     stroke(color3)
     strokeWeight(tileSizeAdjusted / 4)
 
-    let startAngle
-
-    startAngle = (trDataParams[3] + xi + yi) % 2 === 0 ? HALF_PI : PI + HALF_PI
-    endAngle = startAngle + PI
+    const startAngle = (trDataParams[3] + xi + yi) % 2 === 0 ? HALF_PI : PI + HALF_PI
+    const endAngle = startAngle + PI
     arc(centerPos.x, centerPos.y, tileSizeAdjusted, tileSizeAdjusted, startAngle, endAngle)
     arc(centerPos.x, centerPos.y, tileSizeAdjusted, tileSizeAdjusted, PI + HALF_PI, TWO_PI + HALF_PI)
   })
@@ -1745,15 +1085,15 @@ function trDrawRectAndStroke(xi, yi, tileSize) {
   const sineValue = sin(frameCount * 50 * 0.004)
   trCalcSineCount(sineValue)
   let _sineValue = 1
-  if (trSineCount < TR_SINE_ROOP_COUNT) {
+  if (trSineCount < TR_SINE_LOOP_COUNT) {
     _sineValue = sineValue
   }
 
   trDrawBlock(() => {
     rectMode(CENTER)
     noFill()
-    stroke(color2)
-    strokeWeight(tileSize / 16)
+    stroke([color1, color2, color3, color4, color5][(xi + yi) % 5])
+    strokeWeight(min(tileSize / 10, trStrokeWeight))
     rect(centerPos.x, centerPos.y, tileSize * 0.8, tileSize * 0.8)
 
     // 真ん中(centerPos)から左上に向かって線を引く cos/sin を使って

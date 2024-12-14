@@ -84,7 +84,9 @@ function createLaunchpadSetup(userConfig = {}) {
       inputNames: ['Launchpad Mini MK3 LPMiniMK3 MIDI Out', 'MIDIIN2 (LPMiniMK3 MIDI)'],
       outputNames: ['Launchpad Mini MK3 LPMiniMK3 MIDI In', 'MIDIOUT2 (LPMiniMK3 MIDI)'],
       noteRange: { min: 36, max: 99 },
+      incrementButtonCodeList: [],
       activeColor: 42,
+      incrementButtonColor: 80,
       inactiveColor: 0,
     },
     ...userConfig,
@@ -121,11 +123,25 @@ function createLaunchpadSetup(userConfig = {}) {
         const note = event.data[1]
         const velocity = event.data[2]
 
-        // 有効なデータのみ処理する
-        if (!status || !note || !velocity) {
+        if (!status || !note) {
           return
         }
 
+        if (config.incrementButtonCodeList.includes(note)) {
+          if (trLpIsPressed(velocity)) {
+            pressedCallback(note)
+            output.send([0x90, note, config.incrementButtonColor /* 色コード */])
+          } else {
+            output.send([0x90, note, 0])
+          }
+          return
+        }
+
+        if (!velocity) {
+          return
+        }
+
+        // ON/OFFボタンの処理
         for (let i = config.noteRange.min; i <= config.noteRange.max; i++) {
           if (note !== i) {
             continue

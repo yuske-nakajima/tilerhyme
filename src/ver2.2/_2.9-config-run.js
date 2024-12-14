@@ -43,19 +43,7 @@ function trDrawShape() {
   const w = ceil(width / tileSize)
   const h = ceil(height / tileSize)
 
-  const value1 = trDataParams.filter((x) => x % 3 === 0).reduce((acc, cur) => acc + cur, 0)
-  const mode1 = value1 % trFuncArray.length
-
-  const value2 = trDataParams.filter((x) => x % 3 === 1).reduce((acc, cur) => acc + cur, 0)
-  const mode2 = value2 % trFuncArray.length
-
-  const value3 = trDataParams.filter((x) => x % 3 === 2).reduce((acc, cur) => acc + cur, 0)
-  const mode3 = value3 % trFuncArray.length
-
   const mode = trDataParams.reduce((acc, cur) => acc + cur, 0) % trFuncArray.length
-
-  const v1 = value1 + value2
-  const v2 = value2 + value3
 
   for (let y = 0; y <= h; y++) {
     for (let x = 0; x <= w; x++) {
