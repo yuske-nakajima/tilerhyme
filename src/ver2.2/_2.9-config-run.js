@@ -1,58 +1,22 @@
 const trFuncArray = [
   trDrawRectEllipseSquare16, // □○ひし形混合-2色交互
-  trDrawRectEllipseSquare17, // □○ひし形混合-2色縦
-  trDrawRectEllipseSquare18, // □○ひし形混合-2色横
   trDrawRectEllipseSquare26, // □○ひし形混合-線のみ-2色交互
-  trDrawRectEllipseSquare27, // □○ひし形混合-線のみ-2色縦
-  trDrawRectEllipseSquare28, // □○ひし形混合-線のみ-2色横
   trDrawRect16, // □-2色交互
-  trDrawRect17, // □-2色縦
-  trDrawRect18, // □-2色横
   trDrawRect19, // □-文字-単色1-文字
   trDrawRect26, // □-線のみ-2色交互
-  trDrawRect27, // □-線のみ-2色縦
-  trDrawRect28, // □-線のみ-2色横
   trDrawRect29, // □-文字-線のみ-文字
   trDrawRectBig26, // □大-線のみ-2色交互
-  trDrawRectBig27, // □大-線のみ-2色縦
-  trDrawRectBig28, // □大-線のみ-2色横
   trDrawSquare16, // ひし形オンリー-2色交互
-  trDrawSquare17, // ひし形オンリー-2色縦
-  trDrawSquare18, // ひし形オンリー-2色横
   trDrawSquare26, // ひし形-線のみ-2色交互
-  trDrawSquare27, // ひし形-線のみ-2色縦
-  trDrawSquare28, // ひし形-線のみ-2色横
   trDrawSquareBig26, // ひし形大-線のみ-2色交互
-  trDrawSquareBig27, // ひし形大-線のみ-2色縦
-  trDrawSquareBig28, // ひし形大-線のみ-2色横
   trDrawEllipse16, // ◯オンリー-2色交互
-  trDrawEllipse17, // ◯オンリー-2色縦
-  trDrawEllipse18, // ◯オンリー-2色横
   trDrawEllipse26, // ◯-線のみ-2色交互
-  trDrawEllipse27, // ◯-線のみ-2色縦
-  trDrawEllipse28, // ◯-線のみ-2色横
   trDrawEllipseBig26, // ◯大-線のみ-2色交互
-  trDrawEllipseBig27, // ◯大-線のみ-2色縦
-  trDrawEllipseBig28, // ◯大-線のみ-2色横
-  trDrawVerticalRotate16, // 縦-回転-2色縦
-  trDrawVerticalRotate17, // 縦-回転-2色横
-  trDrawHorizontalRotate16, // 横-回転-2色縦
-  trDrawHorizontalRotate17, // 横-回転-2色横
   trDrawDiagonalRightRotate16, // 右斜め回転-2色交互
-  trDrawDiagonalRightRotate17, // 右斜め回転-2色交互2
   trDrawDiagonalLeftRotate16, // 左斜め回転-2色交互
-  trDrawDiagonalLeftRotate17, // 左斜め回転-2色交互2
   trDrawEllipseStrokeRightRotate11, // 丸-回転-右-2色1
-  trDrawEllipseStrokeRightRotate12, // 丸-回転-右-2色2
-  trDrawEllipseStrokeRightRotate13, // 丸-回転-右-2色3
   trDrawEllipseStrokeLeftRotate11, // 丸-回転-左-2色1
-  trDrawEllipseStrokeLeftRotate12, // 丸-回転-左-2色2
-  trDrawEllipseStrokeLeftRotate13, // 丸-回転-左-2色3
   trDrawCrossRotate11, // 十字-回転-2色1
-  trDrawCrossRotate12, // 十字-回転-2色2
-  trDrawCrossRotate13, // 十字-回転-2色3
-  trDrawArc11, // 半円-縦
-  trDrawArc12, // 半円-横
   trDrawArc13, // 半円-混合
   trDrawTriangle11, // 三角形-混合
   trDrawSquareStrokeEllipse, // ひし形-◯混合-線のみ
