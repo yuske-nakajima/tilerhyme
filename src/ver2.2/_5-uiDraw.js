@@ -90,32 +90,21 @@ function trUiDraw() {
     }
   }
 
-  // 有彩色
-  // background(
-  //   color(
-  //     map(trDataParams[14], 0, 99, 0, 360),
-  //     map(trDataParams[15], 0, 99, 10, 40),
-  //     map(trDataParams[16], 0, 99, 20, 98),
-  //   ),
-  // )
-
-  // 無彩色
-  // background(
-  //   color(
-  //     map(trDataParams[10], 0, 99, 0, 360),
-  //     map(trDataParams[11], 0, 99, 0, 0),
-  //     map(trDataParams[12], 0, 99, 0, 100),
-  //   ),
-  // )
-
-  // background(
-  //   map(trDataParams[14], 0, 99, 0, 360),
-  //   map(trDataParams[15], 0, 99, 10, 20),
-  //   map(trDataParams[16], 0, 99, 10, 20),
-  // )
-
-  // ダーク TODO: ライトモードに切り替えるように変更できるようにしたい
-  background(0)
+  switch (trBackgroundMode) {
+    case TR_BACKGROUND_MODE.LIGHT:
+      background(95)
+      break
+    case TR_BACKGROUND_MODE.DARK:
+      background(5)
+      break
+    case TR_BACKGROUND_MODE.CHROMATIC:
+      const s = trDataGrid.find((item) => item.value === TR_FUNCTION_CODE.IS_LIGHT).isPressed ? 85 : 50
+      const b = trDataGrid.find((item) => item.value === TR_FUNCTION_CODE.IS_LIGHT).isPressed ? 95 : 40
+      background(color(map(trDataParams[14], 0, 99, 0, 360), s, b))
+      break
+    default:
+      break
+  }
 
   trDrawShape()
 

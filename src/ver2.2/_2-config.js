@@ -5,6 +5,11 @@ const TR_APP_NAME = 'TILERHYME'
 const TR_VERSION = '2.2'
 const TR_VERSION_NAME = 'KICK'
 
+const TR_FUNCTION_CODE = {
+  IS_LIGHT: 19,
+  IS_CHROMATIC: 29,
+}
+
 // 使用例
 const TR_INIT_DATA_GRID = [
   { value: 11, isPressed: false },
@@ -72,8 +77,8 @@ const TR_INIT_DATA_GRID = [
   { value: 87, isPressed: false },
   { value: 88, isPressed: false },
   // 以下は機能コード
-  { value: 19, isPressed: false },
-  { value: 29, isPressed: false },
+  { value: TR_FUNCTION_CODE.IS_LIGHT, isPressed: false },
+  { value: TR_FUNCTION_CODE.IS_CHROMATIC, isPressed: false },
   { value: 39, isPressed: false },
   { value: 49, isPressed: false },
   { value: 59, isPressed: false },
@@ -129,6 +134,12 @@ const TR_MODE = {
 const TR_AUTO_MODE_INTERVAL = 90
 
 const TR_SINE_ROOP_COUNT = 2
+
+const TR_BACKGROUND_MODE = {
+  LIGHT: 0,
+  DARK: 1,
+  CHROMATIC: 2,
+}
 // ------------------------------------------------------------
 // --- 変数
 // ------------------------------------------------------------
@@ -170,6 +181,9 @@ let trDataParams = []
 
 let trSineData = []
 let trSineCount = 0
+
+// light | dark | chromatic
+let trBackgroundMode = TR_BACKGROUND_MODE.DARK
 // ------------------------------------------------------------
 // --- 関数
 // ------------------------------------------------------------
@@ -200,10 +214,36 @@ function trUtilityDataGridIsPressed(value, isPressed) {
     // ON
     // TODO: 押した時の処理を実装する
     console.log(`ON: ${value}`)
+    switch (value) {
+      case TR_FUNCTION_CODE.IS_LIGHT:
+        trBackgroundMode = trDataGrid.find((item) => item.value === TR_FUNCTION_CODE.IS_CHROMATIC).isPressed
+          ? TR_BACKGROUND_MODE.CHROMATIC
+          : TR_BACKGROUND_MODE.LIGHT
+        break
+      case TR_FUNCTION_CODE.IS_CHROMATIC:
+        trBackgroundMode = TR_BACKGROUND_MODE.CHROMATIC
+        break
+      default:
+        break
+    }
   } else {
     // OFF
     // TODO: 押した時の処理を実装する
     console.log(`OFF: ${value}`)
+    switch (value) {
+      case TR_FUNCTION_CODE.IS_LIGHT:
+        trBackgroundMode = trDataGrid.find((item) => item.value === TR_FUNCTION_CODE.IS_CHROMATIC).isPressed
+          ? TR_BACKGROUND_MODE.CHROMATIC
+          : TR_BACKGROUND_MODE.DARK
+        break
+      case TR_FUNCTION_CODE.IS_CHROMATIC:
+        trBackgroundMode = trDataGrid.find((item) => item.value === TR_FUNCTION_CODE.IS_LIGHT).isPressed
+          ? TR_BACKGROUND_MODE.LIGHT
+          : TR_BACKGROUND_MODE.DARK
+        break
+      default:
+        break
+    }
   }
 }
 
