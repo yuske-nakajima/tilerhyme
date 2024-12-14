@@ -5,82 +5,102 @@ const TR_APP_NAME = 'TILERHYME'
 const TR_VERSION = '2.2'
 const TR_VERSION_NAME = 'KICK'
 
+// 使用例
 const TR_INIT_DATA_GRID = [
-  { value: 85, calcValue: 1, group: 0, isPressed: false },
-  { value: 70, calcValue: 2, group: 0, isPressed: false },
-  { value: 51, calcValue: 4, group: 0, isPressed: false },
-  { value: 97, calcValue: 8, group: 0, isPressed: false },
-  { value: 38, calcValue: 16, group: 0, isPressed: false },
-  { value: 80, calcValue: 32, group: 0, isPressed: false },
-  { value: 43, calcValue: 64, group: 0, isPressed: false },
-  { value: 67, calcValue: 128, group: 0, isPressed: false },
-  { value: 46, calcValue: 256, group: 0, isPressed: false },
-  { value: 77, calcValue: 512, group: 0, isPressed: false },
-  { value: 79, calcValue: 1024, group: 0, isPressed: false },
-  { value: 96, calcValue: 2048, group: 0, isPressed: false },
-  { value: 36, calcValue: 4096, group: 0, isPressed: false },
-  { value: 59, calcValue: 8192, group: 0, isPressed: false },
-  { value: 86, calcValue: 16384, group: 0, isPressed: false },
-  { value: 54, calcValue: 32768, group: 0, isPressed: false },
-  { value: 76, calcValue: 1, group: 1, isPressed: false },
-  { value: 52, calcValue: 2, group: 1, isPressed: false },
-  { value: 87, calcValue: 4, group: 1, isPressed: false },
-  { value: 93, calcValue: 8, group: 1, isPressed: false },
-  { value: 61, calcValue: 16, group: 1, isPressed: false },
-  { value: 45, calcValue: 32, group: 1, isPressed: false },
-  { value: 74, calcValue: 64, group: 1, isPressed: false },
-  { value: 95, calcValue: 128, group: 1, isPressed: false },
-  { value: 63, calcValue: 256, group: 1, isPressed: false },
-  { value: 50, calcValue: 512, group: 1, isPressed: false },
-  { value: 41, calcValue: 1024, group: 1, isPressed: false },
-  { value: 60, calcValue: 2048, group: 1, isPressed: false },
-  { value: 44, calcValue: 4096, group: 1, isPressed: false },
-  { value: 49, calcValue: 8192, group: 1, isPressed: false },
-  { value: 78, calcValue: 16384, group: 1, isPressed: false },
-  { value: 58, calcValue: 32768, group: 1, isPressed: false },
-  { value: 42, calcValue: 1, group: 2, isPressed: false },
-  { value: 94, calcValue: 2, group: 2, isPressed: false },
-  { value: 71, calcValue: 4, group: 2, isPressed: false },
-  { value: 57, calcValue: 8, group: 2, isPressed: false },
-  { value: 47, calcValue: 16, group: 2, isPressed: false },
-  { value: 89, calcValue: 32, group: 2, isPressed: false },
-  { value: 81, calcValue: 64, group: 2, isPressed: false },
-  { value: 53, calcValue: 128, group: 2, isPressed: false },
-  { value: 98, calcValue: 256, group: 2, isPressed: false },
-  { value: 82, calcValue: 512, group: 2, isPressed: false },
-  { value: 39, calcValue: 1024, group: 2, isPressed: false },
-  { value: 37, calcValue: 2048, group: 2, isPressed: false },
-  { value: 91, calcValue: 4096, group: 2, isPressed: false },
-  { value: 72, calcValue: 8192, group: 2, isPressed: false },
-  { value: 64, calcValue: 16384, group: 2, isPressed: false },
-  { value: 75, calcValue: 32768, group: 2, isPressed: false },
-  { value: 69, calcValue: 1, group: 3, isPressed: false },
-  { value: 40, calcValue: 2, group: 3, isPressed: false },
-  { value: 65, calcValue: 4, group: 3, isPressed: false },
-  { value: 48, calcValue: 8, group: 3, isPressed: false },
-  { value: 99, calcValue: 16, group: 3, isPressed: false },
-  { value: 55, calcValue: 32, group: 3, isPressed: false },
-  { value: 84, calcValue: 64, group: 3, isPressed: false },
-  { value: 62, calcValue: 128, group: 3, isPressed: false },
-  { value: 88, calcValue: 256, group: 3, isPressed: false },
-  { value: 92, calcValue: 512, group: 3, isPressed: false },
-  { value: 66, calcValue: 1024, group: 3, isPressed: false },
-  { value: 83, calcValue: 2048, group: 3, isPressed: false },
-  { value: 68, calcValue: 4096, group: 3, isPressed: false },
-  { value: 56, calcValue: 8192, group: 3, isPressed: false },
-  { value: 73, calcValue: 16384, group: 3, isPressed: false },
-  { value: 90, calcValue: 32768, group: 3, isPressed: false },
+  { value: 11, isPressed: false },
+  { value: 12, isPressed: false },
+  { value: 13, isPressed: false },
+  { value: 14, isPressed: false },
+  { value: 15, isPressed: false },
+  { value: 16, isPressed: false },
+  { value: 17, isPressed: false },
+  { value: 18, isPressed: false },
+  { value: 21, isPressed: false },
+  { value: 22, isPressed: false },
+  { value: 23, isPressed: false },
+  { value: 24, isPressed: false },
+  { value: 25, isPressed: false },
+  { value: 26, isPressed: false },
+  { value: 27, isPressed: false },
+  { value: 28, isPressed: false },
+  { value: 31, isPressed: false },
+  { value: 32, isPressed: false },
+  { value: 33, isPressed: false },
+  { value: 34, isPressed: false },
+  { value: 35, isPressed: false },
+  { value: 36, isPressed: false },
+  { value: 37, isPressed: false },
+  { value: 38, isPressed: false },
+  { value: 41, isPressed: false },
+  { value: 42, isPressed: false },
+  { value: 43, isPressed: false },
+  { value: 44, isPressed: false },
+  { value: 45, isPressed: false },
+  { value: 46, isPressed: false },
+  { value: 47, isPressed: false },
+  { value: 48, isPressed: false },
+  { value: 51, isPressed: false },
+  { value: 52, isPressed: false },
+  { value: 53, isPressed: false },
+  { value: 54, isPressed: false },
+  { value: 55, isPressed: false },
+  { value: 56, isPressed: false },
+  { value: 57, isPressed: false },
+  { value: 58, isPressed: false },
+  { value: 61, isPressed: false },
+  { value: 62, isPressed: false },
+  { value: 63, isPressed: false },
+  { value: 64, isPressed: false },
+  { value: 65, isPressed: false },
+  { value: 66, isPressed: false },
+  { value: 67, isPressed: false },
+  { value: 68, isPressed: false },
+  { value: 71, isPressed: false },
+  { value: 72, isPressed: false },
+  { value: 73, isPressed: false },
+  { value: 74, isPressed: false },
+  { value: 75, isPressed: false },
+  { value: 76, isPressed: false },
+  { value: 77, isPressed: false },
+  { value: 78, isPressed: false },
+  { value: 81, isPressed: false },
+  { value: 82, isPressed: false },
+  { value: 83, isPressed: false },
+  { value: 84, isPressed: false },
+  { value: 85, isPressed: false },
+  { value: 86, isPressed: false },
+  { value: 87, isPressed: false },
+  { value: 88, isPressed: false },
+  // 以下は機能コード
+  { value: 19, isPressed: false },
+  { value: 29, isPressed: false },
+  { value: 39, isPressed: false },
+  { value: 49, isPressed: false },
+  { value: 59, isPressed: false },
+  { value: 69, isPressed: false },
+  { value: 79, isPressed: false },
+  { value: 89, isPressed: false },
+  { value: 91, isPressed: false },
+  { value: 92, isPressed: false },
+  { value: 93, isPressed: false },
+  { value: 94, isPressed: false },
+  { value: 95, isPressed: false },
+  { value: 96, isPressed: false },
+  { value: 97, isPressed: false },
+  { value: 98, isPressed: false },
+  { value: 99, isPressed: false },
 ]
 
 const TR_MAPPING_GRID = [
-  [64, 65, 66, 67, 96, 97, 98, 99],
-  [60, 61, 62, 63, 92, 93, 94, 95],
-  [56, 57, 58, 59, 88, 89, 90, 91],
-  [52, 53, 54, 55, 84, 85, 86, 87],
-  [48, 49, 50, 51, 80, 81, 82, 83],
-  [44, 45, 46, 47, 76, 77, 78, 79],
-  [40, 41, 42, 43, 72, 73, 74, 75],
-  [36, 37, 38, 39, 68, 69, 70, 71],
+  [91, 92, 93, 94, 95, 96, 97, 98, 99],
+  [81, 82, 83, 84, 85, 86, 87, 88, 89],
+  [71, 72, 73, 74, 75, 76, 77, 78, 79],
+  [61, 62, 63, 64, 65, 66, 67, 68, 69],
+  [51, 52, 53, 54, 55, 56, 57, 58, 59],
+  [41, 42, 43, 44, 45, 46, 47, 48, 49],
+  [31, 32, 33, 34, 35, 36, 37, 38, 39],
+  [21, 22, 23, 24, 25, 26, 27, 28, 29],
+  [11, 12, 13, 14, 15, 16, 17, 18, 19],
 ]
 
 const TR_SOFT_UI_WIDTH = 200
@@ -154,6 +174,10 @@ let trSineCount = 0
 // --- 関数
 // ------------------------------------------------------------
 
+const trProgrammerModeSetup = createLaunchpadSetup({
+  noteRange: { min: 11, max: 99 },
+})
+
 /**
  * データグリッドのisPressedプロパティを設定する関数
  * @param {number} value - 設定する値
@@ -168,6 +192,18 @@ function trSetDataGridIsPressed(value, isPressed) {
       trChangePatternFrame = frameCount
       trSetDataParams()
     }
+  }
+}
+
+function trUtilityDataGridIsPressed(value, isPressed) {
+  if (isPressed) {
+    // ON
+    // TODO: 押した時の処理を実装する
+    console.log(`ON: ${value}`)
+  } else {
+    // OFF
+    // TODO: 押した時の処理を実装する
+    console.log(`OFF: ${value}`)
   }
 }
 
@@ -342,6 +378,7 @@ function trGridDataToString() {
     .map((item) => item.isPressed)
     .map((item) => (item ? '1' : '0'))
     .join('')
+    .slice(0, 64)
 }
 
 /**

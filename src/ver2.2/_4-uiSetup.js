@@ -1,7 +1,8 @@
 async function trUiSetup() {
   trCreateQrCode()
-  await trLpSetup(
+  await trProgrammerModeSetup(
     async (i) => {
+      trUtilityDataGridIsPressed(i, !trGetPressedKeyList(trDataGrid).includes(i))
       trSetDataGridIsPressed(i, !trGetPressedKeyList(trDataGrid).includes(i))
       await trSetDataParams()
     },

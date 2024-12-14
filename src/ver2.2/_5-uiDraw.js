@@ -17,8 +17,9 @@ function trUiDraw() {
       trChangePatternFrame = frameCount
       trSetDataParams()
 
-      trLpSetup(
+      trProgrammerModeSetup(
         async (i) => {
+          trUtilityDataGridIsPressed(i, !trGetPressedKeyList(trDataGrid).includes(i))
           trSetDataGridIsPressed(i, !trGetPressedKeyList(trDataGrid).includes(i))
           await trSetDataParams()
         },

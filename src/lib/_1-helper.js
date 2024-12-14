@@ -76,82 +76,85 @@ function trGetPressedKeyList(dataGrid) {
   return result
 }
 
+function createLaunchpadSetup(userConfig = {}) {
+  // デフォルト設定とユーザー設定をマージ
+  const config = {
+    ...{
+      // デフォルト設定
+      inputNames: ['Launchpad Mini MK3 LPMiniMK3 MIDI Out', 'MIDIIN2 (LPMiniMK3 MIDI)'],
+      outputNames: ['Launchpad Mini MK3 LPMiniMK3 MIDI In', 'MIDIOUT2 (LPMiniMK3 MIDI)'],
+      noteRange: { min: 36, max: 99 },
+      activeColor: 42,
+      inactiveColor: 0,
+    },
+    ...userConfig,
+  }
+
+  // 以降は設定を使って処理を行う
+  return async (pressedCallback, failedCallback, setDataParams, dataGrid) => {
+    try {
+      const access = await navigator.requestMIDIAccess()
+
+      const input = Array.from(access.inputs.values()).find((input) => config.inputNames.includes(input.name))
+      if (!input) {
+        const errorMessage = 'inputが見つかりません'
+        new Error(errorMessage)
+      }
+
+      const output = Array.from(access.outputs.values()).find((output) => config.outputNames.includes(output.name))
+      if (!output) {
+        const errorMessage = 'outputが見つかりません'
+        new Error(errorMessage)
+      }
+
+      // 初期状態の設定
+      for (let i = config.noteRange.min; i <= config.noteRange.max; i++) {
+        const isPressed = trGetPressedKeyList(dataGrid).includes(i)
+        output.send([0x90, i, isPressed ? config.activeColor : config.inactiveColor])
+        if (isPressed) {
+          await setDataParams()
+        }
+      }
+
+      input.onmidimessage = function (event) {
+        const status = event.data[0]
+        const note = event.data[1]
+        const velocity = event.data[2]
+
+        // 有効なデータのみ処理する
+        if (!status || !note || !velocity) {
+          return
+        }
+
+        for (let i = config.noteRange.min; i <= config.noteRange.max; i++) {
+          if (note !== i) {
+            continue
+          }
+
+          if (trLpIsPressed(velocity)) {
+            pressedCallback(note)
+          }
+
+          if (trGetPressedKeyList(dataGrid).includes(i)) {
+            output.send([0x90, i, config.activeColor /* 色コード */])
+          } else {
+            output.send([0x90, i, 0])
+          }
+        }
+      }
+    } catch (e) {
+      failedCallback()
+    }
+  }
+}
+
 /**
  * [Launchpad Mini MK3]のセットアップを行う関数
  * @param {function(number): void} pressedCallback - ボタンが押されたときのコールバック関数
  * @param {Array.<{isPressed: boolean, value: number}>} dataGrid - キーのデータグリッド
  * @returns {Promise<string|undefined>} - エラーメッセージまたはundefined
  */
-async function trLpSetup(pressedCallback, failedCallback, setDataParams, dataGrid) {
-  try {
-    const access = await navigator.requestMIDIAccess()
-
-    const input = Array.from(access.inputs.values())
-      .filter((input) => {
-        return (
-          input.name === 'Launchpad Mini MK3 LPMiniMK3 MIDI Out' || // mac
-          input.name === 'MIDIIN2 (LPMiniMK3 MIDI)' // windows
-        )
-      })
-      .at(0)
-    if (!input) {
-      const errorMessage = 'inputが見つかりません'
-      new Error(errorMessage)
-    }
-
-    const output = Array.from(access.outputs.values())
-      .filter((output) => {
-        return (
-          output.name === 'Launchpad Mini MK3 LPMiniMK3 MIDI In' || // mac
-          output.name === 'MIDIOUT2 (LPMiniMK3 MIDI)' // windows
-        )
-      })
-      .at(0)
-    if (!output) {
-      const errorMessage = 'outputが見つかりません'
-      new Error(errorMessage)
-    }
-
-    for (let i = 36; i <= 99; i++) {
-      const isPressed = trGetPressedKeyList(dataGrid).includes(i)
-      if (isPressed) {
-        output.send([0x90, i, 41 /* 色コード */])
-        await setDataParams()
-      } else {
-        output.send([0x90, i, 0])
-      }
-    }
-
-    input.onmidimessage = function (event) {
-      const status = event.data[0]
-      const note = event.data[1]
-      const velocity = event.data[2]
-
-      // 有効なデータのみ処理する
-      if (!status || !note || !velocity) {
-        return
-      }
-
-      for (let i = 36; i <= 99; i++) {
-        if (note !== i) {
-          continue
-        }
-
-        if (trLpIsPressed(velocity)) {
-          pressedCallback(note)
-        }
-
-        if (trGetPressedKeyList(dataGrid).includes(i)) {
-          output.send([0x90, i, 41 /* 色コード */])
-        } else {
-          output.send([0x90, i, 0])
-        }
-      }
-    }
-  } catch (e) {
-    failedCallback()
-  }
-}
+const trLpSetup = createLaunchpadSetup()
 
 /**
  * 指定されたキャンバスを画像として保存します。
