@@ -37,7 +37,7 @@ function trUiDraw() {
       }
 
       for (const item of trDataGrid) {
-        for (let yi = 0; yi < TR_MAPPING_GRID.length; yi++) {
+        for (let yi = 0; yi < TR_DATA_GRID_SIZE.length; yi++) {
           for (let xi = 0; xi < TR_MAPPING_GRID[0].length; xi++) {
             if (TR_MAPPING_GRID[yi][xi] === item.value) {
               grid[yi][xi] = item.isPressed ? 1 : 0

@@ -10,6 +10,8 @@ const TR_FUNCTION_CODE = {
   IS_CHROMATIC: 29,
 }
 
+const TR_DATA_GRID_SIZE = 64
+
 // 使用例
 const TR_INIT_DATA_GRID = [
   { value: 11, isPressed: false },
