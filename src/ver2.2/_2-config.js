@@ -263,11 +263,21 @@ function trCalcWindowSize() {
  */
 function trDeviceDraw() {
   if (trIsNoDevice) {
+    const frameColor = color(map(trDataParams[0], 0, 99, 0, 360), 40, 95)
+
     trDrawBlock(() => {
       const gap = 10
+
+      // noStroke()
+      stroke(TR_COLORS.cellMain)
+      strokeWeight(2)
+      rectMode(CENTER)
+
+      fill(frameColor)
+      rect(width / 2, height / 2, TR_SOFT_UI_WIDTH + gap * 2, TR_SOFT_UI_WIDTH + gap * 2, 10, 10, 10, 10)
+
       fill(TR_COLORS.device)
-      noStroke()
-      rect(trSoftUiStartPos.x - gap / 2, trSoftUiStartPos.y - gap / 2, TR_SOFT_UI_WIDTH + gap)
+      rect(width / 2, height / 2, TR_SOFT_UI_WIDTH + gap, TR_SOFT_UI_WIDTH + gap, 10, 10, 10, 10)
     })
     trDrawBlock(() => {
       stroke(TR_COLORS.lineMain)
@@ -282,7 +292,7 @@ function trDeviceDraw() {
 
           trDrawBlock(() => {
             if (trDataGrid[getIndex].isPressed) {
-              fill(TR_COLORS.cellMain)
+              fill(frameColor)
             } else {
               fill(TR_COLORS.cellNormal)
             }
