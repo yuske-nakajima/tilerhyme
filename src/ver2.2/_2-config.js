@@ -248,6 +248,15 @@ function trUtilityDataGridIsPressed(value, isPressed) {
 }
 
 /**
+ * ウィンドウサイズを計算
+ */
+function trCalcWindowSize() {
+  const _windowWidth = windowWidth - trWindowGap
+  const _windowHeight = windowHeight - trWindowGap
+  return max(min(_windowWidth, _windowHeight) - 200, 320)
+}
+
+/**
  * デバイスの描画を行う関数
  */
 function trDeviceDraw() {
@@ -330,9 +339,7 @@ function trSaveWallPaper(mode = TR_WALLPAPER_MODE.FULL) {
   trIsNoDevice = tempTrIsNoDevice
   trSoftUiStartPos = tempTrSoftUiStartPos
 
-  const _windowWidth = windowWidth - trWindowGap
-  const _windowHeight = windowHeight - trWindowGap
-  const windowSize = min(_windowWidth, _windowHeight)
+  const windowSize = trCalcWindowSize()
   resizeCanvas(windowSize, windowSize)
 
   trCellDivNum = ceil(width / 50)
