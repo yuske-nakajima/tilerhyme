@@ -26,4 +26,8 @@ function trInitial() {
   trSoftUiStartPos = createVector(width / 2 - TR_SOFT_UI_WIDTH / 2, height / 2 - TR_SOFT_UI_WIDTH / 2)
 
   textFont('Silkscreen')
+
+  // ノイズ
+  trNoiseGraphic = createGraphics(width / 4, height / 4)
+  trGenerateNoise()
 }

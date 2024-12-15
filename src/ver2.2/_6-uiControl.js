@@ -3,10 +3,10 @@ function trMousePressed() {
     for (let xi = 0; xi < TR_DEVICE_GRID_NUM; xi++) {
       for (let yi = 0; yi < TR_DEVICE_GRID_NUM; yi++) {
         const pos = createVector(
-          trSoftUiStartPos.x + TR_SOFT_UI_CELL_WIDTH * xi,
-          trSoftUiStartPos.y + TR_SOFT_UI_CELL_WIDTH * yi,
+          trSoftUiStartPos.x + TR_SOFT_UI_CELL_SIZE * xi,
+          trSoftUiStartPos.y + TR_SOFT_UI_CELL_SIZE * yi,
         )
-        trMousePressedBlock(pos, { width: TR_SOFT_UI_CELL_WIDTH, height: TR_SOFT_UI_CELL_WIDTH }, () => {
+        trMousePressedBlock(pos, { width: TR_SOFT_UI_CELL_SIZE, height: TR_SOFT_UI_CELL_SIZE }, () => {
           const value = TR_MAPPING_GRID[yi][xi]
           const getIndex = trDataGrid.findIndex((item) => item.value === value)
           if (getIndex === undefined) {

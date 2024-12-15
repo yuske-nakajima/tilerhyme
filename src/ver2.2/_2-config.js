@@ -113,7 +113,7 @@ const TR_MAPPING_GRID = [
 ]
 
 const TR_SOFT_UI_WIDTH = 200
-const TR_SOFT_UI_CELL_WIDTH = TR_SOFT_UI_WIDTH / 8
+const TR_SOFT_UI_CELL_SIZE = TR_SOFT_UI_WIDTH / 8
 
 const TR_COLORS = {}
 
@@ -187,6 +187,8 @@ let trBackgroundMode = TR_BACKGROUND_MODE.DARK
 
 // 線幅の係数
 let trStrokeWeight = 4
+
+let trNoiseGraphic
 // ------------------------------------------------------------
 // --- 関数
 // ------------------------------------------------------------
@@ -208,7 +210,7 @@ function trSetDataGridIsPressed(value, isPressed) {
       trUpdateUrl()
       trCreateQrCode()
       trChangePatternFrame = frameCount
-      trSetDataParams()
+      trSetDataParams().then()
     }
   }
 }
@@ -319,10 +321,10 @@ function trDeviceDraw() {
 
             ellipseMode(CORNER)
             ellipse(
-              trSoftUiStartPos.x + TR_SOFT_UI_CELL_WIDTH * xi,
-              trSoftUiStartPos.y + TR_SOFT_UI_CELL_WIDTH * yi,
-              TR_SOFT_UI_CELL_WIDTH,
-              TR_SOFT_UI_CELL_WIDTH,
+              trSoftUiStartPos.x + TR_SOFT_UI_CELL_SIZE * xi,
+              trSoftUiStartPos.y + TR_SOFT_UI_CELL_SIZE * yi,
+              TR_SOFT_UI_CELL_SIZE,
+              TR_SOFT_UI_CELL_SIZE,
             )
           })
         }
@@ -408,14 +410,14 @@ function trSaveImageClick(dialog) {
  * @function trInfoDraw
  */
 function trInfoDraw() {
-  const infoWidth = 30
+  const infoSize = 30
   trDrawBlock(() => {
     noStroke()
     fill(TR_COLORS.cellMain)
-    rect(0, 0, width, infoWidth)
-    rect(width - infoWidth, 0, infoWidth, height)
-    rect(0, 0, infoWidth, height)
-    rect(0, height - infoWidth, width, infoWidth)
+    rect(0, 0, width, infoSize)
+    rect(width - infoSize, 0, infoSize, height)
+    rect(0, 0, infoSize, height)
+    rect(0, height - infoSize, width, infoSize)
   })
 
   trDrawBlock(() => {
@@ -424,15 +426,11 @@ function trInfoDraw() {
 
     // データ情報
     textAlign(LEFT, CENTER)
-    text(trGridDataToString(), infoWidth, infoWidth / 2)
+    text(trGridDataToString(), infoSize, infoSize / 2)
 
     // バージョン情報
     textAlign(RIGHT, CENTER)
-    text(
-      `${TR_APP_NAME} - ${TR_VERSION_NAME}(${TR_VERSION}) CREATED BY YUSKE`,
-      width - infoWidth,
-      height - infoWidth / 2,
-    )
+    text(`${TR_APP_NAME} - ${TR_VERSION_NAME}(${TR_VERSION}) CREATED BY YUSKE`, width - infoSize, height - infoSize / 2)
   })
 
   trDrawBlock(() => {
@@ -440,7 +438,7 @@ function trInfoDraw() {
     stroke(TR_COLORS.lineMain)
     strokeWeight(2)
     rect(0, 0, width, height)
-    rect(infoWidth, infoWidth, width - infoWidth * 2, height - infoWidth * 2)
+    rect(infoSize, infoSize, width - infoSize * 2, height - infoSize * 2)
   })
 }
 
@@ -563,7 +561,7 @@ async function trSetDataParams() {
   // ハッシュを17個のパラメータに分割（各パラメータは0-99の範囲）
   trDataParams = []
   for (let i = 0; i < 17; i++) {
-    const part = hashHex.substr(i * 3, 3)
+    const part = hashHex.substring(i * 3, i * 3 + 3)
     trDataParams.push(parseInt(part, 16) % 100)
   }
 
@@ -585,6 +583,11 @@ function trChromaticGetColor() {
   return colors
 }
 
+/**
+ * サインカウントを計算する関数。
+ *
+ * @param {number} sineValue - 新しいサイン値。
+ */
 function trCalcSineCount(sineValue) {
   // 配列に新しい値を追加
   trSineData.push(sineValue)
@@ -648,4 +651,40 @@ function trGetDistributedValue(x, params) {
     return 1
   }
   return Math.ceil(value) || 1
+}
+
+/**
+ * ノイズを生成する関数。
+ * trNoiseGraphic のピクセルデータをランダムなノイズ値で更新します。
+ */
+function trGenerateNoise() {
+  trNoiseGraphic.loadPixels()
+  for (let i = 0; i < trNoiseGraphic.pixels.length; i += 4) {
+    let noiseVal = random(200, 255)
+    trNoiseGraphic.pixels[i] = noiseVal
+    trNoiseGraphic.pixels[i + 1] = noiseVal
+    trNoiseGraphic.pixels[i + 2] = noiseVal
+    trNoiseGraphic.pixels[i + 3] = 50 // 透明度
+  }
+  trNoiseGraphic.updatePixels()
+}
+
+/**
+ * ノイズフィルターを適用する関数。
+ * 現在の背景モードに応じてブレンドモードを設定し、ノイズグラフィックを描画します。
+ */
+function trNoiseFilter() {
+  trDrawBlock(() => {
+    switch (trBackgroundMode) {
+      case TR_BACKGROUND_MODE.LIGHT || TR_BACKGROUND_MODE.CHROMATIC:
+        blendMode(OVERLAY)
+        break
+      case TR_BACKGROUND_MODE.DARK:
+        blendMode(SCREEN)
+        break
+      default:
+        break
+    }
+    image(trNoiseGraphic, 0, 0, width, height)
+  })
 }

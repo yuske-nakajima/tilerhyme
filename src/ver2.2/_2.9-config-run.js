@@ -50,4 +50,6 @@ function trDrawShape() {
       trFuncArray[mode](x, y, tileSize)
     }
   }
+
+  trNoiseFilter()
 }
