@@ -14,6 +14,7 @@ function trInitial() {
 
   // カラー
   TR_COLORS.lineMain = color(0, 0, 0)
+  TR_COLORS.lineMainDark = color(0, 0, 100)
   TR_COLORS.cellMain = color(0, 0, 100)
   TR_COLORS.cellNormal = color(0, 0, 40)
   TR_COLORS.background = color(200, 100, 20)

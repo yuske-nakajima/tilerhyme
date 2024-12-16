@@ -427,34 +427,26 @@ function trSaveImageClick(dialog) {
  */
 function trInfoDraw() {
   const infoSize = 30
-  trDrawBlock(() => {
-    noStroke()
-    fill(TR_COLORS.cellMain)
-    rect(0, 0, width, infoSize)
-    rect(width - infoSize, 0, infoSize, height)
-    rect(0, 0, infoSize, height)
-    rect(0, height - infoSize, width, infoSize)
-  })
 
   trDrawBlock(() => {
-    fill(TR_COLORS.lineMain)
+    if (trBackgroundMode === TR_BACKGROUND_MODE.LIGHT) {
+      fill(TR_COLORS.lineMain)
+    } else {
+      fill(TR_COLORS.lineMainDark)
+    }
     textSize(12)
 
     // データ情報
     textAlign(LEFT, CENTER)
-    text(trGridDataToString(), infoSize, infoSize / 2)
+    text(trGridDataToString(), infoSize / 4, infoSize / 2)
 
     // バージョン情報
     textAlign(RIGHT, CENTER)
-    text(`${TR_APP_NAME} - ${TR_VERSION_NAME}(${TR_VERSION}) CREATED BY YUSKE`, width - infoSize, height - infoSize / 2)
-  })
-
-  trDrawBlock(() => {
-    noFill()
-    stroke(TR_COLORS.lineMain)
-    strokeWeight(2)
-    rect(0, 0, width, height)
-    rect(infoSize, infoSize, width - infoSize * 2, height - infoSize * 2)
+    text(
+      `${TR_APP_NAME} - ${TR_VERSION_NAME}(${TR_VERSION}) CREATED BY YUSKE`,
+      width - infoSize / 4,
+      height - infoSize / 2,
+    )
   })
 }
 
@@ -533,7 +525,7 @@ function trCreateQrCode() {
 
   // QRコードのHTML要素を作成
   const qrDiv = document.createElement('div')
-  qrDiv.innerHTML = qr.createImgTag(4, 0)
+  qrDiv.innerHTML = qr.createImgTag(2, 0)
 
   // QRコードの画像を読み込む
   const imgElement = qrDiv.querySelector('img')
@@ -545,8 +537,8 @@ function trCreateQrCode() {
  */
 function trQrDraw() {
   imageMode(CENTER)
-  const gap = trQrImage.width / 2 + 40
-  image(trQrImage, width - gap, height - gap)
+  const gap = createVector(trQrImage.width / 2 + 10, trQrImage.width / 2 + 30)
+  image(trQrImage, width - gap.x, height - gap.y)
 }
 
 /**
