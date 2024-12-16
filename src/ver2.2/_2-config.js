@@ -536,9 +536,11 @@ function trCreateQrCode() {
  * QRコードを描画する関数
  */
 function trQrDraw() {
-  imageMode(CENTER)
-  const gap = createVector(trQrImage.width / 2 + 10, trQrImage.width / 2 + 30)
-  image(trQrImage, width - gap.x, height - gap.y)
+  trDrawBlock(() => {
+    imageMode(CENTER)
+    const gap = createVector(trQrImage.width / 2 + 10, trQrImage.width / 2 + 30)
+    image(trQrImage, width - gap.x, height - gap.y)
+  })
 }
 
 /**
@@ -668,11 +670,11 @@ function trGetDistributedValue(x, params) {
 function trGenerateNoise() {
   trNoiseGraphic.loadPixels()
   for (let i = 0; i < trNoiseGraphic.pixels.length; i += 4) {
-    let noiseVal = random(200, 255)
+    let noiseVal = random(0, 255)
     trNoiseGraphic.pixels[i] = noiseVal
     trNoiseGraphic.pixels[i + 1] = noiseVal
     trNoiseGraphic.pixels[i + 2] = noiseVal
-    trNoiseGraphic.pixels[i + 3] = 50 // 透明度
+    trNoiseGraphic.pixels[i + 3] = 25 // 透明度
   }
   trNoiseGraphic.updatePixels()
 }
