@@ -143,6 +143,11 @@ const TR_BACKGROUND_MODE = {
 }
 
 const TR_STROKE_WEIGHT_STEP = 1
+
+const TR_WINDOW_TYPE = {
+  SQUARE: 0,
+  FULL: 1,
+}
 // ------------------------------------------------------------
 // --- 変数
 // ------------------------------------------------------------
@@ -273,10 +278,22 @@ function trUtilityDataGridIsPressed(value, isPressed) {
 /**
  * ウィンドウサイズを計算
  */
-function trCalcWindowSize() {
+function trCalcWindowSize(params = {}) {
   const _windowWidth = windowWidth - trWindowGap
   const _windowHeight = windowHeight - trWindowGap
-  return max(min(_windowWidth, _windowHeight) - 200, 320)
+
+  const _defaultValue = { width: _windowWidth, height: _windowHeight }
+
+  if (!params.type || params.type === TR_WINDOW_TYPE.FULL) {
+    return _defaultValue
+  }
+
+  if (params.type === TR_WINDOW_TYPE.SQUARE) {
+    const squareSize = max(min(_windowWidth, _windowHeight) - 200, 320)
+    return { width: squareSize, height: squareSize }
+  } else {
+    return _defaultValue
+  }
 }
 
 /**
@@ -372,8 +389,8 @@ function trSaveWallPaper(mode = TR_WALLPAPER_MODE.FULL) {
   trIsNoDevice = tempTrIsNoDevice
   trSoftUiStartPos = tempTrSoftUiStartPos
 
-  const windowSize = trCalcWindowSize()
-  resizeCanvas(windowSize, windowSize)
+  const windowSize = trCalcWindowSize(TR_WINDOW_TYPE.FULL)
+  resizeCanvas(windowSize.width, windowSize.height)
 
   trCellDivNum = ceil(width / 50)
   pixelDensity(originalDensity) // 密度を元に戻す

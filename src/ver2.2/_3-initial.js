@@ -6,8 +6,8 @@ function trInitial() {
     height: windowHeight - trWindowGap,
   }
 
-  const windowSize = trCalcWindowSize()
-  trCanvas = createCanvas(windowSize, windowSize)
+  const windowSize = trCalcWindowSize(TR_WINDOW_TYPE.FULL)
+  trCanvas = createCanvas(windowSize.width, windowSize.height)
 
   colorMode(HSB)
   frameRate(24)
