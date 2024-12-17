@@ -187,7 +187,8 @@ let trSineData = []
 let trSineCount = 0
 
 // light | dark | chromatic
-let trBackgroundMode = TR_BACKGROUND_MODE.DARK
+let trBackgroundMode = TR_BACKGROUND_MODE.LIGHT
+trDataGrid.find((item) => item.value === TR_FUNCTION_CODE.IS_LIGHT).isPressed = true
 
 // 線幅の係数
 let trStrokeWeight = 4
@@ -480,6 +481,8 @@ function trRotateCalc() {
  */
 function trUrlToData() {
   const url = new URL(window.location.href)
+
+  // data
   const data = url.searchParams.get('data')
 
   // dataをバリデーション
@@ -495,6 +498,19 @@ function trUrlToData() {
   } else {
     trDataGrid = TR_INIT_DATA_GRID
   }
+
+  // background
+  const background = url.searchParams.get('background')
+  const isValidBackground = background && Object.values(TR_BACKGROUND_MODE).includes(parseInt(background))
+  if (isValidBackground) {
+    trBackgroundMode = parseInt(background)
+  } else {
+    trBackgroundMode = TR_BACKGROUND_MODE.LIGHT
+  }
+
+  if (!isValidData || !isValidBackground) {
+    trUpdateUrl()
+  }
 }
 
 /**
@@ -506,7 +522,11 @@ function trUrlToData() {
  */
 function trUpdateUrl() {
   const url = new URL(window.location.href)
+
+  // URLの検索パラメータを設定
   url.searchParams.set('data', trGridDataToString())
+  url.searchParams.set('background', trBackgroundMode)
+
   window.history.pushState({}, '', url)
 }
 
