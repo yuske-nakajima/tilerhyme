@@ -550,7 +550,7 @@ function trQrDraw() {
  * 1. スイッチの状態を64ビットの整数に変換します。
  * 2. 全てオフの状態を特別扱いします。
  * 3. 入力のSHA-256ハッシュを生成します。
- * 4. ハッシュを17個のパラメータに分割し、それぞれ0-99の範囲にします。
+ * 4. ハッシュを20個のパラメータに分割し、それぞれ0-99の範囲にします。
  *
  * @async
  * @function trSetDataParams
@@ -568,9 +568,9 @@ async function trSetDataParams() {
   const hashArray = Array.from(new Uint8Array(hashBuffer))
   const hashHex = hashArray.map((b) => b.toString(16).padStart(2, '0')).join('')
 
-  // ハッシュを17個のパラメータに分割（各パラメータは0-99の範囲）
+  // ハッシュを20個のパラメータに分割（各パラメータは0-99の範囲）
   trDataParams = []
-  for (let i = 0; i < 17; i++) {
+  for (let i = 0; i < 20; i++) {
     const part = hashHex.substring(i * 3, i * 3 + 3)
     trDataParams.push(parseInt(part, 16) % 100)
   }
@@ -582,7 +582,7 @@ function trChromaticGetColor() {
   const colors = {}
 
   // カラー
-  for (let i = 1; i <= 14; i++) {
+  for (let i = 1; i <= trDataParams.length - 3; i++) {
     colors[`color${i}`] = color(
       map(trDataParams[i] * 4, 0, 99 * 4, 0, 360),
       map(trDataParams[1 + i], 0, 99, 20, 80),
@@ -619,48 +619,25 @@ function trCalcSineCount(sineValue) {
   }
 }
 
-/**
- * 指定されたパラメータを使用して分散値を計算します。
- *
- * @param {number} x - 基本となる値。
- * @param {number[]} params - 計算に使用するパラメータの配列。
- *   - params[2]: モジュロ演算に使用する値。
- *   - params[3]: 最後の調整に使用する値。
- *   - params[5]: モジュロ演算に使用する値。
- *   - params[8]: 加算に使用する値。
- *   - params[10]: 乗算に使用する値。
- *   - params[15]: XOR演算に使用する値。
- * @returns {number} 計算された分散値。結果が0の場合は1を返します。
- */
 function trGetDistributedValue(x, params) {
-  // 大きな素数を使用してより良い分散を得る
-  const PRIME1 = 31
-  const PRIME2 = 83
-  const PRIME3 = 97
+  // パラメータのインデックスを動的に選択
+  const index1 = x % 20 // 0-19でループ
+  const index2 = (x + 7) % 20 // オフセット付きでループ
+  const index3 = (x * 13) % 20 // 別のパターンでループ
 
-  // パラメータの値を利用して複数の演算を組み合わせる
+  // 選択したパラメータを使用して値を生成
   let value = x
 
-  // 1. 乗算でばらつきを作る
-  value = value * params[10] * PRIME1
+  // 1段階目: 最初のパラメータを使用
+  value = ((value * params[index1] + 0x45d9f3b) >>> 0) % 1000
 
-  // 2. 加算でオフセットを付ける
-  value = value + params[8] * PRIME2
+  // 2段階目: 2つ目のパラメータで変調
+  value = ((value + params[index2] * 0x45d9f3b) >>> 0) % 1000
 
-  // 3. XORで分布を更に複雑にする
-  value = value ^ (params[15] * PRIME3)
+  // 3段階目: 3つ目のパラメータで更に変調
+  value = ((value ^ (params[index3] * 0x45d9f3b)) >>> 0) % 1000
 
-  // 4. モジュロで範囲を制限しながら、さらにばらつきを加える
-  value = value % (params[5] * params[2])
-
-  // 5. 最後の調整
-  value = Math.abs(Math.ceil(value / params[3]))
-
-  // 6. 結果が0の場合は1を返す
-  if (!isFinite(value)) {
-    return 1
-  }
-  return Math.ceil(value) || 1
+  return value
 }
 
 /**
@@ -697,4 +674,11 @@ function trNoiseFilter() {
     }
     image(trNoiseGraphic, 0, 0, width, height)
   })
+}
+
+function trGenerateNoiseValue(x, y) {
+  return trGetDistributedValue(
+    trDataParams.at(x % trDataParams.length) * trDataParams.at(y % trDataParams.length),
+    trDataParams,
+  )
 }

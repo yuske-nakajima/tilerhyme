@@ -1,4 +1,4 @@
-const trFuncArray = [
+let trFuncArray = [
   trDrawRectEllipseSquare16, // □○ひし形混合-2色交互
   trDrawRectEllipseSquare26, // □○ひし形混合-線のみ-2色交互
   trDrawRect16, // □-2色交互
@@ -31,6 +31,15 @@ const trFuncArray = [
   trDrawRectAndStroke, // 四角形と線
 ]
 
+// 合成関数を追加
+const funcListList = []
+for (let i = 2; i < trFuncArray.length / 2; i++) {
+  funcListList.push(trCreateComposeTiles(trFuncArray, i))
+}
+
+for (const funcList of funcListList) {
+  trFuncArray = trFuncArray.concat(funcList)
+}
 /**
  * trDrawShape 関数は、指定された幅と高さに基づいて形状を描画します。
  * 幅と高さを100で割った値を使用して、trDataParams 配列の各パラメータに対して
