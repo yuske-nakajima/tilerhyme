@@ -441,6 +441,12 @@ function _trDrawTilePattern2(func) {
       }
       const noiseVal = trGenerateNoiseValue(_x, _y)
 
+      const strokeSize400 = (tileSize * trDataParams[noiseVal % trDataParams.length]) / 400
+      const strokeSize600 = (tileSize * trDataParams[noiseVal % trDataParams.length]) / 600
+      const strokeSize800 = (tileSize * trDataParams[noiseVal % trDataParams.length]) / 800
+      const strokeSize1200 = (tileSize * trDataParams[noiseVal % trDataParams.length]) / 1200
+      const strokeSize1600 = (tileSize * trDataParams[noiseVal % trDataParams.length]) / 1600
+
       const pointList = [
         { x: x + tileSize * 0.5, y: y },
         { x: x + tileSize, y: y + tileSize * 0.5 },
@@ -475,6 +481,11 @@ function _trDrawTilePattern2(func) {
           color3,
           color4,
           color5,
+          strokeSize400,
+          strokeSize600,
+          strokeSize800,
+          strokeSize1200,
+          strokeSize1600,
           colorDict,
           colorList,
           _tileSize,
@@ -1205,4 +1216,105 @@ const trDrawSquareCascade3 = _trDrawSquareCascade((params) => {
       rect(x - t025 + t0125, y + t025 - t0125, t * 0.7)
     }
   })
+})
+
+function _trDrawVerticalRotate(func) {
+  return _trDrawTilePattern2((params) => {
+    trDrawBlock(() => {
+      const { x, y, tileSize, sineValue, strokeSize400 } = params
+
+      noFill()
+      const _strokeWeight = min(strokeSize400, trStrokeWeight)
+      strokeWeight(_strokeWeight)
+      strokeCap(SQUARE)
+
+      const s1 = map(sineValue, -1, 1, 0, 1)
+      func(params)
+
+      if (trSineCount < TR_SINE_LOOP_COUNT) {
+        switch (trSineCount % 2) {
+          case 0:
+            line(x, y - 1, x, y + (tileSize / 2) * s1)
+            line(x, y + 1, x, y - (tileSize / 2) * s1)
+            break
+          case 1:
+            // 回転
+            translate(x, y)
+            rotate(PI * sineValue)
+            line(0, 0 + 1, 0, 0 - tileSize / 2)
+            line(0, 0 - 1, 0, 0 + tileSize / 2)
+            break
+          default:
+            break
+        }
+      } else {
+        line(x, y - 1, x, y + (tileSize / 2) * 1.01)
+        line(x, y + 1, x, y - (tileSize / 2) * 1.01)
+
+        for (let i = 0; i < 4; i++) {
+          strokeWeight(_strokeWeight / 4)
+          const currentX = x + (tileSize / 4) * i
+
+          line(currentX, y - 1, currentX, y + (tileSize / 2) * 1.01)
+          line(currentX, y + 1, currentX, y - (tileSize / 2) * 1.01)
+        }
+      }
+    })
+  })
+}
+
+const trDrawVerticalRotate11 = _trDrawVerticalRotate((params) => {
+  const { colorList, noiseVal } = params
+  stroke(colorList[noiseVal % colorList.length])
+})
+
+function trDrawHorizontalRotate(func) {
+  return _trDrawTilePattern2((params) => {
+    trDrawBlock(() => {
+      const { x, y, tileSize, sineValue, strokeSize400 } = params
+
+      noFill()
+      const _strokeWeight = min(strokeSize400, trStrokeWeight)
+      strokeWeight(_strokeWeight)
+      strokeCap(SQUARE)
+
+      const s1 = map(sineValue, -1, 1, 0, 1)
+
+      func(params)
+
+      if (trSineCount < TR_SINE_LOOP_COUNT) {
+        switch (trSineCount % 2) {
+          case 0:
+            line(x - 1, y, x + (tileSize / 2) * s1, y)
+            line(x + 1, y, x - (tileSize / 2) * s1, y)
+            break
+          case 1:
+            // 回転
+            translate(x, y)
+            rotate(PI * sineValue)
+            line(0 + 1, 0, 0 - tileSize / 2, 0)
+            line(0 - 1, 0, 0 + tileSize / 2, 0)
+            break
+          default:
+            break
+        }
+      } else {
+        line(x - 1, y, x + (tileSize / 2) * 1.01, y)
+        line(x + 1, y, x - (tileSize / 2) * 1.01, y)
+
+        for (let i = 0; i < 4; i++) {
+          strokeWeight(_strokeWeight / 4)
+          const currentY = y + (tileSize / 4) * i
+
+          line(x - 1, currentY, x + (tileSize / 2) * 1.01, currentY)
+          line(x + 1, currentY, x - (tileSize / 2) * 1.01, currentY)
+        }
+      }
+    })
+  })
+}
+
+const trDrawHorizontalRotate11 = trDrawHorizontalRotate((params) => {
+  const { colorList, noiseVal } = params
+  stroke(colorList[trDataParams[noiseVal % trDataParams.length] % colorList.length])
 })
