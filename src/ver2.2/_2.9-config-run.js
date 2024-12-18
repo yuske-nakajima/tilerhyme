@@ -29,16 +29,22 @@ let trFuncArray = [
   trDrawDiagonalLeft, // 左斜め混合
   trDrawEllipseParts, // 丸-部分
   trDrawRectAndStroke, // 四角形と線
+  trDrawSquareCascade1, // 四角形-連続1
+  trDrawSquareCascade2, // 四角形-連続2（同心）
 ]
 
 // 合成関数を追加
 const funcListList = []
-for (let i = 2; i < trFuncArray.length / 2; i++) {
-  funcListList.push(trCreateComposeTiles(trFuncArray, i))
-}
 
-for (const funcList of funcListList) {
-  trFuncArray = trFuncArray.concat(funcList)
+if (trFuncArray.length >= 2) {
+  const limit = trFuncArray.length > 6 ? trFuncArray.length / 2 : trFuncArray.length + 1
+  for (let i = 2; i < limit; i++) {
+    funcListList.push(trCreateComposeTiles(trFuncArray, i))
+  }
+
+  for (const funcList of funcListList) {
+    trFuncArray = trFuncArray.concat(funcList)
+  }
 }
 /**
  * trDrawShape 関数は、指定された幅と高さに基づいて形状を描画します。

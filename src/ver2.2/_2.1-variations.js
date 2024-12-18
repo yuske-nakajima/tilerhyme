@@ -5,6 +5,11 @@ function _trDrawTilePattern1(func) {
       const y = _y * tileSize
 
       const { color1, color2, color3, color4, color5 } = trChromaticGetColor()
+      const colorDict = trChromaticGetColor()
+      const colorList = []
+      for (const item of Object.values(colorDict)) {
+        colorList.push(item)
+      }
 
       const p1 = trDataParams[_x % trDataParams.length]
       const p2 = trDataParams[_y % trDataParams.length]
@@ -31,6 +36,8 @@ function _trDrawTilePattern1(func) {
 
       trCalcSineCount(sineValue)
 
+      const noiseVal = trGenerateNoiseValue(_x, _y)
+
       trDrawBlock(() => {
         func({
           _x,
@@ -50,7 +57,10 @@ function _trDrawTilePattern1(func) {
           color3,
           color4,
           color5,
+          colorDict,
+          colorList,
           sineValue,
+          noiseVal,
           p1,
           p2,
           p3,
@@ -1106,3 +1116,43 @@ function trDrawRectAndStroke(xi, yi, tileSize) {
     trDrawSimpleLine(centerPos, angle, length)
   })
 }
+
+function _trDrawSquareCascade(func) {
+  return _trDrawTilePattern1((params) => {
+    trDrawBlock(() => {
+      let t = params.tileSize
+      if (trSineCount < TR_SINE_LOOP_COUNT) {
+        t = params._tileSize
+      }
+
+      rectMode(CENTER)
+      func({ ...params, t })
+    })
+  })
+}
+
+const trDrawSquareCascade1 = _trDrawSquareCascade((params) => {
+  trDrawBlock(() => {
+    const { x, y, t, tileSize, colorList, noiseVal } = params
+    noFill()
+    strokeWeight(min((tileSize * trDataParams[5]) / 800, trStrokeWeight))
+
+    rectMode(CORNER)
+    for (let i = 4; i >= 1; i--) {
+      stroke(colorList[(noiseVal + i) % colorList.length])
+      rect(x, y, t * 0.2 * i)
+    }
+  })
+})
+
+const trDrawSquareCascade2 = _trDrawSquareCascade((params) => {
+  trDrawBlock(() => {
+    const { x, y, t, colorList, noiseVal } = params
+    noStroke()
+
+    for (let i = 4; i >= 1; i--) {
+      fill(colorList[(noiseVal + i) % colorList.length])
+      rect(x, y, t * 0.2 * i)
+    }
+  })
+})
