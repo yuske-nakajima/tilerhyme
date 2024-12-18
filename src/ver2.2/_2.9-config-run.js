@@ -1,16 +1,16 @@
 let trFuncArray = [
-  trDrawRectEllipseSquare16, // □○ひし形混合-2色交互
-  trDrawRectEllipseSquare26, // □○ひし形混合-線のみ-2色交互
-  trDrawRect16, // □-2色交互
-  trDrawRect19, // □-文字-単色1-文字
-  trDrawRect26, // □-線のみ-2色交互
+  trDrawRectEllipseSquare16, // □○ひし形混合-カラフル
+  trDrawRectEllipseSquare26, // □○ひし形混合-線のみ-カラフル
+  trDrawRect16, // □-カラフル
+  trDrawRect19, // □-文字-カラフル-文字
+  trDrawRect26, // □-線のみ-カラフル
   trDrawRect29, // □-文字-線のみ-文字
-  trDrawRectBig26, // □大-線のみ-2色交互
-  trDrawSquare16, // ひし形オンリー-2色交互
-  trDrawSquare26, // ひし形-線のみ-2色交互
-  trDrawSquareBig26, // ひし形大-線のみ-2色交互
-  trDrawEllipse16, // ◯オンリー-2色交互
-  trDrawEllipse26, // ◯-線のみ-2色交互
+  trDrawRectBig26, // □大-線のみ-カラフル
+  trDrawSquare16, // ひし形オンリー-カラフル
+  trDrawSquare26, // ひし形-線のみ-カラフル
+  trDrawSquareBig26, // ひし形大-線のみ-カラフル
+  trDrawEllipse16, // ◯オンリー-カラフル
+  trDrawEllipse26, // ◯-線のみ-カラフル
   trDrawEllipseBig26, // ◯大-線のみ-2色交互
   trDrawDiagonalRightRotate16, // 右斜め回転-2色交互
   trDrawDiagonalLeftRotate16, // 左斜め回転-2色交互
