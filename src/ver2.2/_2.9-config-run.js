@@ -32,22 +32,18 @@ let trFuncArray = [
   trDrawSquareCascade1, // 四角形-連続1
   trDrawSquareCascade2, // 四角形-連続2（同心）
   trDrawSquareCascade3, // 重なった四角形
-  trDrawVerticalRotate11, // 縦棒
-  trDrawHorizontalRotate11, // 横棒
 ]
 
 // 合成関数を追加
-const funcListList = []
+let trComposeFuncList = []
 
 if (trFuncArray.length >= 2) {
   const limit = trFuncArray.length > 6 ? trFuncArray.length / 2 : trFuncArray.length + 1
   for (let i = 2; i < limit; i++) {
-    funcListList.push(trCreateComposeTiles(trFuncArray, i))
+    trComposeFuncList = [...trComposeFuncList, ...trCreateComposeTiles(trFuncArray, i)]
   }
 
-  for (const funcList of funcListList) {
-    trFuncArray = trFuncArray.concat(funcList)
-  }
+  trFuncArray = [...trFuncArray, trComposeFuncList]
 }
 /**
  * trDrawShape 関数は、指定された幅と高さに基づいて形状を描画します。
@@ -61,11 +57,11 @@ function trDrawShape() {
   const w = ceil(width / tileSize)
   const h = ceil(height / tileSize)
 
-  const mode = trDataParams.reduce((acc, cur) => acc + cur, 0) % trFuncArray.length
+  const mode = trDataParams.reduce((acc, cur) => acc + cur, 0) % trComposeFuncList.length
 
   for (let y = 0; y <= h; y++) {
     for (let x = 0; x <= w; x++) {
-      trFuncArray[mode](x, y, tileSize)
+      trComposeFuncList[mode](x, y, tileSize)
     }
   }
 
