@@ -1182,3 +1182,27 @@ const trDrawSquareCascade2 = _trDrawSquareCascade((params) => {
     }
   })
 })
+
+const trDrawSquareCascade3 = _trDrawSquareCascade((params) => {
+  trDrawBlock(() => {
+    const { x, y, t, colorList, noiseVal } = params
+    noStroke()
+
+    const t025 = t * 0.25
+    const t0125 = t * 0.125
+
+    if (noiseVal % 2 === 0) {
+      fill(colorList[noiseVal % colorList.length])
+      rect(x - t025 + t0125, y - t025 + t0125, t * 0.7)
+
+      fill(colorList[trDataParams[noiseVal % trDataParams.length] % colorList.length])
+      rect(x + t025 - t0125, y + t025 - t0125, t * 0.7)
+    } else {
+      fill(colorList[trDataParams[noiseVal % trDataParams.length] % colorList.length])
+      rect(x + t025 - t0125, y - t025 + t0125, t * 0.7)
+
+      fill(colorList[noiseVal % colorList.length])
+      rect(x - t025 + t0125, y + t025 - t0125, t * 0.7)
+    }
+  })
+})
