@@ -6,14 +6,15 @@ function trInitial() {
     height: windowHeight - trWindowGap,
   }
 
-  const windowSize = trCalcWindowSize()
-  trCanvas = createCanvas(windowSize, windowSize)
+  const windowSize = trCalcWindowSize(TR_WINDOW_TYPE.FULL)
+  trCanvas = createCanvas(windowSize.width, windowSize.height)
 
   colorMode(HSB)
   frameRate(24)
 
   // カラー
   TR_COLORS.lineMain = color(0, 0, 0)
+  TR_COLORS.lineMainDark = color(0, 0, 100)
   TR_COLORS.cellMain = color(0, 0, 100)
   TR_COLORS.cellNormal = color(0, 0, 40)
   TR_COLORS.background = color(200, 100, 20)
