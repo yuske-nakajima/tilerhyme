@@ -90,6 +90,7 @@ function trUiDraw() {
     }
   }
 
+  const h = (map(trDataParams[14], 0, 99, 0, 360) + trHueShift) % 360
   switch (trBackgroundMode) {
     case TR_BACKGROUND_MODE.LIGHT:
       background(95)
@@ -98,10 +99,10 @@ function trUiDraw() {
       background(5)
       break
     case TR_BACKGROUND_MODE.CHROMATIC:
-      const h = (map(trDataParams[14], 0, 99, 0, 360) + trHueShift) % 360
-      const s = trDataGrid.find((item) => item.value === TR_FUNCTION_CODE.IS_DARK).isPressed ? 85 : 50
-      const b = trDataGrid.find((item) => item.value === TR_FUNCTION_CODE.IS_DARK).isPressed ? 95 : 40
-      background(color(h, s, b))
+      background(color(h, 85, 95))
+      break
+    case TR_BACKGROUND_MODE.CHROMATIC_DARK:
+      background(color(h, 50, 40))
       break
     default:
       break

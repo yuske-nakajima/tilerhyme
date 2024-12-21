@@ -92,10 +92,10 @@ const TR_INIT_DATA_GRID = [
   { value: 69, isPressed: false },
   { value: 79, isPressed: false },
   { value: 89, isPressed: false },
-  { value: 91, isPressed: false },
-  { value: 92, isPressed: false },
-  { value: 93, isPressed: false },
-  { value: 94, isPressed: false },
+  { value: TR_FUNCTION_CODE.STROKE_WEIGHT_UP, isPressed: false },
+  { value: TR_FUNCTION_CODE.STROKE_WEIGHT_DOWN, isPressed: false },
+  { value: TR_FUNCTION_CODE.HUE_SHIFT_UP, isPressed: false },
+  { value: TR_FUNCTION_CODE.HUE_SHIFT_DOWN, isPressed: false },
   { value: 95, isPressed: false },
   { value: 96, isPressed: false },
   { value: 97, isPressed: false },
@@ -142,6 +142,7 @@ const TR_BACKGROUND_MODE = {
   LIGHT: 0,
   DARK: 1,
   CHROMATIC: 2,
+  CHROMATIC_DARK: 3,
 }
 
 TR_FILTER_MODE = {
@@ -240,43 +241,28 @@ function trSetDataGridIsPressed(value, isPressed) {
 function trUtilityDataGridIsPressed(value, isPressed) {
   if (isPressed) {
     // ON
-    // TODO: 押した時の処理を実装する 色相系（グレーススケール）
+    // TODO: 押した時にONになる処理
     console.log(`ON: ${value}`)
     switch (value) {
       case TR_FUNCTION_CODE.IS_DARK:
         trBackgroundMode = trDataGrid.find((item) => item.value === TR_FUNCTION_CODE.IS_CHROMATIC).isPressed
-          ? TR_BACKGROUND_MODE.CHROMATIC
-          : TR_BACKGROUND_MODE.DARK
+          ? TR_BACKGROUND_MODE.CHROMATIC_DARK
+          : TR_BACKGROUND_MODE.CHROMATIC
         break
       case TR_FUNCTION_CODE.IS_CHROMATIC:
-        trBackgroundMode = TR_BACKGROUND_MODE.CHROMATIC
+        trBackgroundMode = trDataGrid.find((item) => item.value === TR_FUNCTION_CODE.IS_DARK).isPressed
+          ? TR_BACKGROUND_MODE.CHROMATIC_DARK
+          : TR_BACKGROUND_MODE.CHROMATIC
         break
       case TR_FUNCTION_CODE.IS_GRAY_SCALE:
         trFilterMode = TR_FILTER_MODE.GRAY
-        break
-      case TR_FUNCTION_CODE.STROKE_WEIGHT_UP:
-        trStrokeWeight += TR_STROKE_WEIGHT_STEP
-        break
-      case TR_FUNCTION_CODE.STROKE_WEIGHT_DOWN:
-        trStrokeWeight -= TR_STROKE_WEIGHT_STEP
-        if (trStrokeWeight <= 0) {
-          trStrokeWeight = 1
-        }
-      case TR_FUNCTION_CODE.HUE_SHIFT_UP:
-        trHueShift += TR_HUE_SHIFT_STEP
-        break
-      case TR_FUNCTION_CODE.HUE_SHIFT_DOWN:
-        trHueShift -= TR_HUE_SHIFT_STEP
-        if (trHueShift < 10) {
-          trHueShift = 360
-        }
         break
       default:
         break
     }
   } else {
     // OFF
-    // TODO: 押した時の処理を実装する
+    // TODO: 押した時にOFFになる処理を実装する
     console.log(`OFF: ${value}`)
     switch (value) {
       case TR_FUNCTION_CODE.IS_DARK:
@@ -292,27 +278,31 @@ function trUtilityDataGridIsPressed(value, isPressed) {
       case TR_FUNCTION_CODE.IS_GRAY_SCALE:
         trFilterMode = TR_FILTER_MODE.NONE
         break
-      case TR_FUNCTION_CODE.STROKE_WEIGHT_UP:
-        trStrokeWeight += TR_STROKE_WEIGHT_STEP
-        break
-      case TR_FUNCTION_CODE.STROKE_WEIGHT_DOWN:
-        trStrokeWeight -= TR_STROKE_WEIGHT_STEP
-        if (trStrokeWeight <= 0) {
-          trStrokeWeight = 1
-        }
-        break
-      case TR_FUNCTION_CODE.HUE_SHIFT_UP:
-        trHueShift += TR_HUE_SHIFT_STEP
-        break
-      case TR_FUNCTION_CODE.HUE_SHIFT_DOWN:
-        trHueShift -= TR_HUE_SHIFT_STEP
-        if (trHueShift < 10) {
-          trHueShift = 360
-        }
-        break
       default:
         break
     }
+  }
+
+  switch (value) {
+    case TR_FUNCTION_CODE.STROKE_WEIGHT_UP:
+      trStrokeWeight += TR_STROKE_WEIGHT_STEP
+      break
+    case TR_FUNCTION_CODE.STROKE_WEIGHT_DOWN:
+      trStrokeWeight -= TR_STROKE_WEIGHT_STEP
+      if (trStrokeWeight <= 0) {
+        trStrokeWeight = 1
+      }
+    case TR_FUNCTION_CODE.HUE_SHIFT_UP:
+      trHueShift += TR_HUE_SHIFT_STEP
+      break
+    case TR_FUNCTION_CODE.HUE_SHIFT_DOWN:
+      trHueShift -= TR_HUE_SHIFT_STEP
+      if (trHueShift < 10) {
+        trHueShift = 360
+      }
+      break
+    default:
+      break
   }
 }
 
@@ -544,6 +534,22 @@ function trUrlToData() {
   const isValidBackground = background && Object.values(TR_BACKGROUND_MODE).includes(parseInt(background))
   if (isValidBackground) {
     trBackgroundMode = parseInt(background)
+    switch (trBackgroundMode) {
+      case TR_BACKGROUND_MODE.LIGHT:
+        trDataGrid.find((item) => item.value === TR_FUNCTION_CODE.IS_DARK).isPressed = false
+        trDataGrid.find((item) => item.value === TR_FUNCTION_CODE.IS_CHROMATIC).isPressed = false
+        break
+      case TR_BACKGROUND_MODE.DARK:
+        trDataGrid.find((item) => item.value === TR_FUNCTION_CODE.IS_DARK).isPressed = true
+        trDataGrid.find((item) => item.value === TR_FUNCTION_CODE.IS_CHROMATIC).isPressed = false
+        break
+      case TR_BACKGROUND_MODE.CHROMATIC:
+        trDataGrid.find((item) => item.value === TR_FUNCTION_CODE.IS_DARK).isPressed = false
+        trDataGrid.find((item) => item.value === TR_FUNCTION_CODE.IS_CHROMATIC).isPressed = true
+        break
+      default:
+        break
+    }
   } else {
     trBackgroundMode = TR_BACKGROUND_MODE.LIGHT
   }
@@ -553,6 +559,9 @@ function trUrlToData() {
   const isValidFilter = _filter && Object.values(TR_FILTER_MODE).includes(parseInt(_filter))
   if (isValidFilter) {
     trFilterMode = parseInt(_filter)
+    if (trFilterMode === TR_FILTER_MODE.GRAY) {
+      trDataGrid.find((item) => item.value === TR_FUNCTION_CODE.IS_GRAY_SCALE).isPressed = true
+    }
   } else {
     trFilterMode = TR_FILTER_MODE.NONE
   }
