@@ -1,4 +1,5 @@
 function trInitial() {
+  trSetDataParams()
   trUrlToData()
   trWindowGap = max(windowWidth * 0.01, windowHeight * 0.01)
   trWindowSize = {

@@ -6,8 +6,9 @@ const TR_VERSION = '2.2'
 const TR_VERSION_NAME = 'KICK'
 
 const TR_FUNCTION_CODE = {
-  IS_LIGHT: 19,
+  IS_DARK: 19,
   IS_CHROMATIC: 29,
+  IS_GRAY_SCALE: 39,
   STROKE_WEIGHT_UP: 91,
   STROKE_WEIGHT_DOWN: 92,
 }
@@ -81,9 +82,9 @@ const TR_INIT_DATA_GRID = [
   { value: 87, isPressed: false },
   { value: 88, isPressed: false },
   // 以下は機能コード
-  { value: TR_FUNCTION_CODE.IS_LIGHT, isPressed: false },
+  { value: TR_FUNCTION_CODE.IS_DARK, isPressed: false },
   { value: TR_FUNCTION_CODE.IS_CHROMATIC, isPressed: false },
-  { value: 39, isPressed: false },
+  { value: TR_FUNCTION_CODE.IS_GRAY_SCALE, isPressed: false },
   { value: 49, isPressed: false },
   { value: 59, isPressed: false },
   { value: 69, isPressed: false },
@@ -142,6 +143,11 @@ const TR_BACKGROUND_MODE = {
   CHROMATIC: 2,
 }
 
+TR_FILTER_MODE = {
+  NONE: 0,
+  GRAY: 1,
+}
+
 const TR_STROKE_WEIGHT_STEP = 1
 
 const TR_WINDOW_TYPE = {
@@ -188,12 +194,16 @@ let trSineCount = 0
 
 // light | dark | chromatic
 let trBackgroundMode = TR_BACKGROUND_MODE.LIGHT
-trDataGrid.find((item) => item.value === TR_FUNCTION_CODE.IS_LIGHT).isPressed = true
+
+// none | gray
+let trFilterMode = TR_FILTER_MODE.NONE
 
 // 線幅の係数
 let trStrokeWeight = 4
 
 let trNoiseGraphic
+
+let trHueShift = 0
 // ------------------------------------------------------------
 // --- 関数
 // ------------------------------------------------------------
@@ -223,16 +233,19 @@ function trSetDataGridIsPressed(value, isPressed) {
 function trUtilityDataGridIsPressed(value, isPressed) {
   if (isPressed) {
     // ON
-    // TODO: 押した時の処理を実装する
+    // TODO: 押した時の処理を実装する 色相系（グレーススケール）
     console.log(`ON: ${value}`)
     switch (value) {
-      case TR_FUNCTION_CODE.IS_LIGHT:
+      case TR_FUNCTION_CODE.IS_DARK:
         trBackgroundMode = trDataGrid.find((item) => item.value === TR_FUNCTION_CODE.IS_CHROMATIC).isPressed
           ? TR_BACKGROUND_MODE.CHROMATIC
-          : TR_BACKGROUND_MODE.LIGHT
+          : TR_BACKGROUND_MODE.DARK
         break
       case TR_FUNCTION_CODE.IS_CHROMATIC:
         trBackgroundMode = TR_BACKGROUND_MODE.CHROMATIC
+        break
+      case TR_FUNCTION_CODE.IS_GRAY_SCALE:
+        trFilterMode = TR_FILTER_MODE.GRAY
         break
       case TR_FUNCTION_CODE.STROKE_WEIGHT_UP:
         trStrokeWeight += TR_STROKE_WEIGHT_STEP
@@ -251,15 +264,18 @@ function trUtilityDataGridIsPressed(value, isPressed) {
     // TODO: 押した時の処理を実装する
     console.log(`OFF: ${value}`)
     switch (value) {
-      case TR_FUNCTION_CODE.IS_LIGHT:
+      case TR_FUNCTION_CODE.IS_DARK:
         trBackgroundMode = trDataGrid.find((item) => item.value === TR_FUNCTION_CODE.IS_CHROMATIC).isPressed
           ? TR_BACKGROUND_MODE.CHROMATIC
-          : TR_BACKGROUND_MODE.DARK
+          : TR_BACKGROUND_MODE.LIGHT
         break
       case TR_FUNCTION_CODE.IS_CHROMATIC:
-        trBackgroundMode = trDataGrid.find((item) => item.value === TR_FUNCTION_CODE.IS_LIGHT).isPressed
-          ? TR_BACKGROUND_MODE.LIGHT
-          : TR_BACKGROUND_MODE.DARK
+        trBackgroundMode = trDataGrid.find((item) => item.value === TR_FUNCTION_CODE.IS_DARK).isPressed
+          ? TR_BACKGROUND_MODE.DARK
+          : TR_BACKGROUND_MODE.LIGHT
+        break
+      case TR_FUNCTION_CODE.IS_GRAY_SCALE:
+        trFilterMode = TR_FILTER_MODE.NONE
         break
       case TR_FUNCTION_CODE.STROKE_WEIGHT_UP:
         trStrokeWeight += TR_STROKE_WEIGHT_STEP
@@ -508,7 +524,16 @@ function trUrlToData() {
     trBackgroundMode = TR_BACKGROUND_MODE.LIGHT
   }
 
-  if (!isValidData || !isValidBackground) {
+  // filter
+  const _filter = url.searchParams.get('filter')
+  const isValidFilter = _filter && Object.values(TR_FILTER_MODE).includes(parseInt(_filter))
+  if (isValidFilter) {
+    trFilterMode = parseInt(_filter)
+  } else {
+    trFilterMode = TR_FILTER_MODE.NONE
+  }
+
+  if (!isValidData || !isValidBackground || !isValidFilter) {
     trUpdateUrl()
   }
 }
@@ -526,6 +551,7 @@ function trUpdateUrl() {
   // URLの検索パラメータを設定
   url.searchParams.set('data', trGridDataToString())
   url.searchParams.set('background', trBackgroundMode)
+  url.searchParams.set('filter', trFilterMode)
 
   window.history.pushState({}, '', url)
 }
@@ -582,6 +608,7 @@ async function trSetDataParams() {
 
   // 全てオフの状態を特別扱いしない
   const hashInput = input === 0n ? 'all_off' : input.toString()
+  // const hashInput = input.toString()
 
   // SHA-256ハッシュを生成
   const hashBuffer = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(hashInput))
@@ -604,7 +631,8 @@ function trChromaticGetColor() {
   // カラー
   for (let i = 1; i <= trDataParams.length - 3; i++) {
     colors[`color${i}`] = color(
-      map(trDataParams[i] * 4, 0, 99 * 4, 0, 360),
+      (map(trDataParams[i] * 4, 0, 99 * 4, 0, 360) + trHueShift) % 360,
+      // map(trDataParams[i] * 4, 0, 99 * 4, 0, 360),
       map(trDataParams[1 + i], 0, 99, 20, 80),
       map(trDataParams[2 + i], 0, 99, 80, 100),
     )

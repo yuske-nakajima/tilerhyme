@@ -8,7 +8,7 @@ function trUiDraw() {
       }
 
       // 自動モードはlife gameのルールを適用する
-      const dataGrid = trModeLifeGameGrid.split('').map((item) => (item === '1' ? true : false))
+      const dataGrid = trModeLifeGameGrid.split('').map((item) => item === '1')
       for (let i = 0; i < trDataGrid.length; i++) {
         trDataGrid[i].isPressed = dataGrid[i]
       }
@@ -48,7 +48,7 @@ function trUiDraw() {
 
       // 次の世代の状態を計算
       let next = Array(8)
-        .fill()
+        .fill(undefined)
         .map(() => Array(8).fill(0))
 
       for (let i = 0; i < 8; i++) {
@@ -98,9 +98,10 @@ function trUiDraw() {
       background(5)
       break
     case TR_BACKGROUND_MODE.CHROMATIC:
-      const s = trDataGrid.find((item) => item.value === TR_FUNCTION_CODE.IS_LIGHT).isPressed ? 85 : 50
-      const b = trDataGrid.find((item) => item.value === TR_FUNCTION_CODE.IS_LIGHT).isPressed ? 95 : 40
-      background(color(map(trDataParams[14], 0, 99, 0, 360), s, b))
+      const h = (map(trDataParams[14], 0, 99, 0, 360) + trHueShift) % 360
+      const s = trDataGrid.find((item) => item.value === TR_FUNCTION_CODE.IS_DARK).isPressed ? 85 : 50
+      const b = trDataGrid.find((item) => item.value === TR_FUNCTION_CODE.IS_DARK).isPressed ? 95 : 40
+      background(color(h, s, b))
       break
     default:
       break
@@ -109,4 +110,8 @@ function trUiDraw() {
   trDrawShape()
 
   trDeviceDraw()
+
+  if (trFilterMode === TR_FILTER_MODE.GRAY) {
+    filter(GRAY)
+  }
 }
