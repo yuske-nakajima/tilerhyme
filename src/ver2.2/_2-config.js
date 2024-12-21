@@ -11,6 +11,8 @@ const TR_FUNCTION_CODE = {
   IS_GRAY_SCALE: 39,
   STROKE_WEIGHT_UP: 91,
   STROKE_WEIGHT_DOWN: 92,
+  HUE_SHIFT_UP: 93,
+  HUE_SHIFT_DOWN: 94,
 }
 
 const TR_DATA_GRID_SIZE = 64
@@ -98,7 +100,6 @@ const TR_INIT_DATA_GRID = [
   { value: 96, isPressed: false },
   { value: 97, isPressed: false },
   { value: 98, isPressed: false },
-  { value: 99, isPressed: false },
 ]
 
 const TR_MAPPING_GRID = [
@@ -148,7 +149,8 @@ TR_FILTER_MODE = {
   GRAY: 1,
 }
 
-const TR_STROKE_WEIGHT_STEP = 1
+const TR_STROKE_WEIGHT_STEP = 2
+const TR_HUE_SHIFT_STEP = 10
 
 const TR_WINDOW_TYPE = {
   SQUARE: 0,
@@ -210,7 +212,12 @@ let trHueShift = 0
 
 const trProgrammerModeSetup = createLaunchpadSetup({
   noteRange: { min: 11, max: 99 },
-  incrementButtonCodeList: [TR_FUNCTION_CODE.STROKE_WEIGHT_UP, TR_FUNCTION_CODE.STROKE_WEIGHT_DOWN],
+  incrementButtonCodeList: [
+    TR_FUNCTION_CODE.STROKE_WEIGHT_UP,
+    TR_FUNCTION_CODE.STROKE_WEIGHT_DOWN,
+    TR_FUNCTION_CODE.HUE_SHIFT_UP,
+    TR_FUNCTION_CODE.HUE_SHIFT_DOWN,
+  ],
 })
 
 /**
@@ -255,6 +262,14 @@ function trUtilityDataGridIsPressed(value, isPressed) {
         if (trStrokeWeight <= 0) {
           trStrokeWeight = 1
         }
+      case TR_FUNCTION_CODE.HUE_SHIFT_UP:
+        trHueShift += TR_HUE_SHIFT_STEP
+        break
+      case TR_FUNCTION_CODE.HUE_SHIFT_DOWN:
+        trHueShift -= TR_HUE_SHIFT_STEP
+        if (trHueShift < 10) {
+          trHueShift = 360
+        }
         break
       default:
         break
@@ -284,6 +299,15 @@ function trUtilityDataGridIsPressed(value, isPressed) {
         trStrokeWeight -= TR_STROKE_WEIGHT_STEP
         if (trStrokeWeight <= 0) {
           trStrokeWeight = 1
+        }
+        break
+      case TR_FUNCTION_CODE.HUE_SHIFT_UP:
+        trHueShift += TR_HUE_SHIFT_STEP
+        break
+      case TR_FUNCTION_CODE.HUE_SHIFT_DOWN:
+        trHueShift -= TR_HUE_SHIFT_STEP
+        if (trHueShift < 10) {
+          trHueShift = 360
         }
         break
       default:
