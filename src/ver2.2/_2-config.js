@@ -247,7 +247,7 @@ function trUtilityDataGridIsPressed(value, isPressed) {
       case TR_FUNCTION_CODE.IS_DARK:
         trBackgroundMode = trDataGrid.find((item) => item.value === TR_FUNCTION_CODE.IS_CHROMATIC).isPressed
           ? TR_BACKGROUND_MODE.CHROMATIC_DARK
-          : TR_BACKGROUND_MODE.CHROMATIC
+          : TR_BACKGROUND_MODE.DARK
         break
       case TR_FUNCTION_CODE.IS_CHROMATIC:
         trBackgroundMode = trDataGrid.find((item) => item.value === TR_FUNCTION_CODE.IS_DARK).isPressed
@@ -292,6 +292,7 @@ function trUtilityDataGridIsPressed(value, isPressed) {
       if (trStrokeWeight <= 0) {
         trStrokeWeight = 1
       }
+      break
     case TR_FUNCTION_CODE.HUE_SHIFT_UP:
       trHueShift += TR_HUE_SHIFT_STEP
       break
@@ -545,6 +546,10 @@ function trUrlToData() {
         break
       case TR_BACKGROUND_MODE.CHROMATIC:
         trDataGrid.find((item) => item.value === TR_FUNCTION_CODE.IS_DARK).isPressed = false
+        trDataGrid.find((item) => item.value === TR_FUNCTION_CODE.IS_CHROMATIC).isPressed = true
+        break
+      case TR_BACKGROUND_MODE.CHROMATIC_DARK:
+        trDataGrid.find((item) => item.value === TR_FUNCTION_CODE.IS_DARK).isPressed = true
         trDataGrid.find((item) => item.value === TR_FUNCTION_CODE.IS_CHROMATIC).isPressed = true
         break
       default:
