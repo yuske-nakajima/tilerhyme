@@ -150,7 +150,12 @@ TR_FILTER_MODE = {
   GRAY: 1,
 }
 
+const TR_STROKE_WEIGHT = {
+  MIN: 1,
+  MAX: 30,
+}
 const TR_STROKE_WEIGHT_STEP = 2
+
 const TR_HUE_SHIFT_STEP = 10
 
 const TR_WINDOW_TYPE = {
@@ -287,13 +292,16 @@ function trUtilityDataGridIsPressed(value, isPressed) {
 
   switch (value) {
     case TR_FUNCTION_CODE.STROKE_WEIGHT_UP:
-      trStrokeWeight += TR_STROKE_WEIGHT_STEP
+      trStrokeWeight =
+        trStrokeWeight + TR_STROKE_WEIGHT_STEP <= TR_STROKE_WEIGHT.MAX
+          ? trStrokeWeight + TR_STROKE_WEIGHT_STEP
+          : TR_STROKE_WEIGHT.MAX
       break
     case TR_FUNCTION_CODE.STROKE_WEIGHT_DOWN:
-      trStrokeWeight -= TR_STROKE_WEIGHT_STEP
-      if (trStrokeWeight <= 0) {
-        trStrokeWeight = 1
-      }
+      trStrokeWeight =
+        trStrokeWeight - TR_STROKE_WEIGHT_STEP >= TR_STROKE_WEIGHT.MIN
+          ? trStrokeWeight - TR_STROKE_WEIGHT_STEP
+          : TR_STROKE_WEIGHT.MIN
       break
     case TR_FUNCTION_CODE.HUE_SHIFT_UP:
       trHueShift += TR_HUE_SHIFT_STEP
@@ -573,7 +581,15 @@ function trUrlToData() {
     trFilterMode = TR_FILTER_MODE.NONE
   }
 
-  if (!isValidData || !isValidBackground || !isValidGrayScale) {
+  // stroke weight
+  const _strokeWeight = url.searchParams.get('stroke-weight')
+  const isValidTrStrokeWeight =
+    _strokeWeight && _strokeWeight >= TR_STROKE_WEIGHT.MIN && _strokeWeight <= TR_STROKE_WEIGHT.MAX
+  if (isValidTrStrokeWeight) {
+    trStrokeWeight = parseInt(_strokeWeight)
+  }
+
+  if (!isValidData || !isValidBackground || !isValidGrayScale || !isValidTrStrokeWeight) {
     trUpdateUrl()
   }
 }
@@ -589,9 +605,10 @@ function trUpdateUrl() {
   const url = new URL(window.location.href)
 
   // URLの検索パラメータを設定
-  url.searchParams.set('data', trGridDataToString())
   url.searchParams.set('background', trBackgroundMode)
   url.searchParams.set('gray-scale', trFilterMode)
+  url.searchParams.set('stroke-weight', trStrokeWeight)
+  url.searchParams.set('data', trGridDataToString())
 
   window.history.pushState({}, '', url)
 }
