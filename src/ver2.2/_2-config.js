@@ -562,10 +562,10 @@ function trUrlToData() {
   }
 
   // filter
-  const _filter = url.searchParams.get('filter')
-  const isValidFilter = _filter && Object.values(TR_FILTER_MODE).includes(parseInt(_filter))
-  if (isValidFilter) {
-    trFilterMode = parseInt(_filter)
+  const grayScale = url.searchParams.get('gray-scale')
+  const isValidGrayScale = grayScale && Object.values(TR_FILTER_MODE).includes(parseInt(grayScale))
+  if (isValidGrayScale) {
+    trFilterMode = parseInt(grayScale)
     if (trFilterMode === TR_FILTER_MODE.GRAY) {
       trDataGrid.find((item) => item.value === TR_FUNCTION_CODE.IS_GRAY_SCALE).isPressed = true
     }
@@ -573,7 +573,7 @@ function trUrlToData() {
     trFilterMode = TR_FILTER_MODE.NONE
   }
 
-  if (!isValidData || !isValidBackground || !isValidFilter) {
+  if (!isValidData || !isValidBackground || !isValidGrayScale) {
     trUpdateUrl()
   }
 }
@@ -591,7 +591,7 @@ function trUpdateUrl() {
   // URLの検索パラメータを設定
   url.searchParams.set('data', trGridDataToString())
   url.searchParams.set('background', trBackgroundMode)
-  url.searchParams.set('filter', trFilterMode)
+  url.searchParams.set('gray-scale', trFilterMode)
 
   window.history.pushState({}, '', url)
 }
