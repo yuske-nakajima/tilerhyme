@@ -837,8 +837,7 @@ const trDrawCrossRotate11 = _trDrawCrossRotate((params) => {
 function _trDrawArc(func) {
   return _trDrawTilePattern2((params) => {
     trDrawBlock(() => {
-      const { x, y, centerPos, tileSize, _tileSize, colorList, noiseVal, color1, color2, color3, color4, color5 } =
-        params
+      const { x, y, centerPos, tileSize, _tileSize, colorList, noiseVal } = params
 
       rectMode(CENTER)
 
