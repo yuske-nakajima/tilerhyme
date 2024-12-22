@@ -156,6 +156,11 @@ const TR_STROKE_WEIGHT = {
 }
 const TR_STROKE_WEIGHT_STEP = 2
 
+const TR_HUE_SHIFT = {
+  MIN: 0,
+  MAX: 360,
+}
+
 const TR_HUE_SHIFT_STEP = 10
 
 const TR_WINDOW_TYPE = {
@@ -304,13 +309,13 @@ function trUtilityDataGridIsPressed(value, isPressed) {
           : TR_STROKE_WEIGHT.MIN
       break
     case TR_FUNCTION_CODE.HUE_SHIFT_UP:
-      trHueShift += TR_HUE_SHIFT_STEP
+      trHueShift = (trHueShift + TR_HUE_SHIFT_STEP) % TR_HUE_SHIFT.MAX
       break
     case TR_FUNCTION_CODE.HUE_SHIFT_DOWN:
-      trHueShift -= TR_HUE_SHIFT_STEP
-      if (trHueShift < 10) {
-        trHueShift = 360
-      }
+      trHueShift =
+        trHueShift - TR_HUE_SHIFT_STEP < TR_HUE_SHIFT.MIN
+          ? TR_HUE_SHIFT.MAX - TR_HUE_SHIFT_STEP
+          : trHueShift - TR_HUE_SHIFT_STEP
       break
     default:
       break
@@ -589,7 +594,14 @@ function trUrlToData() {
     trStrokeWeight = parseInt(_strokeWeight)
   }
 
-  if (!isValidData || !isValidBackground || !isValidGrayScale || !isValidTrStrokeWeight) {
+  // hue shift
+  const hueShift = url.searchParams.get('hue-shift')
+  const isValidHueShift = hueShift && hueShift >= TR_HUE_SHIFT.MIN && hueShift <= TR_HUE_SHIFT.MAX
+  if (isValidHueShift) {
+    trHueShift = parseInt(hueShift)
+  }
+
+  if (!isValidData || !isValidBackground || !isValidGrayScale || !isValidTrStrokeWeight || !isValidHueShift) {
     trUpdateUrl()
   }
 }
@@ -608,6 +620,7 @@ function trUpdateUrl() {
   url.searchParams.set('background', trBackgroundMode)
   url.searchParams.set('gray-scale', trFilterMode)
   url.searchParams.set('stroke-weight', trStrokeWeight)
+  url.searchParams.set('hue-shift', trHueShift)
   url.searchParams.set('data', trGridDataToString())
 
   window.history.pushState({}, '', url)
