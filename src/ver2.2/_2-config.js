@@ -157,6 +157,8 @@ const TR_WINDOW_TYPE = {
   SQUARE: 0,
   FULL: 1,
 }
+
+const TR_SET_DATA_PARAMS_LENGTH = 20
 // ------------------------------------------------------------
 // --- 変数
 // ------------------------------------------------------------
@@ -646,18 +648,21 @@ async function trSetDataParams() {
 
   // 全てオフの状態を特別扱いしない
   const hashInput = input === 0n ? 'all_off' : input.toString()
-  // const hashInput = input.toString()
 
-  // SHA-256ハッシュを生成
-  const hashBuffer = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(hashInput))
-  const hashArray = Array.from(new Uint8Array(hashBuffer))
-  const hashHex = hashArray.map((b) => b.toString(16).padStart(2, '0')).join('')
+  if (hashInput === 'all_off') {
+    trDataParams = Array(TR_SET_DATA_PARAMS_LENGTH).fill(0)
+  } else {
+    // SHA-256ハッシュを生成
+    const hashBuffer = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(hashInput))
+    const hashArray = Array.from(new Uint8Array(hashBuffer))
+    const hashHex = hashArray.map((b) => b.toString(16).padStart(2, '0')).join('')
 
-  // ハッシュを20個のパラメータに分割（各パラメータは0-99の範囲）
-  trDataParams = []
-  for (let i = 0; i < 20; i++) {
-    const part = hashHex.substring(i * 3, i * 3 + 3)
-    trDataParams.push(parseInt(part, 16) % 100)
+    // ハッシュをTR_SET_DATA_PARAMS_LENGTH個のパラメータに分割（各パラメータは0-99の範囲）
+    trDataParams = []
+    for (let i = 0; i < TR_SET_DATA_PARAMS_LENGTH; i++) {
+      const part = hashHex.substring(i * 3, i * 3 + 3)
+      trDataParams.push(parseInt(part, 16) % 100)
+    }
   }
 
   trSineCount = 0
