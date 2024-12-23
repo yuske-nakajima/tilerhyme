@@ -9,6 +9,7 @@ const TR_FUNCTION_CODE = {
   IS_DARK: 19,
   IS_CHROMATIC: 29,
   IS_GRAY_SCALE: 39,
+  IS_AUTO: 89,
   STROKE_WEIGHT_UP: 91,
   STROKE_WEIGHT_DOWN: 92,
   HUE_SHIFT_UP: 93,
@@ -91,7 +92,7 @@ const TR_INIT_DATA_GRID = [
   { value: 59, isPressed: false },
   { value: 69, isPressed: false },
   { value: 79, isPressed: false },
-  { value: 89, isPressed: false },
+  { value: TR_FUNCTION_CODE.IS_AUTO, isPressed: false },
   { value: TR_FUNCTION_CODE.STROKE_WEIGHT_UP, isPressed: false },
   { value: TR_FUNCTION_CODE.STROKE_WEIGHT_DOWN, isPressed: false },
   { value: TR_FUNCTION_CODE.HUE_SHIFT_UP, isPressed: false },
@@ -195,7 +196,7 @@ let trRotateValue = 0
 let trQrImage
 
 // MODE object value
-let trMode = TR_MODE.NORMAL
+let trMode = trSaveToLocalStorage('trMode', TR_MODE.NORMAL)
 
 // life gameの初期値はランダム値
 let trModeLifeGameGrid = Array.from({ length: 64 }, () => Math.floor(Math.random() * 2)).join('')
@@ -230,6 +231,12 @@ const trProgrammerModeSetup = createLaunchpadSetup({
     TR_FUNCTION_CODE.STROKE_WEIGHT_DOWN,
     TR_FUNCTION_CODE.HUE_SHIFT_UP,
     TR_FUNCTION_CODE.HUE_SHIFT_DOWN,
+  ],
+  functionButtonCodeList: [
+    TR_FUNCTION_CODE.IS_DARK,
+    TR_FUNCTION_CODE.IS_CHROMATIC,
+    TR_FUNCTION_CODE.IS_GRAY_SCALE,
+    TR_FUNCTION_CODE.IS_AUTO,
   ],
 })
 
@@ -269,6 +276,10 @@ function trUtilityDataGridIsPressed(value, isPressed) {
       case TR_FUNCTION_CODE.IS_GRAY_SCALE:
         trFilterMode = TR_FILTER_MODE.GRAY
         break
+      case TR_FUNCTION_CODE.IS_AUTO:
+        trMode = trSaveToLocalStorage('trMode', TR_MODE.AUTO)
+        document.querySelector('#image-download').style.display = 'none'
+        break
       default:
         break
     }
@@ -289,6 +300,10 @@ function trUtilityDataGridIsPressed(value, isPressed) {
         break
       case TR_FUNCTION_CODE.IS_GRAY_SCALE:
         trFilterMode = TR_FILTER_MODE.NONE
+        break
+      case TR_FUNCTION_CODE.IS_AUTO:
+        trMode = trSaveToLocalStorage('trMode', TR_MODE.NORMAL)
+        document.querySelector('#image-download').style.display = 'block'
         break
       default:
         break
@@ -601,6 +616,14 @@ function trUrlToData() {
     trHueShift = parseInt(hueShift)
   }
 
+  // ローカルストレージからモードを取得
+  const mode = trGetOrInitializeValue('trMode', TR_MODE.NORMAL)
+  if (mode === TR_MODE.AUTO) {
+    document.querySelector('#image-download').style.display = 'none'
+    trDataGrid.find((item) => item.value === TR_FUNCTION_CODE.IS_AUTO).isPressed = true
+  }
+  trMode = mode
+
   if (!isValidData || !isValidBackground || !isValidGrayScale || !isValidTrStrokeWeight || !isValidHueShift) {
     trUpdateUrl()
   }
@@ -705,7 +728,6 @@ function trChromaticGetColor() {
   for (let i = 1; i <= trDataParams.length - 3; i++) {
     colors[`color${i}`] = color(
       (map(trDataParams[i] * 4, 0, 99 * 4, 0, 360) + trHueShift) % 360,
-      // map(trDataParams[i] * 4, 0, 99 * 4, 0, 360),
       map(trDataParams[1 + i], 0, 99, 20, 80),
       map(trDataParams[2 + i], 0, 99, 80, 100),
     )

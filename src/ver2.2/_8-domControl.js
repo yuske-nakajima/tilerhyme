@@ -42,7 +42,7 @@ dialogDownloadInfo.addEventListener('touchend', () => {
 const modeButton = document.getElementById('mode')
 const modeDialog = document.getElementById('mode-dialog')
 const modeNormal = document.getElementById('mode-normal')
-const modeAuto = document.getElementById('mode-auto')
+// const modeAuto = document.getElementById('mode-auto')
 const modeCancel = document.getElementById('mode-cancel')
 
 // モーダル表示・非表示
@@ -66,7 +66,7 @@ modeCancel.addEventListener('touchend', modeCancelFunc)
 // 通常モード
 const modeNormalFunc = (e) => {
   e.preventDefault()
-  trMode = TR_MODE.NORMAL
+  trMode = trSaveToLocalStorage('trMode', TR_MODE.NORMAL)
   modeDialog.style.display = 'none'
   trIsDataGridClickable = true
 
@@ -78,11 +78,11 @@ modeNormal.addEventListener('touchend', modeNormalFunc)
 // 自動モード
 const modeAutoFunc = (e) => {
   e.preventDefault()
-  trMode = TR_MODE.AUTO
+  trMode = trSaveToLocalStorage('trMode', TR_MODE.AUTO)
   modeDialog.style.display = 'none'
   trIsDataGridClickable = true
 
   imageDownloadArea.style.display = 'none'
 }
-modeAuto.addEventListener('click', modeAutoFunc)
-modeAuto.addEventListener('touchend', modeAutoFunc)
+// modeAuto.addEventListener('click', modeAutoFunc)
+// modeAuto.addEventListener('touchend', modeAutoFunc)

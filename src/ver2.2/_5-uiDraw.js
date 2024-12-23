@@ -1,4 +1,4 @@
-function trUiDraw() {
+async function trUiDraw() {
   if (trMode === TR_MODE.AUTO) {
     if (frameCount % TR_AUTO_MODE_INTERVAL === 0) {
       trModeLifeGameGridHistory.push(trModeLifeGameGrid)
@@ -16,8 +16,11 @@ function trUiDraw() {
       trCreateQrCode()
       trChangePatternFrame = frameCount
       trSetDataParams()
+      trUrlToData()
 
-      trProgrammerModeSetup(
+      // TODO: autoモードの時に、機能ボタンが押せない時がある
+      //  これが悪さしている？
+      await trProgrammerModeSetup(
         async (i) => {
           trUtilityDataGridIsPressed(i, !trGetPressedKeyList(trDataGrid).includes(i))
           trSetDataGridIsPressed(i, !trGetPressedKeyList(trDataGrid).includes(i))
@@ -28,7 +31,7 @@ function trUiDraw() {
         },
         trSetDataParams,
         trDataGrid,
-      ).then()
+      )
 
       // trModeLifeGameGrid を TR_MAPPING_GRID の並び順に変換
       const grid = []

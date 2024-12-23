@@ -85,8 +85,10 @@ function createLaunchpadSetup(userConfig = {}) {
       outputNames: ['Launchpad Mini MK3 LPMiniMK3 MIDI In', 'MIDIOUT2 (LPMiniMK3 MIDI)'],
       noteRange: { min: 36, max: 99 },
       incrementButtonCodeList: [],
-      activeColor: 42,
-      incrementButtonColor: 80,
+      functionButtonCodeList: [],
+      activeColor: 12,
+      functionButtonColor: 96,
+      incrementButtonColor: 72,
       inactiveColor: 0,
     },
     ...userConfig,
@@ -112,9 +114,15 @@ function createLaunchpadSetup(userConfig = {}) {
       // 初期状態の設定
       for (let i = config.noteRange.min; i <= config.noteRange.max; i++) {
         const isPressed = trGetPressedKeyList(dataGrid).includes(i)
-        output.send([0x90, i, isPressed ? config.activeColor : config.inactiveColor])
         if (isPressed) {
+          if (config.functionButtonCodeList.includes(i)) {
+            output.send([0x90, i, config.functionButtonColor /* 色コード */])
+          } else {
+            output.send([0x90, i, config.activeColor /* 色コード */])
+          }
           await setDataParams()
+        } else {
+          output.send([0x90, i, config.inactiveColor])
         }
       }
 
@@ -152,7 +160,11 @@ function createLaunchpadSetup(userConfig = {}) {
           }
 
           if (trGetPressedKeyList(dataGrid).includes(i)) {
-            output.send([0x90, i, config.activeColor /* 色コード */])
+            if (config.functionButtonCodeList.includes(i)) {
+              output.send([0x90, i, config.functionButtonColor /* 色コード */])
+            } else {
+              output.send([0x90, i, config.activeColor /* 色コード */])
+            }
           } else {
             output.send([0x90, i, 0])
           }
