@@ -12,6 +12,20 @@ async function trUiDraw() {
       for (let i = 0; i < trDataGrid.length; i++) {
         trDataGrid[i].isPressed = dataGrid[i]
       }
+
+      // 係数をランダムに変更
+      trBackgroundMode = random(Object.values(TR_BACKGROUND_MODE))
+      // グレイスケールは頻度を下げる
+      if (frameCount % 4 === 0) {
+        trFilterMode = random(Object.values(TR_FILTER_MODE))
+      } else {
+        trFilterMode = TR_FILTER_MODE.NONE
+      }
+      trStrokeWeight = ceil(random(TR_STROKE_WEIGHT.MIN, TR_STROKE_WEIGHT.MAX))
+      trHueShift = ceil(random(TR_HUE_SHIFT.MIN, TR_HUE_SHIFT.MAX))
+      trTileSizeDivNum = ceil(random(TR_TILE_SIZE_DIV.MIN, TR_TILE_SIZE_DIV.MAX))
+      // 係数をランダムに変更
+
       trUpdateUrl()
       trCreateQrCode()
       trChangePatternFrame = frameCount
