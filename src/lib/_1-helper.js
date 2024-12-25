@@ -95,7 +95,7 @@ function createLaunchpadSetup(userConfig = {}) {
   }
 
   // 以降は設定を使って処理を行う
-  return async (pressedCallback, failedCallback, setDataParams, dataGrid) => {
+  return async (pressedCallback, failedCallback, setDataParams, dataGrid, patternButtonClickAction = () => {}) => {
     try {
       const access = await navigator.requestMIDIAccess()
 
@@ -164,9 +164,13 @@ function createLaunchpadSetup(userConfig = {}) {
               output.send([0x90, i, config.functionButtonColor /* 色コード */])
             } else {
               output.send([0x90, i, config.activeColor /* 色コード */])
+              patternButtonClickAction()
             }
           } else {
             output.send([0x90, i, 0])
+            if (!config.functionButtonCodeList.includes(i)) {
+              patternButtonClickAction()
+            }
           }
         }
       }

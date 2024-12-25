@@ -16,6 +16,7 @@ async function trUiDraw() {
       trCreateQrCode()
       trChangePatternFrame = frameCount
       trSetDataParams()
+      trSineCountReset()
       trUrlToData()
 
       // TODO: autoモードの時に、機能ボタンが押せない時がある

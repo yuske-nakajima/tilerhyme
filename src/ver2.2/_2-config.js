@@ -261,6 +261,7 @@ function trUtilityDataGridIsPressed(value, isPressed) {
   if (isPressed) {
     // ON
     // TODO: 押した時にONになる処理
+    console.clear()
     console.log(`ON: ${value}`)
     switch (value) {
       case TR_FUNCTION_CODE.IS_DARK:
@@ -286,6 +287,7 @@ function trUtilityDataGridIsPressed(value, isPressed) {
   } else {
     // OFF
     // TODO: 押した時にOFFになる処理を実装する
+    console.clear()
     console.log(`OFF: ${value}`)
     switch (value) {
       case TR_FUNCTION_CODE.IS_DARK:
@@ -717,7 +719,9 @@ async function trSetDataParams() {
       trDataParams.push(parseInt(part, 16) % 100)
     }
   }
+}
 
+function trSineCountReset() {
   trSineCount = 0
 }
 
