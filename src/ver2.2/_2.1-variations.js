@@ -193,7 +193,7 @@ const trDrawRect19 = _trDrawRect(
       textAlign(CENTER, CENTER)
       textSize(tileSize / 2)
       fill(colorList[trDataParams[noiseVal % trDataParams.length] % colorList.length])
-      const aList = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('')
+      const aList = '0123456789!@#$%^&*()'.split('')
       const index =
         ceil(trDataParams[noiseVal % trDataParams.length] + trDataParams[noiseVal % trDataParams.length]) % aList.length
       const a = aList[index]
@@ -234,7 +234,7 @@ const trDrawRect29 = _trDrawRect(
       textAlign(CENTER, CENTER)
       textSize(tileSize / 2)
       fill(colorList[trDataParams[noiseVal % trDataParams.length] % colorList.length])
-      const aList = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('')
+      const aList = '0123456789!@#$%^&*()'.split('')
       const index =
         ceil(trDataParams[noiseVal % trDataParams.length] + trDataParams[noiseVal % trDataParams.length]) % aList.length
       const a = aList[index]
