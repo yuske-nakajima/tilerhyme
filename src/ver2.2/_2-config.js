@@ -175,7 +175,7 @@ const TR_SET_DATA_PARAMS_LENGTH = 20
 
 const TR_TILE_SIZE_DIV = {
   MIN: 2,
-  MAX: 20,
+  MAX: 16,
 }
 // ------------------------------------------------------------
 // --- 変数
