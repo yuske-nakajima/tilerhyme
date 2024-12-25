@@ -52,7 +52,7 @@ if (trFuncArray.length >= 2) {
  */
 function trDrawShape() {
   // 画面全体をタイルで埋める
-  const tileSize = width / 8 // タイルの基本サイズ
+  const tileSize = width / trTileSizeDivNum // タイルの基本サイズ
   const w = ceil(width / tileSize)
   const h = ceil(height / tileSize)
 

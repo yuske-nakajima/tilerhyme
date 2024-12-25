@@ -14,6 +14,8 @@ const TR_FUNCTION_CODE = {
   STROKE_WEIGHT_DOWN: 92,
   HUE_SHIFT_UP: 93,
   HUE_SHIFT_DOWN: 94,
+  TILE_SIZE_DIV_UP: 95,
+  TILE_SIZE_DIV_DOWN: 96,
 }
 
 const TR_DATA_GRID_SIZE = 64
@@ -97,8 +99,8 @@ const TR_INIT_DATA_GRID = [
   { value: TR_FUNCTION_CODE.STROKE_WEIGHT_DOWN, isPressed: false },
   { value: TR_FUNCTION_CODE.HUE_SHIFT_UP, isPressed: false },
   { value: TR_FUNCTION_CODE.HUE_SHIFT_DOWN, isPressed: false },
-  { value: 95, isPressed: false },
-  { value: 96, isPressed: false },
+  { value: TR_FUNCTION_CODE.TILE_SIZE_DIV_UP, isPressed: false },
+  { value: TR_FUNCTION_CODE.TILE_SIZE_DIV_DOWN, isPressed: false },
   { value: 97, isPressed: false },
   { value: 98, isPressed: false },
 ]
@@ -170,6 +172,11 @@ const TR_WINDOW_TYPE = {
 }
 
 const TR_SET_DATA_PARAMS_LENGTH = 20
+
+const TR_TILE_SIZE_DIV = {
+  MIN: 2,
+  MAX: 20,
+}
 // ------------------------------------------------------------
 // --- 変数
 // ------------------------------------------------------------
@@ -220,6 +227,8 @@ let trStrokeWeight = 4
 let trNoiseGraphic
 
 let trHueShift = 0
+
+let trTileSizeDivNum = 8
 // ------------------------------------------------------------
 // --- 関数
 // ------------------------------------------------------------
@@ -231,6 +240,8 @@ const trProgrammerModeSetup = createLaunchpadSetup({
     TR_FUNCTION_CODE.STROKE_WEIGHT_DOWN,
     TR_FUNCTION_CODE.HUE_SHIFT_UP,
     TR_FUNCTION_CODE.HUE_SHIFT_DOWN,
+    TR_FUNCTION_CODE.TILE_SIZE_DIV_UP,
+    TR_FUNCTION_CODE.TILE_SIZE_DIV_DOWN,
   ],
   functionButtonCodeList: [
     TR_FUNCTION_CODE.IS_DARK,
@@ -306,6 +317,7 @@ function trUtilityDataGridIsPressed(value, isPressed) {
       case TR_FUNCTION_CODE.IS_AUTO:
         trMode = trSaveToLocalStorage('trMode', TR_MODE.NORMAL)
         document.querySelector('#image-download').style.display = 'block'
+        location.reload()
         break
       default:
         break
@@ -333,6 +345,12 @@ function trUtilityDataGridIsPressed(value, isPressed) {
         trHueShift - TR_HUE_SHIFT_STEP < TR_HUE_SHIFT.MIN
           ? TR_HUE_SHIFT.MAX - TR_HUE_SHIFT_STEP
           : trHueShift - TR_HUE_SHIFT_STEP
+      break
+    case TR_FUNCTION_CODE.TILE_SIZE_DIV_UP:
+      trTileSizeDivNum = min(trTileSizeDivNum + 1, TR_TILE_SIZE_DIV.MAX)
+      break
+    case TR_FUNCTION_CODE.TILE_SIZE_DIV_DOWN:
+      trTileSizeDivNum = max(trTileSizeDivNum - 1, TR_TILE_SIZE_DIV.MIN)
       break
     default:
       break
@@ -618,6 +636,14 @@ function trUrlToData() {
     trHueShift = parseInt(hueShift)
   }
 
+  // タイルの分割数
+  const tileSizeDivNum = url.searchParams.get('tile-size-div')
+  const isValidTileSizeDivNum =
+    tileSizeDivNum && tileSizeDivNum >= TR_TILE_SIZE_DIV.MIN && tileSizeDivNum <= TR_TILE_SIZE_DIV.MAX
+  if (isValidTileSizeDivNum) {
+    trTileSizeDivNum = parseInt(tileSizeDivNum)
+  }
+
   // ローカルストレージからモードを取得
   const mode = trGetOrInitializeValue('trMode', TR_MODE.NORMAL)
   if (mode === TR_MODE.AUTO) {
@@ -626,7 +652,14 @@ function trUrlToData() {
   }
   trMode = mode
 
-  if (!isValidData || !isValidBackground || !isValidGrayScale || !isValidTrStrokeWeight || !isValidHueShift) {
+  if (
+    !isValidData ||
+    !isValidBackground ||
+    !isValidGrayScale ||
+    !isValidTrStrokeWeight ||
+    !isValidHueShift ||
+    !isValidTileSizeDivNum
+  ) {
     trUpdateUrl()
   }
 }
@@ -646,6 +679,7 @@ function trUpdateUrl() {
   url.searchParams.set('gray-scale', trFilterMode)
   url.searchParams.set('stroke-weight', trStrokeWeight)
   url.searchParams.set('hue-shift', trHueShift)
+  url.searchParams.set('tile-size-div', trTileSizeDivNum)
   url.searchParams.set('data', trGridDataToString())
 
   window.history.pushState({}, '', url)
