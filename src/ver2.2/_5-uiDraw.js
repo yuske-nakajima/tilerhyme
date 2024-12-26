@@ -128,9 +128,11 @@ async function trUiDraw() {
 
   trDrawShape()
 
-  trDeviceDraw()
-
   if (trFilterMode === TR_FILTER_MODE.GRAY) {
     filter(GRAY)
   }
+
+  trNoiseFilter()
+
+  trDeviceDraw()
 }

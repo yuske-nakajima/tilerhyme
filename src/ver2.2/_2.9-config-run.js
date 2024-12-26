@@ -63,6 +63,4 @@ function trDrawShape() {
       trComposeFuncList[mode](x, y, tileSize)
     }
   }
-
-  trNoiseFilter()
 }
