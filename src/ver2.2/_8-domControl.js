@@ -71,6 +71,7 @@ const modeNormalFunc = (e) => {
   trIsDataGridClickable = true
 
   imageDownloadArea.style.display = 'block'
+  window.location.reload()
 }
 modeNormal.addEventListener('click', modeNormalFunc)
 modeNormal.addEventListener('touchend', modeNormalFunc)
