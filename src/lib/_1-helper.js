@@ -96,9 +96,16 @@ function createLaunchpadSetup(userConfig = {}) {
   }
 
   // 以降は設定を使って処理を行う
-  return async (pressedCallback, failedCallback, setDataParams, dataGrid, patternButtonClickAction = () => {}) => {
+  return async (
+    pressedCallback,
+    failedCallback,
+    setDataParams,
+    dataGrid,
+    _access,
+    patternButtonClickAction = () => {},
+  ) => {
     try {
-      const access = await navigator.requestMIDIAccess()
+      const access = _access || (await navigator.requestMIDIAccess())
 
       const input = Array.from(access.inputs.values()).find((input) => config.inputNames.includes(input.name))
       if (!input) {

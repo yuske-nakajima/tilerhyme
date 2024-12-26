@@ -14,17 +14,7 @@ async function trUiDraw() {
       }
 
       // 係数をランダムに変更
-      trBackgroundMode = random(Object.values(TR_BACKGROUND_MODE))
-      // グレイスケールは頻度を下げる
-      if (frameCount % 4 === 0) {
-        trGrayFilter = random(Object.values(TR_GRAY_FILTER))
-      } else {
-        trGrayFilter = TR_GRAY_FILTER.NONE
-      }
-      trNoiseFilter = random(Object.values(TR_NOISE_FILTER))
-      trStrokeWeight = ceil(random(TR_STROKE_WEIGHT.MIN, TR_STROKE_WEIGHT.MAX))
-      trHueShift = ceil(random(TR_HUE_SHIFT.MIN, TR_HUE_SHIFT.MAX))
-      trTileSizeDivNum = ceil(random(TR_TILE_SIZE_DIV.MIN, TR_TILE_SIZE_DIV.MAX))
+      trFunctionParamsRandomize()
       // 係数をランダムに変更
 
       trUpdateUrl()
@@ -47,6 +37,12 @@ async function trUiDraw() {
         },
         trSetDataParams,
         trDataGrid,
+        trMidiAccess,
+        () => {
+          if (trMode !== TR_MODE.AUTO) {
+            trSineCountReset()
+          }
+        },
       )
 
       // trModeLifeGameGrid を TR_MAPPING_GRID の並び順に変換

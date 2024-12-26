@@ -13,6 +13,7 @@ async function trUiSetup() {
     },
     trSetDataParams,
     trDataGrid,
+    trMidiAccess,
     () => {
       if (trMode !== TR_MODE.AUTO) {
         trSineCountReset()

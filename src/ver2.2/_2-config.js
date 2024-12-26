@@ -20,7 +20,7 @@ const TR_FUNCTION_CODE = {
   HUE_SHIFT_DOWN: 94,
   TILE_SIZE_DIV_UP: 95,
   TILE_SIZE_DIV_DOWN: 96,
-  NO_DEVICE_6: 97,
+  RANDOM_TILE: 97,
   NO_DEVICE_7: 98,
 }
 
@@ -107,7 +107,7 @@ const TR_INIT_DATA_GRID = [
   { value: TR_FUNCTION_CODE.HUE_SHIFT_DOWN, isPressed: false },
   { value: TR_FUNCTION_CODE.TILE_SIZE_DIV_UP, isPressed: false },
   { value: TR_FUNCTION_CODE.TILE_SIZE_DIV_DOWN, isPressed: false },
-  { value: TR_FUNCTION_CODE.NO_DEVICE_6, isPressed: false },
+  { value: TR_FUNCTION_CODE.RANDOM_TILE, isPressed: false },
   { value: TR_FUNCTION_CODE.NO_DEVICE_7, isPressed: false },
 ]
 
@@ -243,6 +243,8 @@ let trNoiseGraphic
 let trHueShift = 0
 
 let trTileSizeDivNum = TR_TILE_SIZE_DIV.DEFAULT
+
+let trMidiAccess
 // ------------------------------------------------------------
 // --- 関数
 // ------------------------------------------------------------
@@ -256,6 +258,7 @@ const trProgrammerModeSetup = createLaunchpadSetup({
     TR_FUNCTION_CODE.HUE_SHIFT_DOWN,
     TR_FUNCTION_CODE.TILE_SIZE_DIV_UP,
     TR_FUNCTION_CODE.TILE_SIZE_DIV_DOWN,
+    TR_FUNCTION_CODE.RANDOM_TILE,
   ],
   functionButtonCodeList: [
     TR_FUNCTION_CODE.IS_DARK,
@@ -268,7 +271,6 @@ const trProgrammerModeSetup = createLaunchpadSetup({
     TR_FUNCTION_CODE.NO_DEVICE_3,
     TR_FUNCTION_CODE.NO_DEVICE_4,
     TR_FUNCTION_CODE.NO_DEVICE_5,
-    TR_FUNCTION_CODE.NO_DEVICE_6,
     TR_FUNCTION_CODE.NO_DEVICE_7,
   ],
 })
@@ -370,6 +372,17 @@ function trUtilityDataGridIsPressed(value, isPressed) {
       break
     case TR_FUNCTION_CODE.TILE_SIZE_DIV_DOWN:
       trTileSizeDivNum = max(trTileSizeDivNum - 1, TR_TILE_SIZE_DIV.MIN)
+      break
+    case TR_FUNCTION_CODE.RANDOM_TILE:
+      trFunctionParamsRandomize()
+      trDataGrid = trDataGrid.map((item, i) => {
+        if (i >= TR_DATA_GRID_SIZE) {
+          return item
+        }
+        item.isPressed = random() > 0.5
+        return item
+      })
+      trSetInitUrlAndMidi()
       break
     default:
       break
@@ -882,4 +895,58 @@ function trGenerateNoiseValue(x, y) {
     trDataParams.at(x % trDataParams.length) * trDataParams.at(y % trDataParams.length),
     trDataParams,
   )
+}
+
+/**
+ * trFunctionParamsRandomize 関数は、ランダムなパラメータを生成して設定します。
+ * 背景モード、グレイスケールフィルター、ノイズフィルター、線の太さ、色相シフト、
+ * タイルサイズの分割数をランダムに設定します。
+ */
+function trFunctionParamsRandomize() {
+  trBackgroundMode = random(Object.values(TR_BACKGROUND_MODE))
+  // グレイスケールは頻度を下げる
+  if (frameCount % 4 === 0) {
+    trGrayFilter = random(Object.values(TR_GRAY_FILTER))
+  } else {
+    trGrayFilter = TR_GRAY_FILTER.NONE
+  }
+  trNoiseFilter = random(Object.values(TR_NOISE_FILTER))
+  trStrokeWeight = ceil(random(TR_STROKE_WEIGHT.MIN, TR_STROKE_WEIGHT.MAX))
+  trHueShift = ceil(random(TR_HUE_SHIFT.MIN, TR_HUE_SHIFT.MAX))
+  trTileSizeDivNum = ceil(random(TR_TILE_SIZE_DIV.MIN, TR_TILE_SIZE_DIV.MAX))
+}
+
+/**
+ * trSetInitUrlAndMidi 関数は、URLとMIDIの初期設定を行います。
+ * URLを更新し、QRコードを生成し、パターン変更フレームを設定し、
+ * データパラメータを設定します。
+ * その後、プログラマーモードのセットアップを行います。
+ */
+function trSetInitUrlAndMidi() {
+  trUpdateUrl()
+  trCreateQrCode()
+  trChangePatternFrame = frameCount
+  trSetDataParams().then(() => {
+    trSineCountReset()
+    trUrlToData()
+
+    trProgrammerModeSetup(
+      async (i) => {
+        trUtilityDataGridIsPressed(i, !trGetPressedKeyList(trDataGrid).includes(i))
+        trSetDataGridIsPressed(i, !trGetPressedKeyList(trDataGrid).includes(i))
+        await trSetDataParams()
+      },
+      () => {
+        trIsNoDevice = true
+      },
+      trSetDataParams,
+      trDataGrid,
+      trMidiAccess,
+      () => {
+        if (trMode !== TR_MODE.AUTO) {
+          trSineCountReset()
+        }
+      },
+    ).then()
+  })
 }

@@ -1,4 +1,4 @@
-function trInitial() {
+async function trInitial() {
   trSetDataParams()
   trUrlToData()
   trWindowGap = max(windowWidth * 0.01, windowHeight * 0.01)
@@ -32,4 +32,7 @@ function trInitial() {
   // ノイズ
   trNoiseGraphic = createGraphics(width / 4, height / 4)
   trGenerateNoise()
+
+  // MIDI
+  trMidiAccess = await navigator.requestMIDIAccess()
 }
