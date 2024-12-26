@@ -175,7 +175,8 @@ const TR_SET_DATA_PARAMS_LENGTH = 20
 
 const TR_TILE_SIZE_DIV = {
   MIN: 2,
-  MAX: 16,
+  MAX: 12,
+  DEFAULT: 6,
 }
 // ------------------------------------------------------------
 // --- 変数
@@ -228,7 +229,7 @@ let trNoiseGraphic
 
 let trHueShift = 0
 
-let trTileSizeDivNum = 8
+let trTileSizeDivNum = TR_TILE_SIZE_DIV.DEFAULT
 // ------------------------------------------------------------
 // --- 関数
 // ------------------------------------------------------------
