@@ -42,7 +42,7 @@ dialogDownloadInfo.addEventListener('touchend', () => {
 const modeButton = document.getElementById('mode')
 const modeDialog = document.getElementById('mode-dialog')
 const modeNormal = document.getElementById('mode-normal')
-// const modeAuto = document.getElementById('mode-auto')
+const modeAuto = document.getElementById('mode-auto')
 const modeCancel = document.getElementById('mode-cancel')
 
 // モーダル表示・非表示
@@ -84,5 +84,5 @@ const modeAutoFunc = (e) => {
 
   imageDownloadArea.style.display = 'none'
 }
-// modeAuto.addEventListener('click', modeAutoFunc)
-// modeAuto.addEventListener('touchend', modeAutoFunc)
+modeAuto.addEventListener('click', modeAutoFunc)
+modeAuto.addEventListener('touchend', modeAutoFunc)

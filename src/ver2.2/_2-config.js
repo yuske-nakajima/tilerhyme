@@ -9,7 +9,6 @@ const TR_FUNCTION_CODE = {
   IS_DARK: 19,
   IS_CHROMATIC: 29,
   IS_GRAY_SCALE: 39,
-  IS_AUTO: 89,
   STROKE_WEIGHT_UP: 91,
   STROKE_WEIGHT_DOWN: 92,
   HUE_SHIFT_UP: 93,
@@ -94,7 +93,6 @@ const TR_INIT_DATA_GRID = [
   { value: 59, isPressed: false },
   { value: 69, isPressed: false },
   { value: 79, isPressed: false },
-  { value: TR_FUNCTION_CODE.IS_AUTO, isPressed: false },
   { value: TR_FUNCTION_CODE.STROKE_WEIGHT_UP, isPressed: false },
   { value: TR_FUNCTION_CODE.STROKE_WEIGHT_DOWN, isPressed: false },
   { value: TR_FUNCTION_CODE.HUE_SHIFT_UP, isPressed: false },
@@ -244,12 +242,7 @@ const trProgrammerModeSetup = createLaunchpadSetup({
     TR_FUNCTION_CODE.TILE_SIZE_DIV_UP,
     TR_FUNCTION_CODE.TILE_SIZE_DIV_DOWN,
   ],
-  functionButtonCodeList: [
-    TR_FUNCTION_CODE.IS_DARK,
-    TR_FUNCTION_CODE.IS_CHROMATIC,
-    TR_FUNCTION_CODE.IS_GRAY_SCALE,
-    TR_FUNCTION_CODE.IS_AUTO,
-  ],
+  functionButtonCodeList: [TR_FUNCTION_CODE.IS_DARK, TR_FUNCTION_CODE.IS_CHROMATIC, TR_FUNCTION_CODE.IS_GRAY_SCALE],
 })
 
 /**
@@ -289,10 +282,6 @@ function trUtilityDataGridIsPressed(value, isPressed) {
       case TR_FUNCTION_CODE.IS_GRAY_SCALE:
         trFilterMode = TR_FILTER_MODE.GRAY
         break
-      case TR_FUNCTION_CODE.IS_AUTO:
-        trMode = trSaveToLocalStorage('trMode', TR_MODE.AUTO)
-        document.querySelector('#image-download').style.display = 'none'
-        break
       default:
         break
     }
@@ -314,11 +303,6 @@ function trUtilityDataGridIsPressed(value, isPressed) {
         break
       case TR_FUNCTION_CODE.IS_GRAY_SCALE:
         trFilterMode = TR_FILTER_MODE.NONE
-        break
-      case TR_FUNCTION_CODE.IS_AUTO:
-        trMode = trSaveToLocalStorage('trMode', TR_MODE.NORMAL)
-        document.querySelector('#image-download').style.display = 'block'
-        location.reload()
         break
       default:
         break
@@ -644,14 +628,6 @@ function trUrlToData() {
   if (isValidTileSizeDivNum) {
     trTileSizeDivNum = parseInt(tileSizeDivNum)
   }
-
-  // ローカルストレージからモードを取得
-  const mode = trGetOrInitializeValue('trMode', TR_MODE.NORMAL)
-  if (mode === TR_MODE.AUTO) {
-    document.querySelector('#image-download').style.display = 'none'
-    trDataGrid.find((item) => item.value === TR_FUNCTION_CODE.IS_AUTO).isPressed = true
-  }
-  trMode = mode
 
   if (
     !isValidData ||
