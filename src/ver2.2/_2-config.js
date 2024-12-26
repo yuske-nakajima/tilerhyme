@@ -9,12 +9,19 @@ const TR_FUNCTION_CODE = {
   IS_DARK: 19,
   IS_CHROMATIC: 29,
   IS_GRAY_SCALE: 39,
+  NO_DEVICE_1: 49,
+  NO_DEVICE_2: 59,
+  NO_DEVICE_3: 69,
+  NO_DEVICE_4: 79,
+  NO_DEVICE_5: 89,
   STROKE_WEIGHT_UP: 91,
   STROKE_WEIGHT_DOWN: 92,
   HUE_SHIFT_UP: 93,
   HUE_SHIFT_DOWN: 94,
   TILE_SIZE_DIV_UP: 95,
   TILE_SIZE_DIV_DOWN: 96,
+  NO_DEVICE_6: 97,
+  NO_DEVICE_7: 98,
 }
 
 const TR_DATA_GRID_SIZE = 64
@@ -89,18 +96,19 @@ const TR_INIT_DATA_GRID = [
   { value: TR_FUNCTION_CODE.IS_DARK, isPressed: false },
   { value: TR_FUNCTION_CODE.IS_CHROMATIC, isPressed: false },
   { value: TR_FUNCTION_CODE.IS_GRAY_SCALE, isPressed: false },
-  { value: 49, isPressed: false },
-  { value: 59, isPressed: false },
-  { value: 69, isPressed: false },
-  { value: 79, isPressed: false },
+  { value: TR_FUNCTION_CODE.NO_DEVICE_1, isPressed: false },
+  { value: TR_FUNCTION_CODE.NO_DEVICE_2, isPressed: false },
+  { value: TR_FUNCTION_CODE.NO_DEVICE_3, isPressed: false },
+  { value: TR_FUNCTION_CODE.NO_DEVICE_4, isPressed: false },
+  { value: TR_FUNCTION_CODE.NO_DEVICE_5, isPressed: false },
   { value: TR_FUNCTION_CODE.STROKE_WEIGHT_UP, isPressed: false },
   { value: TR_FUNCTION_CODE.STROKE_WEIGHT_DOWN, isPressed: false },
   { value: TR_FUNCTION_CODE.HUE_SHIFT_UP, isPressed: false },
   { value: TR_FUNCTION_CODE.HUE_SHIFT_DOWN, isPressed: false },
   { value: TR_FUNCTION_CODE.TILE_SIZE_DIV_UP, isPressed: false },
   { value: TR_FUNCTION_CODE.TILE_SIZE_DIV_DOWN, isPressed: false },
-  { value: 97, isPressed: false },
-  { value: 98, isPressed: false },
+  { value: TR_FUNCTION_CODE.NO_DEVICE_6, isPressed: false },
+  { value: TR_FUNCTION_CODE.NO_DEVICE_7, isPressed: false },
 ]
 
 const TR_MAPPING_GRID = [
@@ -243,6 +251,15 @@ const trProgrammerModeSetup = createLaunchpadSetup({
     TR_FUNCTION_CODE.TILE_SIZE_DIV_DOWN,
   ],
   functionButtonCodeList: [TR_FUNCTION_CODE.IS_DARK, TR_FUNCTION_CODE.IS_CHROMATIC, TR_FUNCTION_CODE.IS_GRAY_SCALE],
+  noneButtonCodeList: [
+    TR_FUNCTION_CODE.NO_DEVICE_1,
+    TR_FUNCTION_CODE.NO_DEVICE_2,
+    TR_FUNCTION_CODE.NO_DEVICE_3,
+    TR_FUNCTION_CODE.NO_DEVICE_4,
+    TR_FUNCTION_CODE.NO_DEVICE_5,
+    TR_FUNCTION_CODE.NO_DEVICE_6,
+    TR_FUNCTION_CODE.NO_DEVICE_7,
+  ],
 })
 
 /**

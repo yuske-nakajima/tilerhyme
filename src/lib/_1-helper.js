@@ -86,6 +86,7 @@ function createLaunchpadSetup(userConfig = {}) {
       noteRange: { min: 36, max: 99 },
       incrementButtonCodeList: [],
       functionButtonCodeList: [],
+      noneButtonCodeList: [],
       activeColor: 12,
       functionButtonColor: 96,
       incrementButtonColor: 72,
@@ -140,6 +141,13 @@ function createLaunchpadSetup(userConfig = {}) {
             pressedCallback(note)
             output.send([0x90, note, config.incrementButtonColor /* 色コード */])
           } else {
+            output.send([0x90, note, 0])
+          }
+          return
+        }
+
+        if (config.noneButtonCodeList.includes(note)) {
+          if (trLpIsPressed(velocity)) {
             output.send([0x90, note, 0])
           }
           return
