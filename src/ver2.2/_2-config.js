@@ -8,8 +8,8 @@ const TR_VERSION_NAME = 'KICK'
 const TR_FUNCTION_CODE = {
   IS_DARK: 19,
   IS_CHROMATIC: 29,
-  IS_GRAY_SCALE: 39,
-  NO_DEVICE_1: 49,
+  IS_NOISE_FILTER: 39,
+  IS_GRAY_SCALE: 49,
   NO_DEVICE_2: 59,
   NO_DEVICE_3: 69,
   NO_DEVICE_4: 79,
@@ -96,7 +96,7 @@ const TR_INIT_DATA_GRID = [
   { value: TR_FUNCTION_CODE.IS_DARK, isPressed: false },
   { value: TR_FUNCTION_CODE.IS_CHROMATIC, isPressed: false },
   { value: TR_FUNCTION_CODE.IS_GRAY_SCALE, isPressed: false },
-  { value: TR_FUNCTION_CODE.NO_DEVICE_1, isPressed: false },
+  { value: TR_FUNCTION_CODE.IS_NOISE_FILTER, isPressed: false },
   { value: TR_FUNCTION_CODE.NO_DEVICE_2, isPressed: false },
   { value: TR_FUNCTION_CODE.NO_DEVICE_3, isPressed: false },
   { value: TR_FUNCTION_CODE.NO_DEVICE_4, isPressed: false },
@@ -154,9 +154,14 @@ const TR_BACKGROUND_MODE = {
   CHROMATIC_DARK: 3,
 }
 
-TR_FILTER_MODE = {
+const TR_GRAY_FILTER = {
   NONE: 0,
   GRAY: 1,
+}
+
+const TR_NOISE_FILTER = {
+  NONE: 0,
+  NOISE: 1,
 }
 
 const TR_STROKE_WEIGHT = {
@@ -226,7 +231,9 @@ let trSineCount = 0
 let trBackgroundMode = TR_BACKGROUND_MODE.LIGHT
 
 // none | gray
-let trFilterMode = TR_FILTER_MODE.NONE
+let trGrayFilter = TR_GRAY_FILTER.NONE
+
+let trNoiseFilter = TR_NOISE_FILTER.NONE
 
 // 線幅の係数
 let trStrokeWeight = 4
@@ -250,9 +257,13 @@ const trProgrammerModeSetup = createLaunchpadSetup({
     TR_FUNCTION_CODE.TILE_SIZE_DIV_UP,
     TR_FUNCTION_CODE.TILE_SIZE_DIV_DOWN,
   ],
-  functionButtonCodeList: [TR_FUNCTION_CODE.IS_DARK, TR_FUNCTION_CODE.IS_CHROMATIC, TR_FUNCTION_CODE.IS_GRAY_SCALE],
+  functionButtonCodeList: [
+    TR_FUNCTION_CODE.IS_DARK,
+    TR_FUNCTION_CODE.IS_CHROMATIC,
+    TR_FUNCTION_CODE.IS_GRAY_SCALE,
+    TR_FUNCTION_CODE.IS_NOISE_FILTER,
+  ],
   noneButtonCodeList: [
-    TR_FUNCTION_CODE.NO_DEVICE_1,
     TR_FUNCTION_CODE.NO_DEVICE_2,
     TR_FUNCTION_CODE.NO_DEVICE_3,
     TR_FUNCTION_CODE.NO_DEVICE_4,
@@ -297,7 +308,10 @@ function trUtilityDataGridIsPressed(value, isPressed) {
           : TR_BACKGROUND_MODE.CHROMATIC
         break
       case TR_FUNCTION_CODE.IS_GRAY_SCALE:
-        trFilterMode = TR_FILTER_MODE.GRAY
+        trGrayFilter = TR_GRAY_FILTER.GRAY
+        break
+      case TR_FUNCTION_CODE.IS_NOISE_FILTER:
+        trNoiseFilter = TR_NOISE_FILTER.NOISE
         break
       default:
         break
@@ -319,7 +333,10 @@ function trUtilityDataGridIsPressed(value, isPressed) {
           : TR_BACKGROUND_MODE.LIGHT
         break
       case TR_FUNCTION_CODE.IS_GRAY_SCALE:
-        trFilterMode = TR_FILTER_MODE.NONE
+        trGrayFilter = TR_GRAY_FILTER.NONE
+        break
+      case TR_FUNCTION_CODE.IS_NOISE_FILTER:
+        trNoiseFilter = TR_NOISE_FILTER.NONE
         break
       default:
         break
@@ -606,16 +623,28 @@ function trUrlToData() {
     trBackgroundMode = TR_BACKGROUND_MODE.LIGHT
   }
 
-  // filter
+  // gray filter
   const grayScale = url.searchParams.get('gray-scale')
-  const isValidGrayScale = grayScale && Object.values(TR_FILTER_MODE).includes(parseInt(grayScale))
+  const isValidGrayScale = grayScale && Object.values(TR_GRAY_FILTER).includes(parseInt(grayScale))
   if (isValidGrayScale) {
-    trFilterMode = parseInt(grayScale)
-    if (trFilterMode === TR_FILTER_MODE.GRAY) {
+    trGrayFilter = parseInt(grayScale)
+    if (trGrayFilter === TR_GRAY_FILTER.GRAY) {
       trDataGrid.find((item) => item.value === TR_FUNCTION_CODE.IS_GRAY_SCALE).isPressed = true
     }
   } else {
-    trFilterMode = TR_FILTER_MODE.NONE
+    trGrayFilter = TR_GRAY_FILTER.NONE
+  }
+
+  // noise filter
+  const noiseFilter = url.searchParams.get('noise-filter')
+  const isValidNoiseFilter = noiseFilter && Object.values(TR_NOISE_FILTER).includes(parseInt(noiseFilter))
+  if (isValidNoiseFilter) {
+    trNoiseFilter = parseInt(noiseFilter)
+    if (trNoiseFilter === TR_NOISE_FILTER.NOISE) {
+      trDataGrid.find((item) => item.value === TR_FUNCTION_CODE.IS_NOISE_FILTER).isPressed = true
+    }
+  } else {
+    trNoiseFilter = TR_NOISE_FILTER.NONE
   }
 
   // stroke weight
@@ -645,6 +674,7 @@ function trUrlToData() {
     !isValidData ||
     !isValidBackground ||
     !isValidGrayScale ||
+    !isValidNoiseFilter ||
     !isValidTrStrokeWeight ||
     !isValidHueShift ||
     !isValidTileSizeDivNum
@@ -665,7 +695,8 @@ function trUpdateUrl() {
 
   // URLの検索パラメータを設定
   url.searchParams.set('background', trBackgroundMode)
-  url.searchParams.set('gray-scale', trFilterMode)
+  url.searchParams.set('gray-scale', trGrayFilter)
+  url.searchParams.set('noise-filter', trNoiseFilter)
   url.searchParams.set('stroke-weight', trStrokeWeight)
   url.searchParams.set('hue-shift', trHueShift)
   url.searchParams.set('tile-size-div', trTileSizeDivNum)
@@ -830,7 +861,7 @@ function trGenerateNoise() {
  * ノイズフィルターを適用する関数。
  * 現在の背景モードに応じてブレンドモードを設定し、ノイズグラフィックを描画します。
  */
-function trNoiseFilter() {
+function trDrawNoiseFilter() {
   trDrawBlock(() => {
     switch (trBackgroundMode) {
       case TR_BACKGROUND_MODE.LIGHT || TR_BACKGROUND_MODE.CHROMATIC:

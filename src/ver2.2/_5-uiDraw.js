@@ -17,10 +17,11 @@ async function trUiDraw() {
       trBackgroundMode = random(Object.values(TR_BACKGROUND_MODE))
       // グレイスケールは頻度を下げる
       if (frameCount % 4 === 0) {
-        trFilterMode = random(Object.values(TR_FILTER_MODE))
+        trGrayFilter = random(Object.values(TR_GRAY_FILTER))
       } else {
-        trFilterMode = TR_FILTER_MODE.NONE
+        trGrayFilter = TR_GRAY_FILTER.NONE
       }
+      trNoiseFilter = random(Object.values(TR_NOISE_FILTER))
       trStrokeWeight = ceil(random(TR_STROKE_WEIGHT.MIN, TR_STROKE_WEIGHT.MAX))
       trHueShift = ceil(random(TR_HUE_SHIFT.MIN, TR_HUE_SHIFT.MAX))
       trTileSizeDivNum = ceil(random(TR_TILE_SIZE_DIV.MIN, TR_TILE_SIZE_DIV.MAX))
@@ -128,11 +129,13 @@ async function trUiDraw() {
 
   trDrawShape()
 
-  if (trFilterMode === TR_FILTER_MODE.GRAY) {
+  if (trGrayFilter === TR_GRAY_FILTER.GRAY) {
     filter(GRAY)
   }
 
-  trNoiseFilter()
+  if (trNoiseFilter === TR_NOISE_FILTER.NOISE) {
+    trDrawNoiseFilter()
+  }
 
   trDeviceDraw()
 }
