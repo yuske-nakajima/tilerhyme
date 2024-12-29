@@ -120,6 +120,33 @@ async function trUiDraw() {
     }
   }
 
+  if (trMode === TR_MODE.FONT_2_AUTO) {
+    if (frameCount % TR_AUTO_MODE_INTERVAL === 0) {
+      let index = trFont2AutoCount % trFont2AutoText.length
+
+      trFunctionParamsRandomize()
+
+      let _fontBitmap = trBitMapFontData.getBitmap(trFont2AutoText[index])
+      while (!_fontBitmap) {
+        // フォントが存在しない場合は次のフォントを取得
+        index = (index + 1) % trFont2AutoText.length
+        _fontBitmap = trBitMapFontData.getBitmap(trFont2AutoText[index])
+      }
+
+      const fontBitmap = _fontBitmap.bitmap
+      for (let yi = 0; yi < 8; yi++) {
+        for (let xi = 0; xi < 8; xi++) {
+          const gridIndex = TR_MAPPING_GRID[yi][xi]
+          const trDataGridIndex = trDataGrid.findIndex((item) => item.value === gridIndex)
+          trDataGrid[trDataGridIndex].isPressed = fontBitmap[yi][xi] === 1
+        }
+      }
+      trSetInitUrlAndMidi()
+
+      trFont2AutoCount = index + 1
+    }
+  }
+
   const h = (map(trDataParams[14], 0, 99, 0, 360) + trHueShift) % 360
   switch (trBackgroundMode) {
     case TR_BACKGROUND_MODE.LIGHT:

@@ -142,9 +142,10 @@ const TR_MODE = {
   NORMAL: 0,
   AUTO: 1,
   FONT_AUTO: 2,
+  FONT_2_AUTO: 3,
 }
 
-const TR_AUTO_MODE_INTERVAL = 90
+const TR_AUTO_MODE_INTERVAL = 60
 
 const TR_SINE_LOOP_COUNT = 2
 
@@ -217,6 +218,10 @@ let trQrImage
 
 // MODE object value
 let trMode = trSaveToLocalStorage('trMode', TR_MODE.NORMAL)
+
+let trFont2AutoText = trSaveToLocalStorage('trFont2AutoText', '')
+
+let trFont2AutoCount = 0
 
 // life gameの初期値はランダム値
 let trModeLifeGameGrid = Array.from({ length: 64 }, () => Math.floor(Math.random() * 2)).join('')
@@ -1005,6 +1010,6 @@ class BitmapUtils {
         bitmap: this.data.bitmaps[character].bitmap,
       }
     }
-    throw new Error(`Character "${character}" not found in bitmap data`)
+    return undefined
   }
 }
