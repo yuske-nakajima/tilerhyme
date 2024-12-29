@@ -35,4 +35,9 @@ async function trInitial() {
 
   // MIDI
   trMidiAccess = await navigator.requestMIDIAccess()
+
+  // フォントデータ読み込み
+  const fontResponse = await fetch('../assets/font.json')
+  const fontJson = await fontResponse.json()
+  trBitMapFontData = new BitmapUtils(fontJson)
 }

@@ -89,8 +89,10 @@ function createLaunchpadSetup(userConfig = {}) {
       noneButtonCodeList: [],
       activeColor: 12,
       functionButtonColor: 96,
-      incrementButtonColor: 72,
+      incrementButtonColor: 45,
+      functionInactiveColor: 1,
       inactiveColor: 0,
+      noneButtonColor: 0,
     },
     ...userConfig,
   }
@@ -121,6 +123,10 @@ function createLaunchpadSetup(userConfig = {}) {
 
       // 初期状態の設定
       for (let i = config.noteRange.min; i <= config.noteRange.max; i++) {
+        if (config.noneButtonCodeList.includes(i)) {
+          output.send([0x90, i, config.noneButtonColor])
+          continue
+        }
         const isPressed = trGetPressedKeyList(dataGrid).includes(i)
         if (isPressed) {
           if (config.functionButtonCodeList.includes(i)) {
@@ -130,7 +136,11 @@ function createLaunchpadSetup(userConfig = {}) {
           }
           await setDataParams()
         } else {
-          output.send([0x90, i, config.inactiveColor])
+          if (config.functionButtonCodeList.includes(i) || config.incrementButtonCodeList.includes(i)) {
+            output.send([0x90, i, config.functionInactiveColor])
+          } else {
+            output.send([0x90, i, config.inactiveColor])
+          }
         }
       }
 
@@ -148,14 +158,14 @@ function createLaunchpadSetup(userConfig = {}) {
             pressedCallback(note)
             output.send([0x90, note, config.incrementButtonColor /* 色コード */])
           } else {
-            output.send([0x90, note, 0])
+            output.send([0x90, note, config.functionInactiveColor])
           }
           return
         }
 
         if (config.noneButtonCodeList.includes(note)) {
           if (trLpIsPressed(velocity)) {
-            output.send([0x90, note, 0])
+            output.send([0x90, note, config.noneButtonColor])
           }
           return
         }
@@ -165,6 +175,38 @@ function createLaunchpadSetup(userConfig = {}) {
         }
 
         // ON/OFFボタンの処理
+        // 処理を増やす場合は、インターフェースを合わせてfuncListに追加する
+        const funcList = [
+          (i) => {
+            if (!config.functionButtonCodeList.includes(i)) {
+              return undefined
+            }
+            return {
+              press: () => {
+                output.send([0x90, i, config.functionButtonColor])
+              },
+              release: () => {
+                output.send([0x90, i, config.functionInactiveColor])
+              },
+            }
+          },
+          (i) => {
+            if (config.functionButtonCodeList.includes(i)) {
+              return undefined
+            }
+            return {
+              press: () => {
+                output.send([0x90, i, config.activeColor])
+                patternButtonClickAction()
+              },
+              release: () => {
+                output.send([0x90, i, config.inactiveColor])
+                patternButtonClickAction()
+              },
+            }
+          },
+        ]
+
         for (let i = config.noteRange.min; i <= config.noteRange.max; i++) {
           if (note !== i) {
             continue
@@ -174,18 +216,20 @@ function createLaunchpadSetup(userConfig = {}) {
             pressedCallback(note)
           }
 
+          const _func = funcList.filter((f) => f(i) !== undefined)
+          if (!_func.length) {
+            return
+          }
+
+          const func = _func[0](i)
+          if (!func) {
+            return
+          }
+
           if (trGetPressedKeyList(dataGrid).includes(i)) {
-            if (config.functionButtonCodeList.includes(i)) {
-              output.send([0x90, i, config.functionButtonColor /* 色コード */])
-            } else {
-              output.send([0x90, i, config.activeColor /* 色コード */])
-              patternButtonClickAction()
-            }
+            func.press()
           } else {
-            output.send([0x90, i, 0])
-            if (!config.functionButtonCodeList.includes(i)) {
-              patternButtonClickAction()
-            }
+            func.release()
           }
         }
       }

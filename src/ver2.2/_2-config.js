@@ -21,7 +21,7 @@ const TR_FUNCTION_CODE = {
   TILE_SIZE_DIV_UP: 95,
   TILE_SIZE_DIV_DOWN: 96,
   RANDOM_TILE: 97,
-  NO_DEVICE_7: 98,
+  RANDOM_FONT_TILE: 98,
 }
 
 const TR_DATA_GRID_SIZE = 64
@@ -108,7 +108,7 @@ const TR_INIT_DATA_GRID = [
   { value: TR_FUNCTION_CODE.TILE_SIZE_DIV_UP, isPressed: false },
   { value: TR_FUNCTION_CODE.TILE_SIZE_DIV_DOWN, isPressed: false },
   { value: TR_FUNCTION_CODE.RANDOM_TILE, isPressed: false },
-  { value: TR_FUNCTION_CODE.NO_DEVICE_7, isPressed: false },
+  { value: TR_FUNCTION_CODE.RANDOM_FONT_TILE, isPressed: false },
 ]
 
 const TR_MAPPING_GRID = [
@@ -245,6 +245,8 @@ let trHueShift = 0
 let trTileSizeDivNum = TR_TILE_SIZE_DIV.DEFAULT
 
 let trMidiAccess
+
+let trBitMapFontData
 // ------------------------------------------------------------
 // --- 関数
 // ------------------------------------------------------------
@@ -259,6 +261,7 @@ const trProgrammerModeSetup = createLaunchpadSetup({
     TR_FUNCTION_CODE.TILE_SIZE_DIV_UP,
     TR_FUNCTION_CODE.TILE_SIZE_DIV_DOWN,
     TR_FUNCTION_CODE.RANDOM_TILE,
+    TR_FUNCTION_CODE.RANDOM_FONT_TILE,
   ],
   functionButtonCodeList: [
     TR_FUNCTION_CODE.IS_DARK,
@@ -271,7 +274,6 @@ const trProgrammerModeSetup = createLaunchpadSetup({
     TR_FUNCTION_CODE.NO_DEVICE_3,
     TR_FUNCTION_CODE.NO_DEVICE_4,
     TR_FUNCTION_CODE.NO_DEVICE_5,
-    TR_FUNCTION_CODE.NO_DEVICE_7,
   ],
 })
 
@@ -382,6 +384,19 @@ function trUtilityDataGridIsPressed(value, isPressed) {
         item.isPressed = random() > 0.5
         return item
       })
+      trSetInitUrlAndMidi()
+      break
+    case TR_FUNCTION_CODE.RANDOM_FONT_TILE:
+      const targetBit = random([1])
+      trFunctionParamsRandomize()
+      const randomFontBitmap = trBitMapFontData.getRandomBitmap().bitmap
+      for (let yi = 0; yi < 8; yi++) {
+        for (let xi = 0; xi < 8; xi++) {
+          const gridIndex = TR_MAPPING_GRID[yi][xi]
+          const trDataGridIndex = trDataGrid.findIndex((item) => item.value === gridIndex)
+          trDataGrid[trDataGridIndex].isPressed = randomFontBitmap[yi][xi] === targetBit
+        }
+      }
       trSetInitUrlAndMidi()
       break
     default:
@@ -949,4 +964,47 @@ function trSetInitUrlAndMidi() {
       },
     ).then()
   })
+}
+
+class BitmapUtils {
+  constructor(jsonData) {
+    this.data = jsonData
+    this.characters = Object.keys(jsonData.bitmaps)
+  }
+
+  /**
+   * ランダムに1文字のビットマップを取得
+   * @returns {{character: string, bitmap: number[][]}}
+   */
+  getRandomBitmap() {
+    const randomChar = this.characters[Math.floor(Math.random() * this.characters.length)]
+    return {
+      character: randomChar,
+      bitmap: this.data.bitmaps[randomChar].bitmap,
+    }
+  }
+
+  /**
+   * 指定した数のビットマップをランダムに取得
+   * @param {number} count - 取得する文字数
+   * @returns {Array<{character: string, bitmap: number[][]}>}
+   */
+  getRandomBitmaps(count = 1) {
+    return Array.from({ length: count }, () => this.getRandomBitmap())
+  }
+
+  /**
+   * 特定の文字のビットマップを取得
+   * @param {string} character - 取得したい文字
+   * @returns {{character: string, bitmap: number[][]}}
+   */
+  getBitmap(character) {
+    if (this.data.bitmaps[character]) {
+      return {
+        character,
+        bitmap: this.data.bitmaps[character].bitmap,
+      }
+    }
+    throw new Error(`Character "${character}" not found in bitmap data`)
+  }
 }
