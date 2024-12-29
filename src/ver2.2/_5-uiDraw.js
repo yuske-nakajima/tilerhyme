@@ -105,6 +105,21 @@ async function trUiDraw() {
     }
   }
 
+  if (trMode === TR_MODE.FONT_AUTO) {
+    if (frameCount % TR_AUTO_MODE_INTERVAL === 0) {
+      trFunctionParamsRandomize()
+      const randomFontBitmap = trBitMapFontData.getRandomBitmap().bitmap
+      for (let yi = 0; yi < 8; yi++) {
+        for (let xi = 0; xi < 8; xi++) {
+          const gridIndex = TR_MAPPING_GRID[yi][xi]
+          const trDataGridIndex = trDataGrid.findIndex((item) => item.value === gridIndex)
+          trDataGrid[trDataGridIndex].isPressed = randomFontBitmap[yi][xi] === 1
+        }
+      }
+      trSetInitUrlAndMidi()
+    }
+  }
+
   const h = (map(trDataParams[14], 0, 99, 0, 360) + trHueShift) % 360
   switch (trBackgroundMode) {
     case TR_BACKGROUND_MODE.LIGHT:

@@ -141,6 +141,7 @@ const TR_DEVICE_GRID_NUM = 8
 const TR_MODE = {
   NORMAL: 0,
   AUTO: 1,
+  FONT_AUTO: 2,
 }
 
 const TR_AUTO_MODE_INTERVAL = 90
@@ -387,14 +388,13 @@ function trUtilityDataGridIsPressed(value, isPressed) {
       trSetInitUrlAndMidi()
       break
     case TR_FUNCTION_CODE.RANDOM_FONT_TILE:
-      const targetBit = random([1])
       trFunctionParamsRandomize()
       const randomFontBitmap = trBitMapFontData.getRandomBitmap().bitmap
       for (let yi = 0; yi < 8; yi++) {
         for (let xi = 0; xi < 8; xi++) {
           const gridIndex = TR_MAPPING_GRID[yi][xi]
           const trDataGridIndex = trDataGrid.findIndex((item) => item.value === gridIndex)
-          trDataGrid[trDataGridIndex].isPressed = randomFontBitmap[yi][xi] === targetBit
+          trDataGrid[trDataGridIndex].isPressed = randomFontBitmap[yi][xi] === 1
         }
       }
       trSetInitUrlAndMidi()

@@ -43,6 +43,7 @@ const modeButton = document.getElementById('mode')
 const modeDialog = document.getElementById('mode-dialog')
 const modeNormal = document.getElementById('mode-normal')
 const modeAuto = document.getElementById('mode-auto')
+const modeFontAuto = document.getElementById('mode-font-auto')
 const modeCancel = document.getElementById('mode-cancel')
 
 // モーダル表示・非表示
@@ -87,3 +88,15 @@ const modeAutoFunc = (e) => {
 }
 modeAuto.addEventListener('click', modeAutoFunc)
 modeAuto.addEventListener('touchend', modeAutoFunc)
+
+// 自動モード（フォントの形）
+const modeFontAutoFunc = (e) => {
+  e.preventDefault()
+  trMode = trSaveToLocalStorage('trMode', TR_MODE.FONT_AUTO)
+  modeDialog.style.display = 'none'
+  trIsDataGridClickable = true
+
+  imageDownloadArea.style.display = 'none'
+}
+modeFontAuto.addEventListener('click', modeFontAutoFunc)
+modeFontAuto.addEventListener('touchend', modeFontAutoFunc)
