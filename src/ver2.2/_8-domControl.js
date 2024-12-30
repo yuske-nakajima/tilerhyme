@@ -105,10 +105,9 @@ const modeFontAutoFunc = (e) => {
 modeFontAuto.addEventListener('click', modeFontAutoFunc)
 modeFontAuto.addEventListener('touchend', modeFontAutoFunc)
 
-// 自動モード（フォントの形）
+// 自動モード（文章指定）
 const modeFont2AutoFunc = (e) => {
   e.preventDefault()
-  // trMode = trSaveToLocalStorage('trMode', TR_MODE.FONT_AUTO)
   font2AutoDialog.style.display = 'block'
 
   modeDialog.style.display = 'none'
@@ -132,6 +131,10 @@ const font2AutoButtonFunc = (e) => {
   font2AutoDialog.style.display = 'none'
   trIsDataGridClickable = true
   imageDownloadArea.style.display = 'none'
+  for (let i = 0; i < trFont2AutoText.length; i++) {
+    const c = trBitMapFontData.getBitmap(trFont2AutoText[i])
+    trFont2AutoBitmapList[i] = c ? c.bitmap : TR_TOFU_GRID
+  }
 }
 font2AutoButton.addEventListener('click', font2AutoButtonFunc)
 font2AutoButton.addEventListener('touchend', font2AutoButtonFunc)

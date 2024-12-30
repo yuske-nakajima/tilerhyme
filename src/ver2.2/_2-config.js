@@ -122,7 +122,19 @@ const TR_MAPPING_GRID = [
   [11, 12, 13, 14, 15, 16, 17, 18],
 ]
 
+const TR_TOFU_GRID = [
+  [0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 1, 1, 1, 1, 1, 1, 0],
+  [0, 1, 1, 0, 0, 1, 1, 0],
+  [0, 1, 0, 1, 1, 0, 1, 0],
+  [0, 1, 0, 1, 1, 0, 1, 0],
+  [0, 1, 1, 0, 0, 1, 1, 0],
+  [0, 1, 1, 1, 1, 1, 1, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0],
+]
+
 const TR_SOFT_UI_WIDTH = 200
+const TR_SOFT_UI_WIDTH_GAP = 10
 const TR_SOFT_UI_CELL_SIZE = TR_SOFT_UI_WIDTH / 8
 
 const TR_COLORS = {}
@@ -230,6 +242,8 @@ let trMode = trSaveToLocalStorage('trMode', TR_MODE.NORMAL)
 let trFont2AutoText = trSaveToLocalStorage('trFont2AutoText', '')
 
 let trFont2AutoCount = 0
+
+let trFont2AutoBitmapList = []
 
 // life gameの初期値はランダム値
 let trModeLifeGameGrid = Array.from({ length: 64 }, () => Math.floor(Math.random() * 2)).join('')
@@ -447,48 +461,99 @@ function trCalcWindowSize(params = {}) {
  * デバイスの描画を行う関数
  */
 function trDeviceDraw() {
-  if (trIsNoDevice) {
-    trDrawBlock(() => {
-      const gap = 10
+  const position = createVector(width / 2, height / 2)
+  const softUiStartPos = createVector(position.x - TR_SOFT_UI_WIDTH / 2, position.y - TR_SOFT_UI_WIDTH / 2)
 
-      stroke(TR_COLORS.cellMain)
-      strokeWeight(2)
-      rectMode(CENTER)
+  trDrawBlock(() => {
+    noStroke()
+    rectMode(CENTER)
 
-      fill(TR_COLORS.device)
-      rect(width / 2, height / 2, TR_SOFT_UI_WIDTH + gap * 2, TR_SOFT_UI_WIDTH + gap * 2, 10, 10, 10, 10)
-      rect(width / 2, height / 2, TR_SOFT_UI_WIDTH + gap, TR_SOFT_UI_WIDTH + gap, 10, 10, 10, 10)
-    })
-    trDrawBlock(() => {
-      stroke(TR_COLORS.lineMain)
-      strokeWeight(2)
-      for (let xi = 0; xi < TR_DEVICE_GRID_NUM; xi++) {
-        for (let yi = 0; yi < TR_DEVICE_GRID_NUM; yi++) {
-          const value = TR_MAPPING_GRID[yi][xi]
-          const getIndex = trDataGrid.findIndex((item) => item.value === value)
-          if (getIndex === undefined) {
-            continue
+    fill(TR_COLORS.device)
+    rect(
+      position.x,
+      position.y,
+      TR_SOFT_UI_WIDTH + TR_SOFT_UI_WIDTH_GAP * 2,
+      TR_SOFT_UI_WIDTH + TR_SOFT_UI_WIDTH_GAP * 2,
+    )
+    rect(position.x, position.y, TR_SOFT_UI_WIDTH + TR_SOFT_UI_WIDTH_GAP, TR_SOFT_UI_WIDTH + TR_SOFT_UI_WIDTH_GAP)
+  })
+  trDrawBlock(() => {
+    stroke(TR_COLORS.lineMain)
+    strokeWeight(2)
+    for (let xi = 0; xi < TR_DEVICE_GRID_NUM; xi++) {
+      for (let yi = 0; yi < TR_DEVICE_GRID_NUM; yi++) {
+        const value = TR_MAPPING_GRID[yi][xi]
+        const getIndex = trDataGrid.findIndex((item) => item.value === value)
+        if (getIndex === undefined) {
+          continue
+        }
+
+        trDrawBlock(() => {
+          if (trDataGrid[getIndex].isPressed) {
+            fill(TR_COLORS.cellMain)
+          } else {
+            fill(TR_COLORS.cellNormal)
           }
 
-          trDrawBlock(() => {
-            if (trDataGrid[getIndex].isPressed) {
-              fill(TR_COLORS.cellMain)
-            } else {
-              fill(TR_COLORS.cellNormal)
-            }
-
-            ellipseMode(CORNER)
-            ellipse(
-              trSoftUiStartPos.x + TR_SOFT_UI_CELL_SIZE * xi,
-              trSoftUiStartPos.y + TR_SOFT_UI_CELL_SIZE * yi,
-              TR_SOFT_UI_CELL_SIZE,
-              TR_SOFT_UI_CELL_SIZE,
-            )
-          })
-        }
+          rectMode(CORNER)
+          rect(
+            softUiStartPos.x + TR_SOFT_UI_CELL_SIZE * xi,
+            softUiStartPos.y + TR_SOFT_UI_CELL_SIZE * yi,
+            TR_SOFT_UI_CELL_SIZE,
+            TR_SOFT_UI_CELL_SIZE,
+          )
+        })
       }
-    })
+    }
+  })
+}
+
+function trDeviceDummyDraw(position = undefined, dataGrid = undefined) {
+  if (!position) {
+    position = createVector(width / 2, height / 2)
   }
+
+  const softUiStartPos = createVector(position.x - TR_SOFT_UI_WIDTH / 2, position.y - TR_SOFT_UI_WIDTH / 2)
+
+  if (!dataGrid) {
+    dataGrid = trDataGrid
+  }
+
+  trDrawBlock(() => {
+    noStroke()
+    rectMode(CENTER)
+
+    fill(TR_COLORS.device)
+    rect(
+      position.x,
+      position.y,
+      TR_SOFT_UI_WIDTH + TR_SOFT_UI_WIDTH_GAP * 2,
+      TR_SOFT_UI_WIDTH + TR_SOFT_UI_WIDTH_GAP * 2,
+    )
+    rect(position.x, position.y, TR_SOFT_UI_WIDTH + TR_SOFT_UI_WIDTH_GAP, TR_SOFT_UI_WIDTH + TR_SOFT_UI_WIDTH_GAP)
+  })
+  trDrawBlock(() => {
+    noStroke()
+    for (let xi = 0; xi < TR_DEVICE_GRID_NUM; xi++) {
+      for (let yi = 0; yi < TR_DEVICE_GRID_NUM; yi++) {
+        trDrawBlock(() => {
+          if (dataGrid[yi][xi]) {
+            fill(TR_COLORS.cellSub)
+          } else {
+            fill(TR_COLORS.device)
+          }
+
+          rectMode(CORNER)
+          rect(
+            softUiStartPos.x + TR_SOFT_UI_CELL_SIZE * xi,
+            softUiStartPos.y + TR_SOFT_UI_CELL_SIZE * yi,
+            TR_SOFT_UI_CELL_SIZE,
+            TR_SOFT_UI_CELL_SIZE,
+          )
+        })
+      }
+    }
+  })
 }
 
 /**

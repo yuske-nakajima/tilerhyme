@@ -126,14 +126,7 @@ async function trUiDraw() {
 
       trFunctionParamsRandomize()
 
-      let _fontBitmap = trBitMapFontData.getBitmap(trFont2AutoText[index])
-      while (!_fontBitmap) {
-        // フォントが存在しない場合は次のフォントを取得
-        index = (index + 1) % trFont2AutoText.length
-        _fontBitmap = trBitMapFontData.getBitmap(trFont2AutoText[index])
-      }
-
-      const fontBitmap = _fontBitmap.bitmap
+      const fontBitmap = trFont2AutoBitmapList[index]
       for (let yi = 0; yi < 8; yi++) {
         for (let xi = 0; xi < 8; xi++) {
           const gridIndex = TR_MAPPING_GRID[yi][xi]
@@ -143,7 +136,7 @@ async function trUiDraw() {
       }
       trSetInitUrlAndMidi()
 
-      trFont2AutoCount = index + 1
+      trFont2AutoCount += 1
     }
   }
 
@@ -175,5 +168,45 @@ async function trUiDraw() {
     trDrawNoiseFilter()
   }
 
-  trDeviceDraw()
+  if (trIsNoDevice || trMode === TR_MODE.FONT_AUTO || trMode === TR_MODE.FONT_2_AUTO) {
+    trDeviceDraw()
+  }
+
+  if (trMode === TR_MODE.FONT_2_AUTO) {
+    const nowIndex = (trFont2AutoCount - 1) % trFont2AutoText.length
+
+    // 前の文字を表示
+    for (let xi = 1; xi < width / TR_SOFT_UI_WIDTH / 2; xi++) {
+      const pos = createVector(width / 2 - (TR_SOFT_UI_WIDTH + 20) * xi, height / 2)
+      if (pos.x < 0 - TR_SOFT_UI_WIDTH / 2) {
+        break
+      }
+
+      let index = nowIndex - xi
+      if (index < 0) {
+        index = trFont2AutoText.length + nowIndex - xi
+      }
+
+      if (trFont2AutoBitmapList[index]) {
+        trDeviceDummyDraw(createVector(pos.x, pos.y), trFont2AutoBitmapList[index])
+      }
+    }
+
+    // 次の文字を表示
+    for (let xi = 1; xi < width / TR_SOFT_UI_WIDTH / 2; xi++) {
+      const pos = createVector(width / 2 + (TR_SOFT_UI_WIDTH + 20) * xi, height / 2)
+      if (pos.x > width + TR_SOFT_UI_WIDTH / 2) {
+        break
+      }
+
+      let index = nowIndex + xi
+      if (index >= trFont2AutoText.length) {
+        index = nowIndex + xi - trFont2AutoText.length
+      }
+
+      if (trFont2AutoBitmapList[index]) {
+        trDeviceDummyDraw(createVector(pos.x, pos.y), trFont2AutoBitmapList[index])
+      }
+    }
+  }
 }
