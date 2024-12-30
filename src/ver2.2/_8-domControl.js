@@ -112,7 +112,6 @@ const modeFont2AutoFunc = (e) => {
   font2AutoDialog.style.display = 'block'
 
   modeDialog.style.display = 'none'
-  trIsDataGridClickable = true
 
   imageDownloadArea.style.display = 'none'
 }
