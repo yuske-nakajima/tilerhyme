@@ -465,7 +465,8 @@ function trDeviceDraw() {
   const softUiStartPos = createVector(position.x - TR_SOFT_UI_WIDTH / 2, position.y - TR_SOFT_UI_WIDTH / 2)
 
   trDrawBlock(() => {
-    noStroke()
+    stroke(TR_COLORS.device)
+    strokeWeight(1)
     rectMode(CENTER)
 
     fill(TR_COLORS.device)
@@ -520,7 +521,8 @@ function trDeviceDummyDraw(position = undefined, dataGrid = undefined) {
   }
 
   trDrawBlock(() => {
-    noStroke()
+    stroke(TR_COLORS.device)
+    strokeWeight(1)
     rectMode(CENTER)
 
     fill(TR_COLORS.device)
@@ -533,14 +535,16 @@ function trDeviceDummyDraw(position = undefined, dataGrid = undefined) {
     rect(position.x, position.y, TR_SOFT_UI_WIDTH + TR_SOFT_UI_WIDTH_GAP, TR_SOFT_UI_WIDTH + TR_SOFT_UI_WIDTH_GAP)
   })
   trDrawBlock(() => {
-    noStroke()
     for (let xi = 0; xi < TR_DEVICE_GRID_NUM; xi++) {
       for (let yi = 0; yi < TR_DEVICE_GRID_NUM; yi++) {
         trDrawBlock(() => {
+          strokeWeight(1)
           if (dataGrid[yi][xi]) {
             fill(TR_COLORS.cellSub)
+            stroke(TR_COLORS.cellSub)
           } else {
             fill(TR_COLORS.device)
+            stroke(TR_COLORS.device)
           }
 
           rectMode(CORNER)
