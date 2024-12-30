@@ -237,9 +237,9 @@ let trRotateValue = 0
 let trQrImage
 
 // MODE object value
-let trMode = trSaveToLocalStorage('trMode', TR_MODE.NORMAL)
+let trMode = trGetOrInitializeValue('trMode', TR_MODE.NORMAL)
 
-let trFont2AutoText = trSaveToLocalStorage('trFont2AutoText', '')
+let trFont2AutoText = trGetOrInitializeValue('trFont2AutoText', '')
 
 let trFont2AutoCount = 0
 

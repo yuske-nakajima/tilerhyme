@@ -49,6 +49,7 @@ const modeCancel = document.getElementById('mode-cancel')
 const font2AutoDialog = document.getElementById('font2-auto-dialog')
 const font2AutoButton = document.getElementById('font2-auto-button')
 const font2AutoCancel = document.getElementById('font2-auto-cancel')
+const font2AutoText = document.getElementById('font2-auto-text')
 
 // モーダル表示・非表示
 const modeButtonFunc = (e) => {
@@ -113,13 +114,15 @@ const modeFont2AutoFunc = (e) => {
   modeDialog.style.display = 'none'
 
   imageDownloadArea.style.display = 'none'
+
+  font2AutoText.value = trFont2AutoText
 }
 modeFont2Auto.addEventListener('click', modeFont2AutoFunc)
 modeFont2Auto.addEventListener('touchend', modeFont2AutoFunc)
 
 const font2AutoButtonFunc = (e) => {
   e.preventDefault()
-  const _text = document.getElementById('font2-auto-text').value.trim()
+  const _text = font2AutoText.value.trim()
   if (_text === '') {
     alert('文字を入力してください')
     return
