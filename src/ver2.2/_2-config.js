@@ -1011,13 +1011,11 @@ function trGenerateNoiseValue(x, y) {
  */
 function trFunctionParamsRandomize() {
   trBackgroundMode = random(Object.values(TR_BACKGROUND_MODE))
-  // グレイスケールは頻度を下げる
-  if (frameCount % 4 === 0) {
-    trGrayFilter = random(Object.values(TR_GRAY_FILTER))
-  } else {
-    trGrayFilter = TR_GRAY_FILTER.NONE
-  }
-  trNoiseFilter = random(Object.values(TR_NOISE_FILTER))
+
+  // フィルター系は重いため、ランダムでは常にオフにする
+  trGrayFilter = TR_GRAY_FILTER.NONE
+  trNoiseFilter = TR_NOISE_FILTER.NONE
+
   trStrokeWeight = ceil(random(TR_STROKE_WEIGHT.MIN, TR_STROKE_WEIGHT.MAX))
   trHueShift = ceil(random(TR_HUE_SHIFT.MIN, TR_HUE_SHIFT.MAX))
   trTileSizeDivNum = ceil(random(TR_TILE_SIZE_DIV.MIN, TR_TILE_SIZE_DIV.MAX))
