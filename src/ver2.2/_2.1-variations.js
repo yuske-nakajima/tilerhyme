@@ -22,7 +22,7 @@ function _trDrawTilePattern1(func) {
       // 0.1 から 1 まで
       // 1 から 0.1 まで
       // 線形補間
-      const sineValue = sin(frameCount * 50 * 0.004)
+      const sineValue = trSineCalc()
 
       const gap = 1 - map(trDataParams[7], 0, 99, 0.1, 0.5)
       const _tileSize = tileSize * sineValue
@@ -461,7 +461,7 @@ function _trDrawTilePattern2(func) {
       const p3 = (p1 + 2) % pointList.length
       const p4 = (p1 + 3) % pointList.length
 
-      const sineValue = sin(frameCount * 50 * 0.004)
+      const sineValue = trSineCalc()
 
       trCalcSineCount(sineValue)
 
@@ -985,7 +985,7 @@ function _trDrawTilePattern(func) {
   return function (xi, yi, tileSize) {
     const { color1, color2, color3, color4, color5 } = trChromaticGetColor()
 
-    const sineValue = sin(frameCount * 50 * 0.004)
+    const sineValue = trSineCalc()
     trCalcSineCount(sineValue)
     const _tileSize = tileSize * map(sineValue, -1, 1, 0.01, 1)
 
@@ -1078,7 +1078,7 @@ function trDrawEllipseParts(xi, yi, tileSize) {
   const { color1, color2, color3, color5 } = trChromaticGetColor()
   const centerPos = createVector(xi * tileSize + tileSize / 2, yi * tileSize + tileSize / 2)
 
-  const sineValue = sin(frameCount * 50 * 0.004)
+  const sineValue = trSineCalc()
   trCalcSineCount(sineValue)
   const _tileSize = tileSize * map(sineValue, -1, 1, 0.01, 1)
 
@@ -1128,7 +1128,7 @@ function trDrawRectAndStroke(xi, yi, tileSize) {
   const { color1, color2, color3, color4, color5 } = trChromaticGetColor()
   const centerPos = createVector(xi * tileSize + tileSize / 2, yi * tileSize + tileSize / 2)
 
-  const sineValue = sin(frameCount * 50 * 0.004)
+  const sineValue = trSineCalc()
   trCalcSineCount(sineValue)
   let _sineValue = 1
   if (trSineCount < TR_SINE_LOOP_COUNT) {

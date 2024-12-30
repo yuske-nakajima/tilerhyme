@@ -12,16 +12,16 @@ const TR_FUNCTION_CODE = {
   IS_GRAY_SCALE: 49,
   NO_DEVICE_2: 59,
   NO_DEVICE_3: 69,
-  NO_DEVICE_4: 79,
-  NO_DEVICE_5: 89,
+  RANDOM_FONT_TILE: 79,
+  RANDOM_TILE: 89,
   STROKE_WEIGHT_UP: 91,
   STROKE_WEIGHT_DOWN: 92,
   HUE_SHIFT_UP: 93,
   HUE_SHIFT_DOWN: 94,
   TILE_SIZE_DIV_UP: 95,
   TILE_SIZE_DIV_DOWN: 96,
-  RANDOM_TILE: 97,
-  RANDOM_FONT_TILE: 98,
+  SINE_SPEED_UP: 97,
+  SINE_SPEED_DOWN: 98,
 }
 
 const TR_DATA_GRID_SIZE = 64
@@ -99,8 +99,8 @@ const TR_INIT_DATA_GRID = [
   { value: TR_FUNCTION_CODE.IS_NOISE_FILTER, isPressed: false },
   { value: TR_FUNCTION_CODE.NO_DEVICE_2, isPressed: false },
   { value: TR_FUNCTION_CODE.NO_DEVICE_3, isPressed: false },
-  { value: TR_FUNCTION_CODE.NO_DEVICE_4, isPressed: false },
-  { value: TR_FUNCTION_CODE.NO_DEVICE_5, isPressed: false },
+  { value: TR_FUNCTION_CODE.SINE_SPEED_UP, isPressed: false },
+  { value: TR_FUNCTION_CODE.SINE_SPEED_DOWN, isPressed: false },
   { value: TR_FUNCTION_CODE.STROKE_WEIGHT_UP, isPressed: false },
   { value: TR_FUNCTION_CODE.STROKE_WEIGHT_DOWN, isPressed: false },
   { value: TR_FUNCTION_CODE.HUE_SHIFT_UP, isPressed: false },
@@ -190,6 +190,14 @@ const TR_TILE_SIZE_DIV = {
   MIN: 2,
   MAX: 12,
   DEFAULT: 6,
+  STEP: 1,
+}
+
+const TR_SINE_SPEED = {
+  MIN: 0.5,
+  MAX: 2.0,
+  STEP: 0.05,
+  DEFAULT: 1.0,
 }
 // ------------------------------------------------------------
 // --- 変数
@@ -253,6 +261,8 @@ let trTileSizeDivNum = TR_TILE_SIZE_DIV.DEFAULT
 let trMidiAccess
 
 let trBitMapFontData
+
+let trSineSpeed = TR_SINE_SPEED.DEFAULT
 // ------------------------------------------------------------
 // --- 関数
 // ------------------------------------------------------------
@@ -266,6 +276,8 @@ const trProgrammerModeSetup = createLaunchpadSetup({
     TR_FUNCTION_CODE.HUE_SHIFT_DOWN,
     TR_FUNCTION_CODE.TILE_SIZE_DIV_UP,
     TR_FUNCTION_CODE.TILE_SIZE_DIV_DOWN,
+    TR_FUNCTION_CODE.SINE_SPEED_UP,
+    TR_FUNCTION_CODE.SINE_SPEED_DOWN,
     TR_FUNCTION_CODE.RANDOM_TILE,
     TR_FUNCTION_CODE.RANDOM_FONT_TILE,
   ],
@@ -275,12 +287,7 @@ const trProgrammerModeSetup = createLaunchpadSetup({
     TR_FUNCTION_CODE.IS_GRAY_SCALE,
     TR_FUNCTION_CODE.IS_NOISE_FILTER,
   ],
-  noneButtonCodeList: [
-    TR_FUNCTION_CODE.NO_DEVICE_2,
-    TR_FUNCTION_CODE.NO_DEVICE_3,
-    TR_FUNCTION_CODE.NO_DEVICE_4,
-    TR_FUNCTION_CODE.NO_DEVICE_5,
-  ],
+  noneButtonCodeList: [TR_FUNCTION_CODE.NO_DEVICE_2, TR_FUNCTION_CODE.NO_DEVICE_3],
 })
 
 /**
@@ -376,10 +383,16 @@ function trUtilityDataGridIsPressed(value, isPressed) {
           : trHueShift - TR_HUE_SHIFT_STEP
       break
     case TR_FUNCTION_CODE.TILE_SIZE_DIV_UP:
-      trTileSizeDivNum = min(trTileSizeDivNum + 1, TR_TILE_SIZE_DIV.MAX)
+      trTileSizeDivNum = min(trTileSizeDivNum + TR_TILE_SIZE_DIV.STEP, TR_TILE_SIZE_DIV.MAX)
       break
     case TR_FUNCTION_CODE.TILE_SIZE_DIV_DOWN:
-      trTileSizeDivNum = max(trTileSizeDivNum - 1, TR_TILE_SIZE_DIV.MIN)
+      trTileSizeDivNum = max(trTileSizeDivNum - TR_TILE_SIZE_DIV.STEP, TR_TILE_SIZE_DIV.MIN)
+      break
+    case TR_FUNCTION_CODE.SINE_SPEED_UP:
+      trSineSpeed = min(trSineSpeed + TR_SINE_SPEED.STEP, TR_SINE_SPEED.MAX)
+      break
+    case TR_FUNCTION_CODE.SINE_SPEED_DOWN:
+      trSineSpeed = max(trSineSpeed - TR_SINE_SPEED.STEP, TR_SINE_SPEED.MIN)
       break
     case TR_FUNCTION_CODE.RANDOM_TILE:
       trFunctionParamsRandomize()
@@ -703,6 +716,13 @@ function trUrlToData() {
     trTileSizeDivNum = parseInt(tileSizeDivNum)
   }
 
+  // サイン波の速度
+  const sineSpeed = url.searchParams.get('sine-speed')
+  const isValidSineSpeed = sineSpeed && sineSpeed >= TR_SINE_SPEED.MIN && sineSpeed <= TR_SINE_SPEED.MAX
+  if (isValidSineSpeed) {
+    trSineSpeed = parseFloat(sineSpeed)
+  }
+
   if (
     !isValidData ||
     !isValidBackground ||
@@ -710,7 +730,8 @@ function trUrlToData() {
     !isValidNoiseFilter ||
     !isValidTrStrokeWeight ||
     !isValidHueShift ||
-    !isValidTileSizeDivNum
+    !isValidTileSizeDivNum ||
+    !isValidSineSpeed
   ) {
     trUpdateUrl()
   }
@@ -733,6 +754,7 @@ function trUpdateUrl() {
   url.searchParams.set('stroke-weight', trStrokeWeight)
   url.searchParams.set('hue-shift', trHueShift)
   url.searchParams.set('tile-size-div', trTileSizeDivNum)
+  url.searchParams.set('sine-speed', trSineSpeed)
   url.searchParams.set('data', trGridDataToString())
 
   window.history.pushState({}, '', url)
@@ -1012,4 +1034,8 @@ class BitmapUtils {
     }
     return undefined
   }
+}
+
+function trSineCalc() {
+  return sin(frameCount * 50 * 0.004 * trSineSpeed)
 }
