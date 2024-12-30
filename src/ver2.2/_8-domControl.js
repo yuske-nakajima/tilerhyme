@@ -72,7 +72,7 @@ modeCancel.addEventListener('touchend', modeCancelFunc)
 // 通常モード
 const modeNormalFunc = (e) => {
   e.preventDefault()
-  trMode = trSaveToLocalStorage('trMode', TR_MODE.NORMAL)
+  trMode = TR_MODE.NORMAL
   modeDialog.style.display = 'none'
   trIsDataGridClickable = true
 
@@ -85,7 +85,7 @@ modeNormal.addEventListener('touchend', modeNormalFunc)
 // 自動モード
 const modeAutoFunc = (e) => {
   e.preventDefault()
-  trMode = trSaveToLocalStorage('trMode', TR_MODE.AUTO)
+  trMode = TR_MODE.AUTO
   modeDialog.style.display = 'none'
   trIsDataGridClickable = true
 
@@ -97,7 +97,7 @@ modeAuto.addEventListener('touchend', modeAutoFunc)
 // 自動モード（フォントの形）
 const modeFontAutoFunc = (e) => {
   e.preventDefault()
-  trMode = trSaveToLocalStorage('trMode', TR_MODE.FONT_AUTO)
+  trMode = TR_MODE.FONT_AUTO
   modeDialog.style.display = 'none'
   trIsDataGridClickable = true
 
@@ -128,7 +128,7 @@ const font2AutoButtonFunc = (e) => {
     return
   }
 
-  trMode = trSaveToLocalStorage('trMode', TR_MODE.FONT_2_AUTO)
+  trMode = TR_MODE.FONT_2_AUTO
   trFont2AutoText = trSaveToLocalStorage('trFont2AutoText', _text)
   trFont2AutoCount = 0
   font2AutoDialog.style.display = 'none'
