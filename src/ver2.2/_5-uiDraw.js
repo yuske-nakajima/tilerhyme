@@ -173,7 +173,6 @@ async function trUiDraw() {
   }
 
   if (trMode === TR_MODE.FONT_2_AUTO) {
-    const totalTextLength = trFont2AutoText.length * round(width / 2 / TR_SOFT_UI_WIDTH)
     const nowIndex = (trFont2AutoCount - 1) % trFont2AutoText.length
 
     // 前の文字を表示
@@ -185,7 +184,7 @@ async function trUiDraw() {
 
       let index = nowIndex - xi
       if (index < 0) {
-        index = (totalTextLength + nowIndex - xi) % trFont2AutoText.length
+        break
       }
 
       if (trFont2AutoBitmapList[index]) {
@@ -202,7 +201,7 @@ async function trUiDraw() {
 
       let index = nowIndex + xi
       if (index >= trFont2AutoText.length) {
-        index = (totalTextLength + nowIndex + xi - trFont2AutoText.length) % trFont2AutoText.length
+        break
       }
 
       if (trFont2AutoBitmapList[index]) {
