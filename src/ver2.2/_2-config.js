@@ -133,8 +133,8 @@ const TR_TOFU_GRID = [
   [0, 0, 0, 0, 0, 0, 0, 0],
 ]
 
-const TR_SOFT_UI_WIDTH = 200
-const TR_SOFT_UI_WIDTH_GAP = 10
+const TR_SOFT_UI_WIDTH = 100
+const TR_SOFT_UI_WIDTH_GAP = TR_SOFT_UI_WIDTH / 20
 const TR_SOFT_UI_CELL_SIZE = TR_SOFT_UI_WIDTH / 8
 
 const TR_COLORS = {}

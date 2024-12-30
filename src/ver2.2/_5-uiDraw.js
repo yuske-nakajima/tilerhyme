@@ -173,18 +173,19 @@ async function trUiDraw() {
   }
 
   if (trMode === TR_MODE.FONT_2_AUTO) {
+    const totalTextLength = trFont2AutoText.length * round(width / 2 / TR_SOFT_UI_WIDTH)
     const nowIndex = (trFont2AutoCount - 1) % trFont2AutoText.length
 
     // 前の文字を表示
-    for (let xi = 1; xi < width / TR_SOFT_UI_WIDTH / 2; xi++) {
-      const pos = createVector(width / 2 - (TR_SOFT_UI_WIDTH + 20) * xi, height / 2)
-      if (pos.x < 0 - TR_SOFT_UI_WIDTH / 2) {
+    for (let xi = 1; xi < width / TR_SOFT_UI_WIDTH; xi++) {
+      const pos = createVector(width / 2 - (TR_SOFT_UI_WIDTH + TR_SOFT_UI_WIDTH_GAP * 2) * xi, height / 2)
+      if (pos.x < 0 - TR_SOFT_UI_WIDTH) {
         break
       }
 
       let index = nowIndex - xi
       if (index < 0) {
-        index = trFont2AutoText.length + nowIndex - xi
+        index = (totalTextLength + nowIndex - xi) % trFont2AutoText.length
       }
 
       if (trFont2AutoBitmapList[index]) {
@@ -193,15 +194,15 @@ async function trUiDraw() {
     }
 
     // 次の文字を表示
-    for (let xi = 1; xi < width / TR_SOFT_UI_WIDTH / 2; xi++) {
-      const pos = createVector(width / 2 + (TR_SOFT_UI_WIDTH + 20) * xi, height / 2)
-      if (pos.x > width + TR_SOFT_UI_WIDTH / 2) {
+    for (let xi = 1; xi < width / TR_SOFT_UI_WIDTH; xi++) {
+      const pos = createVector(width / 2 + (TR_SOFT_UI_WIDTH + TR_SOFT_UI_WIDTH_GAP * 2) * xi, height / 2)
+      if (pos.x > width + TR_SOFT_UI_WIDTH) {
         break
       }
 
       let index = nowIndex + xi
       if (index >= trFont2AutoText.length) {
-        index = nowIndex + xi - trFont2AutoText.length
+        index = (totalTextLength + nowIndex + xi - trFont2AutoText.length) % trFont2AutoText.length
       }
 
       if (trFont2AutoBitmapList[index]) {

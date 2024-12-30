@@ -17,10 +17,10 @@ async function trInitial() {
   TR_COLORS.lineMain = color(0, 0, 0)
   TR_COLORS.lineMainDark = color(0, 0, 100)
   TR_COLORS.cellMain = color(0, 0, 100)
-  TR_COLORS.cellSub = color(0, 0, 70)
+  TR_COLORS.cellSub = color(0, 0, 60)
   TR_COLORS.cellNormal = color(0, 0, 40)
   TR_COLORS.background = color(200, 100, 20)
-  TR_COLORS.device = color(200, 0, 20)
+  TR_COLORS.device = color(200, 0, 5)
   TR_COLORS.deviceFrame = color(80, 10, 100)
 
   // 横幅でセルの分割数を計算
