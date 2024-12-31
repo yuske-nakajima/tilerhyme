@@ -409,6 +409,10 @@ function trUtilityDataGridIsPressed(value, isPressed) {
       trSineSpeed = max(trSineSpeed - TR_SINE_SPEED.STEP, TR_SINE_SPEED.MIN)
       break
     case TR_FUNCTION_CODE.RANDOM_TILE:
+      // オートモード時は無効
+      if (trMode !== TR_MODE.NORMAL) {
+        break
+      }
       trFunctionParamsRandomize()
       trDataGrid = trDataGrid.map((item, i) => {
         if (i >= TR_DATA_GRID_SIZE) {
@@ -420,6 +424,10 @@ function trUtilityDataGridIsPressed(value, isPressed) {
       trSetInitUrlAndMidi()
       break
     case TR_FUNCTION_CODE.RANDOM_FONT_TILE:
+      // オートモード時は無効
+      if (trMode !== TR_MODE.NORMAL) {
+        break
+      }
       trFunctionParamsRandomize()
       const randomFontBitmap = trBitMapFontData.getRandomBitmap().bitmap
       for (let yi = 0; yi < 8; yi++) {
