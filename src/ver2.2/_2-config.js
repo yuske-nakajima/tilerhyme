@@ -11,9 +11,9 @@ const TR_FUNCTION_CODE = {
   IS_NOISE_FILTER: 39,
   IS_GRAY_SCALE: 49,
   NO_DEVICE_2: 59,
-  NO_DEVICE_3: 69,
-  RANDOM_FONT_TILE: 79,
-  RANDOM_TILE: 89,
+  RANDOM_FONT_TILE: 69,
+  RANDOM_TILE: 79,
+  RANDOM_PARAMS: 89,
   STROKE_WEIGHT_UP: 91,
   STROKE_WEIGHT_DOWN: 92,
   HUE_SHIFT_UP: 93,
@@ -98,7 +98,7 @@ const TR_INIT_DATA_GRID = [
   { value: TR_FUNCTION_CODE.IS_GRAY_SCALE, isPressed: false },
   { value: TR_FUNCTION_CODE.IS_NOISE_FILTER, isPressed: false },
   { value: TR_FUNCTION_CODE.NO_DEVICE_2, isPressed: false },
-  { value: TR_FUNCTION_CODE.NO_DEVICE_3, isPressed: false },
+  { value: TR_FUNCTION_CODE.RANDOM_PARAMS, isPressed: false },
   { value: TR_FUNCTION_CODE.SINE_SPEED_UP, isPressed: false },
   { value: TR_FUNCTION_CODE.SINE_SPEED_DOWN, isPressed: false },
   { value: TR_FUNCTION_CODE.STROKE_WEIGHT_UP, isPressed: false },
@@ -292,6 +292,7 @@ const trProgrammerModeSetup = createLaunchpadSetup({
     TR_FUNCTION_CODE.TILE_SIZE_DIV_DOWN,
     TR_FUNCTION_CODE.SINE_SPEED_UP,
     TR_FUNCTION_CODE.SINE_SPEED_DOWN,
+    TR_FUNCTION_CODE.RANDOM_PARAMS,
     TR_FUNCTION_CODE.RANDOM_TILE,
     TR_FUNCTION_CODE.RANDOM_FONT_TILE,
   ],
@@ -301,7 +302,7 @@ const trProgrammerModeSetup = createLaunchpadSetup({
     TR_FUNCTION_CODE.IS_GRAY_SCALE,
     TR_FUNCTION_CODE.IS_NOISE_FILTER,
   ],
-  noneButtonCodeList: [TR_FUNCTION_CODE.NO_DEVICE_2, TR_FUNCTION_CODE.NO_DEVICE_3],
+  noneButtonCodeList: [TR_FUNCTION_CODE.NO_DEVICE_2],
 })
 
 /**
@@ -407,6 +408,9 @@ function trUtilityDataGridIsPressed(value, isPressed) {
       break
     case TR_FUNCTION_CODE.SINE_SPEED_DOWN:
       trSineSpeed = max(trSineSpeed - TR_SINE_SPEED.STEP, TR_SINE_SPEED.MIN)
+      break
+    case TR_FUNCTION_CODE.RANDOM_PARAMS:
+      trFunctionAllParamsRandomize()
       break
     case TR_FUNCTION_CODE.RANDOM_TILE:
       // オートモード時は無効
@@ -1024,9 +1028,21 @@ function trGenerateNoiseValue(x, y) {
 function trFunctionParamsRandomize() {
   trBackgroundMode = random(Object.values(TR_BACKGROUND_MODE))
 
-  // フィルター系は重いため、ランダムでは常にオフにする
-  trGrayFilter = TR_GRAY_FILTER.NONE
-  trNoiseFilter = TR_NOISE_FILTER.NONE
+  trStrokeWeight = ceil(random(TR_STROKE_WEIGHT.MIN, TR_STROKE_WEIGHT.MAX))
+  trHueShift = ceil(random(TR_HUE_SHIFT.MIN, TR_HUE_SHIFT.MAX))
+  trTileSizeDivNum = ceil(random(TR_TILE_SIZE_DIV.MIN, TR_TILE_SIZE_DIV.MAX))
+}
+
+function trFunctionAllParamsRandomize() {
+  trBackgroundMode = random(Object.values(TR_BACKGROUND_MODE))
+
+  // グレイスケールは頻度を下げる
+  if (frameCount % 4 === 0) {
+    trGrayFilter = random(Object.values(TR_GRAY_FILTER))
+  } else {
+    trGrayFilter = TR_GRAY_FILTER.NONE
+  }
+  trNoiseFilter = random(Object.values(TR_NOISE_FILTER))
 
   trStrokeWeight = ceil(random(TR_STROKE_WEIGHT.MIN, TR_STROKE_WEIGHT.MAX))
   trHueShift = ceil(random(TR_HUE_SHIFT.MIN, TR_HUE_SHIFT.MAX))
