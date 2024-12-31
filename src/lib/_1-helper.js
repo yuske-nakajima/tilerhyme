@@ -88,9 +88,10 @@ function createLaunchpadSetup(userConfig = {}) {
       functionButtonCodeList: [],
       noneButtonCodeList: [],
       activeColor: 12,
-      functionButtonColor: 96,
-      incrementButtonColor: 45,
-      functionInactiveColor: 1,
+      functionButtonColor: 9,
+      incrementButtonColor: 9,
+      incrementInactiveColor: 1,
+      functionInactiveColor: 70,
       inactiveColor: 0,
       noneButtonColor: 0,
     },
@@ -136,8 +137,10 @@ function createLaunchpadSetup(userConfig = {}) {
           }
           await setDataParams()
         } else {
-          if (config.functionButtonCodeList.includes(i) || config.incrementButtonCodeList.includes(i)) {
+          if (config.functionButtonCodeList.includes(i)) {
             output.send([0x90, i, config.functionInactiveColor])
+          } else if (config.incrementButtonCodeList.includes(i)) {
+            output.send([0x90, i, config.incrementInactiveColor])
           } else {
             output.send([0x90, i, config.inactiveColor])
           }
@@ -156,9 +159,9 @@ function createLaunchpadSetup(userConfig = {}) {
         if (config.incrementButtonCodeList.includes(note)) {
           if (trLpIsPressed(velocity)) {
             pressedCallback(note)
-            output.send([0x90, note, config.incrementButtonColor /* 色コード */])
+            output.send([0x90, note, config.incrementButtonColor])
           } else {
-            output.send([0x90, note, config.functionInactiveColor])
+            output.send([0x90, note, config.incrementInactiveColor])
           }
           return
         }
