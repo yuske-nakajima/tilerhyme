@@ -10,7 +10,7 @@ const TR_FUNCTION_CODE = {
   IS_CHROMATIC: 29,
   IS_NOISE_FILTER: 39,
   IS_GRAY_SCALE: 49,
-  NO_DEVICE_2: 59,
+  IS_BLUR_FILTER: 59,
   RANDOM_FONT_TILE: 69,
   RANDOM_TILE: 79,
   RANDOM_PARAMS: 89,
@@ -97,7 +97,7 @@ const TR_INIT_DATA_GRID = [
   { value: TR_FUNCTION_CODE.IS_CHROMATIC, isPressed: false },
   { value: TR_FUNCTION_CODE.IS_GRAY_SCALE, isPressed: false },
   { value: TR_FUNCTION_CODE.IS_NOISE_FILTER, isPressed: false },
-  { value: TR_FUNCTION_CODE.NO_DEVICE_2, isPressed: false },
+  { value: TR_FUNCTION_CODE.IS_BLUR_FILTER, isPressed: false },
   { value: TR_FUNCTION_CODE.RANDOM_PARAMS, isPressed: false },
   { value: TR_FUNCTION_CODE.SINE_SPEED_UP, isPressed: false },
   { value: TR_FUNCTION_CODE.SINE_SPEED_DOWN, isPressed: false },
@@ -171,6 +171,11 @@ const TR_BACKGROUND_MODE = {
 const TR_GRAY_FILTER = {
   NONE: 0,
   GRAY: 1,
+}
+
+const TR_BLUR_FILTER = {
+  NONE: 0,
+  BLUR: 1,
 }
 
 const TR_NOISE_FILTER = {
@@ -261,6 +266,9 @@ let trBackgroundMode = TR_BACKGROUND_MODE.LIGHT
 // none | gray
 let trGrayFilter = TR_GRAY_FILTER.NONE
 
+// none | blur
+let trBlurFilter = TR_BLUR_FILTER.NONE
+
 let trNoiseFilter = TR_NOISE_FILTER.NONE
 
 // 線幅の係数
@@ -301,8 +309,9 @@ const trProgrammerModeSetup = createLaunchpadSetup({
     TR_FUNCTION_CODE.IS_CHROMATIC,
     TR_FUNCTION_CODE.IS_GRAY_SCALE,
     TR_FUNCTION_CODE.IS_NOISE_FILTER,
+    TR_FUNCTION_CODE.IS_BLUR_FILTER,
   ],
-  noneButtonCodeList: [TR_FUNCTION_CODE.NO_DEVICE_2],
+  noneButtonCodeList: [],
 })
 
 /**
@@ -342,6 +351,9 @@ function trUtilityDataGridIsPressed(value, isPressed) {
       case TR_FUNCTION_CODE.IS_GRAY_SCALE:
         trGrayFilter = TR_GRAY_FILTER.GRAY
         break
+      case TR_FUNCTION_CODE.IS_BLUR_FILTER:
+        trBlurFilter = TR_BLUR_FILTER.BLUR
+        break
       case TR_FUNCTION_CODE.IS_NOISE_FILTER:
         trNoiseFilter = TR_NOISE_FILTER.NOISE
         break
@@ -366,6 +378,9 @@ function trUtilityDataGridIsPressed(value, isPressed) {
         break
       case TR_FUNCTION_CODE.IS_GRAY_SCALE:
         trGrayFilter = TR_GRAY_FILTER.NONE
+        break
+      case TR_FUNCTION_CODE.IS_BLUR_FILTER:
+        trBlurFilter = TR_BLUR_FILTER.NONE
         break
       case TR_FUNCTION_CODE.IS_NOISE_FILTER:
         trNoiseFilter = TR_NOISE_FILTER.NONE
@@ -411,6 +426,7 @@ function trUtilityDataGridIsPressed(value, isPressed) {
       break
     case TR_FUNCTION_CODE.RANDOM_PARAMS:
       trFunctionAllParamsRandomize()
+      trSetInitUrlAndMidi()
       break
     case TR_FUNCTION_CODE.RANDOM_TILE:
       // オートモード時は無効
@@ -762,6 +778,18 @@ function trUrlToData() {
     trGrayFilter = TR_GRAY_FILTER.NONE
   }
 
+  // blur filter
+  const blurFilter = url.searchParams.get('blur-filter')
+  const isValidBlurFilter = blurFilter && Object.values(TR_BLUR_FILTER).includes(parseInt(blurFilter))
+  if (isValidBlurFilter) {
+    trBlurFilter = parseInt(blurFilter)
+    if (trBlurFilter === TR_BLUR_FILTER.BLUR) {
+      trDataGrid.find((item) => item.value === TR_FUNCTION_CODE.IS_BLUR_FILTER).isPressed = true
+    }
+  } else {
+    trBlurFilter = TR_BLUR_FILTER.NONE
+  }
+
   // noise filter
   const noiseFilter = url.searchParams.get('noise-filter')
   const isValidNoiseFilter = noiseFilter && Object.values(TR_NOISE_FILTER).includes(parseInt(noiseFilter))
@@ -808,6 +836,7 @@ function trUrlToData() {
     !isValidData ||
     !isValidBackground ||
     !isValidGrayScale ||
+    !isValidBlurFilter ||
     !isValidNoiseFilter ||
     !isValidTrStrokeWeight ||
     !isValidHueShift ||
@@ -831,6 +860,7 @@ function trUpdateUrl() {
   // URLの検索パラメータを設定
   url.searchParams.set('background', trBackgroundMode)
   url.searchParams.set('gray-scale', trGrayFilter)
+  url.searchParams.set('blur-filter', trBlurFilter)
   url.searchParams.set('noise-filter', trNoiseFilter)
   url.searchParams.set('stroke-weight', trStrokeWeight)
   url.searchParams.set('hue-shift', trHueShift)
@@ -1043,6 +1073,7 @@ function trFunctionAllParamsRandomize() {
     trGrayFilter = TR_GRAY_FILTER.NONE
   }
   trNoiseFilter = random(Object.values(TR_NOISE_FILTER))
+  trBlurFilter = random(Object.values(TR_BLUR_FILTER))
 
   trStrokeWeight = ceil(random(TR_STROKE_WEIGHT.MIN, TR_STROKE_WEIGHT.MAX))
   trHueShift = ceil(random(TR_HUE_SHIFT.MIN, TR_HUE_SHIFT.MAX))

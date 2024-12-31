@@ -168,6 +168,10 @@ async function trUiDraw() {
     trDrawNoiseFilter()
   }
 
+  if (trBlurFilter === TR_BLUR_FILTER.BLUR) {
+    filter(BLUR, 5)
+  }
+
   if (trIsNoDevice || trMode === TR_MODE.FONT_AUTO || trMode === TR_MODE.FONT_2_AUTO) {
     trDeviceDraw()
   }
