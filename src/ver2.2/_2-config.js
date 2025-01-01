@@ -292,24 +292,24 @@ let trSineSpeed = TR_SINE_SPEED.DEFAULT
 const trProgrammerModeSetup = createLaunchpadSetup({
   noteRange: { min: 11, max: 99 },
   incrementButtonCodeList: [
-    TR_FUNCTION_CODE.STROKE_WEIGHT_UP,
-    TR_FUNCTION_CODE.STROKE_WEIGHT_DOWN,
-    TR_FUNCTION_CODE.HUE_SHIFT_UP,
-    TR_FUNCTION_CODE.HUE_SHIFT_DOWN,
-    TR_FUNCTION_CODE.TILE_SIZE_DIV_UP,
-    TR_FUNCTION_CODE.TILE_SIZE_DIV_DOWN,
-    TR_FUNCTION_CODE.SINE_SPEED_UP,
-    TR_FUNCTION_CODE.SINE_SPEED_DOWN,
-    TR_FUNCTION_CODE.RANDOM_PARAMS,
-    TR_FUNCTION_CODE.RANDOM_TILE,
-    TR_FUNCTION_CODE.RANDOM_FONT_TILE,
+    TR_FUNCTION_CODE.STROKE_WEIGHT_UP, // 線幅を増加
+    TR_FUNCTION_CODE.STROKE_WEIGHT_DOWN, // 線幅を減少
+    TR_FUNCTION_CODE.HUE_SHIFT_UP, // 色相シフトを増加
+    TR_FUNCTION_CODE.HUE_SHIFT_DOWN, // 色相シフトを減少
+    TR_FUNCTION_CODE.TILE_SIZE_DIV_UP, // タイルサイズ分割を増加
+    TR_FUNCTION_CODE.TILE_SIZE_DIV_DOWN, // タイルサイズ分割を減少
+    TR_FUNCTION_CODE.SINE_SPEED_UP, // サイン波速度を増加
+    TR_FUNCTION_CODE.SINE_SPEED_DOWN, // サイン波速度を減少
+    TR_FUNCTION_CODE.RANDOM_PARAMS, // ランダムパラメータ
+    TR_FUNCTION_CODE.RANDOM_TILE, // ランダムタイル
+    TR_FUNCTION_CODE.RANDOM_FONT_TILE, // ランダムフォントタイル
   ],
   functionButtonCodeList: [
-    TR_FUNCTION_CODE.IS_DARK,
-    TR_FUNCTION_CODE.IS_CHROMATIC,
-    TR_FUNCTION_CODE.IS_GRAY_SCALE,
-    TR_FUNCTION_CODE.IS_NOISE_FILTER,
-    TR_FUNCTION_CODE.IS_BLUR_FILTER,
+    TR_FUNCTION_CODE.IS_DARK, // ダークモード
+    TR_FUNCTION_CODE.IS_CHROMATIC, // クロマチックモード
+    TR_FUNCTION_CODE.IS_GRAY_SCALE, // グレースケール
+    TR_FUNCTION_CODE.IS_NOISE_FILTER, // ノイズフィルター
+    TR_FUNCTION_CODE.IS_BLUR_FILTER, // ぼかしフィルター
   ],
   noneButtonCodeList: [],
 })
@@ -537,6 +537,13 @@ function trDeviceDraw() {
   })
 }
 
+/**
+ * ダミーデバイスの描画を行う関数。
+ * 指定された位置とデータグリッドを使用してデバイスのUIを描画します。
+ *
+ * @param {p5.Vector} [position] - 描画する位置。デフォルトは画面の中央。
+ * @param {Array} [dataGrid] - 使用するデータグリッド。デフォルトは `trDataGrid`。
+ */
 function trDeviceDummyDraw(position = undefined, dataGrid = undefined) {
   if (!position) {
     position = createVector(width / 2, height / 2)
@@ -941,14 +948,23 @@ async function trSetDataParams() {
   }
 }
 
+/**
+ * trSineCountをリセットする関数。
+ */
 function trSineCountReset() {
   trSineCount = 0
 }
 
+/**
+ * trChromaticGetColor 関数は、trDataParams 配列の値に基づいて色を生成します。
+ * 各色は HSL カラーモデルを使用して計算され、色相、彩度、明度の値が設定されます。
+ *
+ * @returns {Object} colors - 生成された色のオブジェクト。キーは 'color1', 'color2', ... の形式。
+ */
 function trChromaticGetColor() {
   const colors = {}
 
-  // カラー
+  // カラ���
   for (let i = 1; i <= trDataParams.length - 3; i++) {
     colors[`color${i}`] = color(
       (map(trDataParams[i] * 4, 0, 99 * 4, 0, 360) + trHueShift) % 360,
@@ -986,6 +1002,13 @@ function trCalcSineCount(sineValue) {
   }
 }
 
+/**
+ * 指定されたパラメータを使用して値を生成する関数。
+ *
+ * @param {number} x - 入力値。
+ * @param {number[]} params - パラメータの配列。
+ * @returns {number} 生成された値。
+ */
 function trGetDistributedValue(x, params) {
   // パラメータのインデックスを動的に選択
   const index1 = x % 20 // 0-19でループ
@@ -1006,7 +1029,6 @@ function trGetDistributedValue(x, params) {
 
   return value
 }
-
 /**
  * ノイズを生成する関数。
  * trNoiseGraphic のピクセルデータをランダムなノイズ値で更新します。
@@ -1043,6 +1065,13 @@ function trDrawNoiseFilter() {
   })
 }
 
+/**
+ * 指定された座標に基づいてノイズ値を生成する関数。
+ *
+ * @param {number} x - X座標
+ * @param {number} y - Y座標
+ * @returns {number} 生成されたノイズ値
+ */
 function trGenerateNoiseValue(x, y) {
   return trGetDistributedValue(
     trDataParams.at(x % trDataParams.length) * trDataParams.at(y % trDataParams.length),
@@ -1063,6 +1092,11 @@ function trFunctionParamsRandomize() {
   trTileSizeDivNum = ceil(random(TR_TILE_SIZE_DIV.MIN, TR_TILE_SIZE_DIV.MAX))
 }
 
+/**
+ * 全てのパラメータをランダムに設定する関数。
+ * 背景モード、グレイスケールフィルター、ノイズフィルター、ぼかしフィルター、
+ * 線の太さ、色相シフト、タイルサイズの分割数をランダムに設定します。
+ */
 function trFunctionAllParamsRandomize() {
   trBackgroundMode = random(Object.values(TR_BACKGROUND_MODE))
 
@@ -1115,7 +1149,14 @@ function trSetInitUrlAndMidi() {
   })
 }
 
+/**
+ * BitmapUtils クラスは、ビットマップデータを管理し、ランダムまたは特定のビットマップを取得するためのユーティリティを提供します。
+ */
 class BitmapUtils {
+  /**
+   * BitmapUtils のコンストラクタ
+   * @param {Object} jsonData - ビットマップデータを含む JSON オブジ���クト
+   */
   constructor(jsonData) {
     this.data = jsonData
     this.characters = Object.keys(jsonData.bitmaps)
@@ -1123,7 +1164,7 @@ class BitmapUtils {
 
   /**
    * ランダムに1文字のビットマップを取得
-   * @returns {{character: string, bitmap: number[][]}}
+   * @returns {{character: string, bitmap: number[][]}} ランダムに選ばれた文字とそのビットマップ
    */
   getRandomBitmap() {
     const randomChar = this.characters[Math.floor(Math.random() * this.characters.length)]
@@ -1136,7 +1177,7 @@ class BitmapUtils {
   /**
    * 指定した数のビットマップをランダムに取得
    * @param {number} count - 取得する文字数
-   * @returns {Array<{character: string, bitmap: number[][]}>}
+   * @returns {Array<{character: string, bitmap: number[][]}>} ランダムに選ばれた文字とそのビットマップの配列
    */
   getRandomBitmaps(count = 1) {
     return Array.from({ length: count }, () => this.getRandomBitmap())
@@ -1145,7 +1186,7 @@ class BitmapUtils {
   /**
    * 特定の文字のビットマップを取得
    * @param {string} character - 取得したい文字
-   * @returns {{character: string, bitmap: number[][]}}
+   * @returns {{character: string, bitmap: number[][]}} 指定された文字とそのビットマップ
    */
   getBitmap(character) {
     if (this.data.bitmaps[character]) {
@@ -1158,6 +1199,12 @@ class BitmapUtils {
   }
 }
 
+/**
+ * サイン波の計算を行う関数。
+ * 現在のフレーム数とサイン波の速度を使用してサイン波の値を計算します。
+ *
+ * @returns {number} サイン波の値
+ */
 function trSineCalc() {
   return sin(frameCount * 50 * 0.004 * trSineSpeed)
 }
