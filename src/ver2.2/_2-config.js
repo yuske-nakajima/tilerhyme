@@ -444,9 +444,14 @@ function trUtilityDataGridIsPressed(value, isPressed) {
         break
       }
 
-      // 係数をランダムに変更
-      trFunctionFilterParamsRandomize()
-      trFunctionShapeParamsRandomize()
+      if (trRandomShapeParamsMode === TR_RANDOM_SHAPE_PARAMS_MODE.RANDOM) {
+        trDataGrid.find((item) => item.value === TR_FUNCTION_CODE.IS_RANDOM_SHAPE_PARAMS).isPressed = true
+        trFunctionShapeParamsRandomize()
+      }
+      if (trRandomFilterParamsMode === TR_RANDOM_FILTER_PARAMS_MODE.RANDOM) {
+        trDataGrid.find((item) => item.value === TR_FUNCTION_CODE.IS_RANDOM_FILTER_PARAMS).isPressed = true
+        trFunctionFilterParamsRandomize()
+      }
 
       trDataGrid = trDataGrid.map((item, i) => {
         if (i >= TR_DATA_GRID_SIZE) {
@@ -463,9 +468,14 @@ function trUtilityDataGridIsPressed(value, isPressed) {
         break
       }
 
-      // 係数をランダムに変更
-      trFunctionFilterParamsRandomize()
-      trFunctionShapeParamsRandomize()
+      if (trRandomShapeParamsMode === TR_RANDOM_SHAPE_PARAMS_MODE.RANDOM) {
+        trDataGrid.find((item) => item.value === TR_FUNCTION_CODE.IS_RANDOM_SHAPE_PARAMS).isPressed = true
+        trFunctionShapeParamsRandomize()
+      }
+      if (trRandomFilterParamsMode === TR_RANDOM_FILTER_PARAMS_MODE.RANDOM) {
+        trDataGrid.find((item) => item.value === TR_FUNCTION_CODE.IS_RANDOM_FILTER_PARAMS).isPressed = true
+        trFunctionFilterParamsRandomize()
+      }
 
       const randomFontBitmap = trBitMapFontData.getRandomBitmap().bitmap
       for (let yi = 0; yi < 8; yi++) {
