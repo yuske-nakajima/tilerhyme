@@ -5,6 +5,13 @@ async function trUiSetup() {
       trUtilityDataGridIsPressed(i, !trGetPressedKeyList(trDataGrid).includes(i))
       trSetDataGridIsPressed(i, !trGetPressedKeyList(trDataGrid).includes(i))
       await trSetDataParams()
+
+      if (trRandomShapeParamsMode === TR_RANDOM_SHAPE_PARAMS_MODE.RANDOM) {
+        trFunctionShapeParamsRandomize()
+      }
+      if (trRandomFilterParamsMode === TR_RANDOM_FILTER_PARAMS_MODE.RANDOM) {
+        trFunctionFilterParamsRandomize()
+      }
     },
     async () => {
       console.log('ノーデバイスモード')

@@ -14,8 +14,8 @@ async function trUiDraw() {
       }
 
       // 係数をランダムに変更
-      trFunctionParamsRandomize()
-      // 係数をランダムに変更
+      trFunctionFilterParamsRandomize()
+      trFunctionShapeParamsRandomize()
 
       trUpdateUrl()
       trCreateQrCode()
@@ -107,7 +107,10 @@ async function trUiDraw() {
 
   if (trMode === TR_MODE.FONT_AUTO) {
     if (frameCount % TR_AUTO_MODE_INTERVAL === 0) {
-      trFunctionParamsRandomize()
+      // 係数をランダムに変更
+      trFunctionFilterParamsRandomize()
+      trFunctionShapeParamsRandomize()
+
       const randomFontBitmap = trBitMapFontData.getRandomBitmap().bitmap
       for (let yi = 0; yi < 8; yi++) {
         for (let xi = 0; xi < 8; xi++) {
@@ -124,7 +127,9 @@ async function trUiDraw() {
     if (frameCount % (TR_AUTO_MODE_INTERVAL * 0.3) === 0) {
       let index = trFont2AutoCount % trFont2AutoText.length
 
-      trFunctionParamsRandomize()
+      // 係数をランダムに変更
+      trFunctionFilterParamsRandomize()
+      trFunctionShapeParamsRandomize()
 
       const fontBitmap = trFont2AutoBitmapList[index]
       for (let yi = 0; yi < 8; yi++) {
@@ -166,10 +171,6 @@ async function trUiDraw() {
 
   if (trNoiseFilter === TR_NOISE_FILTER.NOISE) {
     trDrawNoiseFilter()
-  }
-
-  if (trBlurFilter === TR_BLUR_FILTER.BLUR) {
-    filter(BLUR, 5)
   }
 
   if (trIsNoDevice || trMode === TR_MODE.FONT_AUTO || trMode === TR_MODE.FONT_2_AUTO) {
