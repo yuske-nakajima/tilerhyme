@@ -12,8 +12,8 @@ const TR_FUNCTION_CODE = {
   IS_GRAY_SCALE: 49,
   IS_BLUR_FILTER: 59,
   SINE_SPEED_UP: 69,
-  SINE_SPEED_DOWN: 79,
-  RANDOM_PARAMS: 89,
+  RANDOM_FILTER_PARAMS: 79,
+  RANDOM_SHAPE_PARAMS: 89,
   STROKE_WEIGHT_UP: 91,
   STROKE_WEIGHT_DOWN: 92,
   HUE_SHIFT_UP: 93,
@@ -98,9 +98,9 @@ const TR_INIT_DATA_GRID = [
   { value: TR_FUNCTION_CODE.IS_GRAY_SCALE, isPressed: false },
   { value: TR_FUNCTION_CODE.IS_NOISE_FILTER, isPressed: false },
   { value: TR_FUNCTION_CODE.IS_BLUR_FILTER, isPressed: false },
-  { value: TR_FUNCTION_CODE.RANDOM_PARAMS, isPressed: false },
+  { value: TR_FUNCTION_CODE.RANDOM_SHAPE_PARAMS, isPressed: false },
   { value: TR_FUNCTION_CODE.SINE_SPEED_UP, isPressed: false },
-  { value: TR_FUNCTION_CODE.SINE_SPEED_DOWN, isPressed: false },
+  { value: TR_FUNCTION_CODE.RANDOM_FILTER_PARAMS, isPressed: false },
   { value: TR_FUNCTION_CODE.STROKE_WEIGHT_UP, isPressed: false },
   { value: TR_FUNCTION_CODE.STROKE_WEIGHT_DOWN, isPressed: false },
   { value: TR_FUNCTION_CODE.HUE_SHIFT_UP, isPressed: false },
@@ -299,8 +299,8 @@ const trProgrammerModeSetup = createLaunchpadSetup({
     TR_FUNCTION_CODE.TILE_SIZE_DIV_UP, // タイルサイズ分割を増加
     TR_FUNCTION_CODE.TILE_SIZE_DIV_DOWN, // タイルサイズ分割を減少
     TR_FUNCTION_CODE.SINE_SPEED_UP, // サイン波速度を増加
-    TR_FUNCTION_CODE.SINE_SPEED_DOWN, // サイン波速度を減少
-    TR_FUNCTION_CODE.RANDOM_PARAMS, // ランダムパラメータ
+    TR_FUNCTION_CODE.RANDOM_FILTER_PARAMS, // ランダムフィルターパラメータ
+    TR_FUNCTION_CODE.RANDOM_SHAPE_PARAMS, // ランダムパラメータ
     TR_FUNCTION_CODE.RANDOM_TILE, // ランダムタイル
     TR_FUNCTION_CODE.RANDOM_FONT_TILE, // ランダムフォントタイル
   ],
@@ -421,11 +421,12 @@ function trUtilityDataGridIsPressed(value, isPressed) {
     case TR_FUNCTION_CODE.SINE_SPEED_UP:
       trSineSpeed = min(trSineSpeed + TR_SINE_SPEED.STEP, TR_SINE_SPEED.MAX)
       break
-    case TR_FUNCTION_CODE.SINE_SPEED_DOWN:
-      trSineSpeed = max(trSineSpeed - TR_SINE_SPEED.STEP, TR_SINE_SPEED.MIN)
+    case TR_FUNCTION_CODE.RANDOM_FILTER_PARAMS:
+      trFunctionFilterParamsRandomize()
+      trSetInitUrlAndMidi()
       break
-    case TR_FUNCTION_CODE.RANDOM_PARAMS:
-      trFunctionAllParamsRandomize()
+    case TR_FUNCTION_CODE.RANDOM_SHAPE_PARAMS:
+      trFunctionShapeParamsRandomize()
       trSetInitUrlAndMidi()
       break
     case TR_FUNCTION_CODE.RANDOM_TILE:
@@ -1093,13 +1094,22 @@ function trFunctionParamsRandomize() {
 }
 
 /**
- * 全てのパラメータをランダムに設定する関数。
- * 背景モード、グレイスケールフィルター、ノイズフィルター、ぼかしフィルター、
- * 線の太さ、色相シフト、タイルサイズの分割数をランダムに設定します。
+ * ランダムな形状パラメータを設定する関数。
+ * 線幅とタイルサイズの分割数をランダムに設定します。
  */
-function trFunctionAllParamsRandomize() {
-  trBackgroundMode = random(Object.values(TR_BACKGROUND_MODE))
+function trFunctionShapeParamsRandomize() {
+  trStrokeWeight = ceil(random(TR_STROKE_WEIGHT.MIN, TR_STROKE_WEIGHT.MAX))
+  trTileSizeDivNum = ceil(random(TR_TILE_SIZE_DIV.MIN, TR_TILE_SIZE_DIV.MAX))
+}
 
+/**
+ * フィルターパラメータをランダムに設定する関数。
+ * 色相シフト、背景モード、グレイスケールフィルター、ノイズフィルターをランダムに設定します。
+ * グレイスケールフィルターは、フレームカウントが4の倍数のときにのみランダムに設定されます。
+ */
+function trFunctionFilterParamsRandomize() {
+  trHueShift = ceil(random(TR_HUE_SHIFT.MIN, TR_HUE_SHIFT.MAX))
+  trBackgroundMode = random(Object.values(TR_BACKGROUND_MODE))
   // グレイスケールは頻度を下げる
   if (frameCount % 4 === 0) {
     trGrayFilter = random(Object.values(TR_GRAY_FILTER))
@@ -1107,11 +1117,6 @@ function trFunctionAllParamsRandomize() {
     trGrayFilter = TR_GRAY_FILTER.NONE
   }
   trNoiseFilter = random(Object.values(TR_NOISE_FILTER))
-  trBlurFilter = random(Object.values(TR_BLUR_FILTER))
-
-  trStrokeWeight = ceil(random(TR_STROKE_WEIGHT.MIN, TR_STROKE_WEIGHT.MAX))
-  trHueShift = ceil(random(TR_HUE_SHIFT.MIN, TR_HUE_SHIFT.MAX))
-  trTileSizeDivNum = ceil(random(TR_TILE_SIZE_DIV.MIN, TR_TILE_SIZE_DIV.MAX))
 }
 
 /**
