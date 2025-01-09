@@ -232,7 +232,7 @@ let trWindowGap
 
 let trCellDivNum
 
-let trIsNoDevice = false
+let trIsNoDevice = true
 
 let trSoftUiStartPos
 

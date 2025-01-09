@@ -173,7 +173,9 @@ async function trUiDraw() {
     trDrawNoiseFilter()
   }
 
-  trDeviceDraw()
+  if (trIsNoDevice) {
+    trDeviceDraw()
+  }
 
   if (trMode === TR_MODE.FONT_2_AUTO) {
     const nowIndex = (trFont2AutoCount - 1) % trFont2AutoText.length
