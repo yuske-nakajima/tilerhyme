@@ -21,15 +21,15 @@ function trCreateComposeTiles(funcList, funcNum) {
 
   // ビット演算で組み合わせを生成
   for (let i = 0; i < baseLength; i++) {
-    const selectedFuncs = []
-    selectedFuncs.push(funcList[i]) // 最初の関数を追加
+    const selectedFuncList = []
+    selectedFuncList.push(funcList[i]) // 最初の関数を追加
 
     // 残りの関数を選択
     let remaining = funcNum - 1
     let startIdx = (i + 1) % baseLength
 
     while (remaining > 0) {
-      selectedFuncs.push(funcList[startIdx])
+      selectedFuncList.push(funcList[startIdx])
       startIdx = (startIdx + 1) % baseLength
       remaining--
     }
@@ -40,8 +40,8 @@ function trCreateComposeTiles(funcList, funcNum) {
         const { xi, yi, tileSize, noiseVal } = params
 
         // noiseValをビットパターンとして使用
-        const patternIndex = (noiseVal & maxValue) % selectedFuncs.length
-        selectedFuncs[patternIndex](xi, yi, tileSize)
+        const patternIndex = (noiseVal & maxValue) % selectedFuncList.length
+        selectedFuncList[patternIndex](xi, yi, tileSize)
       }),
     )
   }

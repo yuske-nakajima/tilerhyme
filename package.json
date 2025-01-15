@@ -4,13 +4,14 @@
   "description": "模様生成器",
   "scripts": {
     "dev": "live-server src",
-    "format": "prettier --write \"src/**/*.{js,html,css}\""
+    "format": "prettier --write \"src/**/*.{js,html,css,json}\" \"makeBitmap/**/*.js\""
   },
   "author": "yuske-nakajima",
   "license": "MIT",
   "thirdPartyNotices": "THIRD_PARTY_NOTICES.md",
   "devDependencies": {
     "@types/p5": "^1.7.6",
+    "canvas": "^3.0.0",
     "live-server": "^1.2.2",
     "prettier": "^3.3.3"
   }

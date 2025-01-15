@@ -85,17 +85,30 @@ function createLaunchpadSetup(userConfig = {}) {
       outputNames: ['Launchpad Mini MK3 LPMiniMK3 MIDI In', 'MIDIOUT2 (LPMiniMK3 MIDI)'],
       noteRange: { min: 36, max: 99 },
       incrementButtonCodeList: [],
-      activeColor: 42,
-      incrementButtonColor: 80,
+      functionButtonCodeList: [],
+      noneButtonCodeList: [],
+      activeColor: 12,
+      functionButtonColor: 9,
+      incrementButtonColor: 9,
+      incrementInactiveColor: 1,
+      functionInactiveColor: 70,
       inactiveColor: 0,
+      noneButtonColor: 0,
     },
     ...userConfig,
   }
 
   // 以降は設定を使って処理を行う
-  return async (pressedCallback, failedCallback, setDataParams, dataGrid) => {
+  return async (
+    pressedCallback,
+    failedCallback,
+    setDataParams,
+    dataGrid,
+    _access,
+    patternButtonClickAction = () => {},
+  ) => {
     try {
-      const access = await navigator.requestMIDIAccess()
+      const access = _access || (await navigator.requestMIDIAccess())
 
       const input = Array.from(access.inputs.values()).find((input) => config.inputNames.includes(input.name))
       if (!input) {
@@ -111,10 +124,26 @@ function createLaunchpadSetup(userConfig = {}) {
 
       // 初期状態の設定
       for (let i = config.noteRange.min; i <= config.noteRange.max; i++) {
+        if (config.noneButtonCodeList.includes(i)) {
+          output.send([0x90, i, config.noneButtonColor])
+          continue
+        }
         const isPressed = trGetPressedKeyList(dataGrid).includes(i)
-        output.send([0x90, i, isPressed ? config.activeColor : config.inactiveColor])
         if (isPressed) {
+          if (config.functionButtonCodeList.includes(i)) {
+            output.send([0x90, i, config.functionButtonColor /* 色コード */])
+          } else {
+            output.send([0x90, i, config.activeColor /* 色コード */])
+          }
           await setDataParams()
+        } else {
+          if (config.functionButtonCodeList.includes(i)) {
+            output.send([0x90, i, config.functionInactiveColor])
+          } else if (config.incrementButtonCodeList.includes(i)) {
+            output.send([0x90, i, config.incrementInactiveColor])
+          } else {
+            output.send([0x90, i, config.inactiveColor])
+          }
         }
       }
 
@@ -130,9 +159,16 @@ function createLaunchpadSetup(userConfig = {}) {
         if (config.incrementButtonCodeList.includes(note)) {
           if (trLpIsPressed(velocity)) {
             pressedCallback(note)
-            output.send([0x90, note, config.incrementButtonColor /* 色コード */])
+            output.send([0x90, note, config.incrementButtonColor])
           } else {
-            output.send([0x90, note, 0])
+            output.send([0x90, note, config.incrementInactiveColor])
+          }
+          return
+        }
+
+        if (config.noneButtonCodeList.includes(note)) {
+          if (trLpIsPressed(velocity)) {
+            output.send([0x90, note, config.noneButtonColor])
           }
           return
         }
@@ -142,6 +178,38 @@ function createLaunchpadSetup(userConfig = {}) {
         }
 
         // ON/OFFボタンの処理
+        // 処理を増やす場合は、インターフェースを合わせてfuncListに追加する
+        const funcList = [
+          (i) => {
+            if (!config.functionButtonCodeList.includes(i)) {
+              return undefined
+            }
+            return {
+              press: () => {
+                output.send([0x90, i, config.functionButtonColor])
+              },
+              release: () => {
+                output.send([0x90, i, config.functionInactiveColor])
+              },
+            }
+          },
+          (i) => {
+            if (config.functionButtonCodeList.includes(i)) {
+              return undefined
+            }
+            return {
+              press: () => {
+                output.send([0x90, i, config.activeColor])
+                patternButtonClickAction()
+              },
+              release: () => {
+                output.send([0x90, i, config.inactiveColor])
+                patternButtonClickAction()
+              },
+            }
+          },
+        ]
+
         for (let i = config.noteRange.min; i <= config.noteRange.max; i++) {
           if (note !== i) {
             continue
@@ -151,10 +219,20 @@ function createLaunchpadSetup(userConfig = {}) {
             pressedCallback(note)
           }
 
+          const _func = funcList.filter((f) => f(i) !== undefined)
+          if (!_func.length) {
+            return
+          }
+
+          const func = _func[0](i)
+          if (!func) {
+            return
+          }
+
           if (trGetPressedKeyList(dataGrid).includes(i)) {
-            output.send([0x90, i, config.activeColor /* 色コード */])
+            func.press()
           } else {
-            output.send([0x90, i, 0])
+            func.release()
           }
         }
       }
