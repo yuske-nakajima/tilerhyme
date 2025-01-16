@@ -32,6 +32,8 @@ let trFuncArray = [
   trDrawSquareCascade1, // 四角形-連続1
   trDrawSquareCascade2, // 四角形-連続2（同心）
   trDrawSquareCascade3, // 重なった四角形
+  trDrawFillStar, // 星-塗りつぶし
+  trDrawStrokeStar, // 星-線のみ
 ]
 
 // 合成関数を追加

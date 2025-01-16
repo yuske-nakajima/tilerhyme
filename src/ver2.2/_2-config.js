@@ -1105,7 +1105,6 @@ function trFunctionShapeParamsRandomize() {
 function trFunctionFilterParamsRandomize() {
   trHueShift = ceil(random(TR_HUE_SHIFT.MIN, TR_HUE_SHIFT.MAX))
   trBackgroundMode = random(Object.values(TR_BACKGROUND_MODE))
-  trNoiseFilter = random(Object.values(TR_NOISE_FILTER))
 }
 
 /**

@@ -1216,3 +1216,55 @@ const trDrawSquareCascade3 = _trDrawSquareCascade((params) => {
     }
   })
 })
+
+function drawStar(x, y, size) {
+  trDrawBlock(() => {
+    // 外側の頂点と内側の頂点の数（5角形なので5）
+    const numPoints = 5
+    // 内側の頂点の半径（外側に対する比率）
+    const innerRadius = size * 0.2
+    const outerRadius = size * 0.5
+
+    beginShape()
+    for (let i = 0; i < numPoints * 2; i++) {
+      // 角度を計算（360度を10等分）
+      const angle = (TWO_PI * i) / (numPoints * 2) - PI / 2
+      // 外側と内側の頂点を交互に配置
+      const radius = i % 2 === 0 ? outerRadius : innerRadius
+      // 頂点の座標を計算
+      const px = x + cos(angle) * radius
+      const py = y + sin(angle) * radius
+      vertex(px, py)
+    }
+    endShape(CLOSE)
+  })
+}
+
+const trDrawFillStar = _trDrawSquareCascade((params) => {
+  trDrawBlock(() => {
+    const { x, y, t, colorList, noiseVal } = params
+    noStroke()
+
+    if (noiseVal % 2 === 0) {
+      fill(colorList[noiseVal % colorList.length])
+    } else {
+      fill(colorList[trDataParams[noiseVal % trDataParams.length] % colorList.length])
+    }
+    drawStar(x, y, t)
+  })
+})
+
+const trDrawStrokeStar = _trDrawSquareCascade((params) => {
+  trDrawBlock(() => {
+    const { x, y, t, colorList, noiseVal, strokeSize400 } = params
+    noFill()
+    strokeWeight(min(strokeSize400, trStrokeWeight))
+
+    if (noiseVal % 2 === 0) {
+      stroke(colorList[noiseVal % colorList.length])
+    } else {
+      stroke(colorList[trDataParams[noiseVal % trDataParams.length] % colorList.length])
+    }
+    drawStar(x, y, t)
+  })
+})
