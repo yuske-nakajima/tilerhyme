@@ -1268,3 +1268,77 @@ const trDrawStrokeStar = _trDrawSquareCascade((params) => {
     drawStar(x, y, t)
   })
 })
+
+function drawPolygon(x, y, size, numPoints = 5) {
+  // 開始角度（-90度 = -HALF_PI）で上部から開始
+  const startAngle = -HALF_PI
+
+  beginShape()
+  for (let i = 0; i < numPoints; i++) {
+    // 角度を計算（360度を5等分）
+    const angle = startAngle + (TWO_PI * i) / numPoints
+    // 頂点の座標を計算
+    const px = x + cos(angle) * size * 0.45
+    const py = y + sin(angle) * size * 0.45
+    vertex(px, py)
+  }
+  endShape(CLOSE)
+}
+
+const trDrawFillPentagon = _trDrawSquareCascade((params) => {
+  trDrawBlock(() => {
+    const { x, y, t, colorList, noiseVal } = params
+    noStroke()
+
+    if (noiseVal % 2 === 0) {
+      fill(colorList[noiseVal % colorList.length])
+    } else {
+      fill(colorList[trDataParams[noiseVal % trDataParams.length] % colorList.length])
+    }
+    drawPolygon(x, y, t)
+  })
+})
+
+const trDrawStrokePentagon = _trDrawSquareCascade((params) => {
+  trDrawBlock(() => {
+    const { x, y, t, colorList, noiseVal, strokeSize400 } = params
+    noFill()
+    strokeWeight(min(strokeSize400, trStrokeWeight))
+
+    if (noiseVal % 2 === 0) {
+      stroke(colorList[noiseVal % colorList.length])
+    } else {
+      stroke(colorList[trDataParams[noiseVal % trDataParams.length] % colorList.length])
+    }
+    drawPolygon(x, y, t)
+  })
+})
+
+const trDrawFillHexagon = _trDrawSquareCascade((params) => {
+  trDrawBlock(() => {
+    const { x, y, t, colorList, noiseVal } = params
+    noStroke()
+
+    if (noiseVal % 2 === 0) {
+      fill(colorList[noiseVal % colorList.length])
+    } else {
+      fill(colorList[trDataParams[noiseVal % trDataParams.length] % colorList.length])
+    }
+    drawPolygon(x, y, t, 6)
+  })
+})
+
+const trDrawStrokeHexagon = _trDrawSquareCascade((params) => {
+  trDrawBlock(() => {
+    const { x, y, t, colorList, noiseVal, strokeSize400 } = params
+    noFill()
+    strokeWeight(min(strokeSize400, trStrokeWeight))
+
+    if (noiseVal % 2 === 0) {
+      stroke(colorList[noiseVal % colorList.length])
+    } else {
+      stroke(colorList[trDataParams[noiseVal % trDataParams.length] % colorList.length])
+    }
+    drawPolygon(x, y, t, 6)
+  })
+})
