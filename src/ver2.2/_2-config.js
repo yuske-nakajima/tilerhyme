@@ -221,6 +221,8 @@ const TR_SINE_SPEED = {
   STEP: 0.05,
   DEFAULT: 1.0,
 }
+
+const TR_PRIME = 65537
 // ------------------------------------------------------------
 // --- 変数
 // ------------------------------------------------------------
@@ -1019,22 +1021,16 @@ function trCalcSineCount(sineValue) {
  * @returns {number} 生成された値。
  */
 function trGetDistributedValue(x, params) {
-  // パラメータのインデックスを動的に選択
-  const index1 = x % 20 // 0-19でループ
-  const index2 = (x + 7) % 20 // オフセット付きでループ
-  const index3 = (x * 13) % 20 // 別のパターンでループ
+  // ハッシュ関数的なアプローチで周期性を減らす
+  const hash = (x * 0x9e3779b9) >>> 0
+  const index1 = hash % params.length
+  const index2 = (hash * 31) % params.length
+  const index3 = (hash * 37) % params.length
 
-  // 選択したパラメータを使用して値を生成
   let value = x
-
-  // 1段階目: 最初のパラメータを使用
-  value = ((value * params[index1] + 0x45d9f3b) >>> 0) % 1000
-
-  // 2段階目: 2つ目のパラメータで変調
-  value = ((value + params[index2] * 0x45d9f3b) >>> 0) % 1000
-
-  // 3段階目: 3つ目のパラメータで更に変調
-  value = ((value ^ (params[index3] * 0x45d9f3b)) >>> 0) % 1000
+  value = ((value * params[index1] + 0x9e3779b9) >>> 0) % TR_PRIME
+  value = ((value + params[index2] * 0x9e3779b9) >>> 0) % TR_PRIME
+  value = ((value ^ (params[index3] * 0x9e3779b9)) >>> 0) % TR_PRIME
 
   return value
 }

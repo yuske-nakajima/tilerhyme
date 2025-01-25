@@ -44,12 +44,10 @@ let trFuncArray = [
 let trComposeFuncList = []
 
 if (trFuncArray.length >= 2) {
-  const limit = trFuncArray.length > 6 ? trFuncArray.length / 2 : trFuncArray.length + 1
+  const limit = trFuncArray.length > 12 ? trFuncArray.length / 4 : trFuncArray.length + 1
   for (let i = 2; i < limit; i++) {
     trComposeFuncList = [...trComposeFuncList, ...trCreateComposeTiles(trFuncArray, i)]
   }
-
-  trFuncArray = [...trFuncArray, trComposeFuncList]
 }
 /**
  * trDrawShape 関数は、指定された幅と高さに基づいて形状を描画します。
