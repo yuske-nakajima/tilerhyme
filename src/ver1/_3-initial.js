@@ -1,13 +1,18 @@
 function trInitial() {
-  const gap = max(windowWidth * 0.02, windowHeight * 0.02)
-  createCanvas(windowWidth - gap, windowHeight - gap)
+  trUrlToData()
+  trWindowGap = max(windowWidth * 0.01, windowHeight * 0.01)
+  trWindowSize = {
+    width: windowWidth - trWindowGap,
+    height: windowHeight - trWindowGap,
+  }
+  trCanvas = createCanvas(windowWidth - trWindowGap, windowHeight - trWindowGap)
   colorMode(HSB)
   frameRate(24)
 
   // カラー
-  TR_COLORS.lineMain = color(200, 0, 10)
-  TR_COLORS.cellMain = color(200, 60, 100)
-  TR_COLORS.cellNormal = color(200, 10, 100)
+  TR_COLORS.lineMain = color(0, 0, 0)
+  TR_COLORS.cellMain = color(0, 0, 100)
+  TR_COLORS.cellNormal = color(0, 0, 50)
 
   // 横幅でセルの分割数を計算
   trCellDivNum = ceil(width / 50)

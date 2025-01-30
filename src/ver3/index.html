@@ -15,7 +15,7 @@
     <meta name="twitter:description" content="TILERHYME: PATTERN MAKER" />
     <meta name="twitter:image" content="https://tilerhyme.yuske.app/assets/tilerhyme.png" />
     <link rel="shortcut icon" href="../assets/favicon.ico" />
-    <title>TILERHYME - KICK ver-2.0</title>
+    <title>TILERHYME - KETHUME ver-3</title>
   </head>
 
   <body>
@@ -24,9 +24,9 @@
     </div>
     <div class="functions-area">
       <div id="image-download" class="functions-button">DOWNLOAD</div>
-      <div id="mode" class="functions-button">MODE</div>
+      <div id="mode" class="functions-button">AUTO MODE</div>
     </div>
-    <div class="version-num-area">KICK ver-2.0</div>
+    <div class="version-num-area">KETHUME ver-3</div>
     <!-- ダイアログ -->
     <div id="dialog" class="dialog">
       <div class="dialog-content">
@@ -43,13 +43,29 @@
     </div>
     <div id="mode-dialog" class="dialog">
       <div class="dialog-content">
-        <div class="dialog-title">MODE</div>
+        <div class="dialog-title">AUTO MODE</div>
         <div class="dialog-body">
-          <div class="dialog-body__text">SELECT MODE</div>
+          <div class="dialog-body__text">SELECT</div>
           <div class="dialog-body__btns">
-            <div id="mode-normal" class="dialog-body__btn">NORMAL</div>
-            <div id="mode-auto" class="dialog-body__btn">AUTO</div>
+            <div id="mode-auto" class="dialog-body__btn">RANDOM</div>
+            <div id="mode-font-auto" class="dialog-body__btn">FONT</div>
+            <div id="mode-font2-auto" class="dialog-body__btn">TEXT</div>
+            <div id="mode-normal" class="dialog-body__btn">STOP</div>
             <div id="mode-cancel" class="dialog-body__btn dialog-cancel">CANCEL</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="font2-auto-dialog" class="dialog">
+      <div class="dialog-content">
+        <div class="dialog-title">AUTO MODE -TEXT-</div>
+        <div class="dialog-body">
+          <div class="dialog-body__text">WRITE TEXT</div>
+          <div class="dialog-body__btns">
+            <input type="text" id="font2-auto-text" />
+            <div id="font2-auto-button" class="dialog-body__btn">START</div>
+            <div id="font2-auto-cancel" class="dialog-body__btn dialog-cancel">CANCEL</div>
           </div>
         </div>
       </div>
@@ -59,6 +75,9 @@
     <script src="../lib/qrcode.js" defer></script>
     <script src="../lib/_1-helper.js" defer></script>
     <script src="./_2-config.js" defer></script>
+    <script src="./_2.1-variations.js" defer></script>
+    <script src="./_2.2-variations.js" defer></script>
+    <script src="./_2.9-config-run.js" defer></script>
     <script src="./_3-initial.js" defer></script>
     <script src="./_4-uiSetup.js" defer></script>
     <script src="./_5-uiDraw.js" defer></script>

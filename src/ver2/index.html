@@ -15,7 +15,7 @@
     <meta name="twitter:description" content="TILERHYME: PATTERN MAKER" />
     <meta name="twitter:image" content="https://tilerhyme.yuske.app/assets/tilerhyme.png" />
     <link rel="shortcut icon" href="../assets/favicon.ico" />
-    <title>TILERHYME - RIP ver-1.1</title>
+    <title>TILERHYME - KICK ver-2</title>
   </head>
 
   <body>
@@ -23,9 +23,10 @@
       <a href="/">TILERHYME</a>
     </div>
     <div class="functions-area">
-      <div id="image-download">DOWNLOAD</div>
+      <div id="image-download" class="functions-button">DOWNLOAD</div>
+      <div id="mode" class="functions-button">MODE</div>
     </div>
-    <div class="version-num-area">RIP ver-1.1</div>
+    <div class="version-num-area">KICK ver-2</div>
     <!-- ダイアログ -->
     <div id="dialog" class="dialog">
       <div class="dialog-content">
@@ -35,13 +36,27 @@
           <div class="dialog-body__btns">
             <div id="dialog-download-info" class="dialog-body__btn">INFO</div>
             <div id="dialog-download" class="dialog-body__btn">FULL</div>
-            <div id="dialog-cancel" class="dialog-body__btn">CANCEL</div>
+            <div id="dialog-cancel" class="dialog-body__btn dialog-cancel">CANCEL</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="mode-dialog" class="dialog">
+      <div class="dialog-content">
+        <div class="dialog-title">MODE</div>
+        <div class="dialog-body">
+          <div class="dialog-body__text">SELECT MODE</div>
+          <div class="dialog-body__btns">
+            <div id="mode-normal" class="dialog-body__btn">NORMAL</div>
+            <div id="mode-auto" class="dialog-body__btn">AUTO</div>
+            <div id="mode-cancel" class="dialog-body__btn dialog-cancel">CANCEL</div>
           </div>
         </div>
       </div>
     </div>
     <!-- ダイアログ -->
     <script src="../lib/p5.js" defer></script>
+    <script src="../lib/qrcode.js" defer></script>
     <script src="../lib/_1-helper.js" defer></script>
     <script src="./_2-config.js" defer></script>
     <script src="./_3-initial.js" defer></script>
