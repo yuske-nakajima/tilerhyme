@@ -1,7 +1,9 @@
 // ------------------------------------------------------------
 // --- 定数
 // ------------------------------------------------------------
-const TR_VERSION = '1.0'
+const TR_APP_NAME = 'TILERHYME'
+const TR_VERSION = '1'
+const TR_VERSION_NAME = 'RIP'
 
 const TR_INIT_DATA_GRID = [
   { value: 85, calcValue: 1, group: 0, isPressed: false },
@@ -134,9 +136,37 @@ const TR_SOFT_UI_WIDTH = 200
 const TR_SOFT_UI_CELL_WIDTH = TR_SOFT_UI_WIDTH / 8
 
 const TR_COLORS = {}
+
+const TR_WALLPAPER_MODE = {
+  FULL: 0,
+  INFO: 1,
+}
+
+const TR_WALLPAPER_SIZE = 1080
+
+const TR_ROTATE_NUM = 4
+
+const TR_CYCLE_FRAME = 60 / TR_ROTATE_NUM
+
+const TR_DEVICE_GRID_NUM = 8
+
+const TR_MODE = {
+  NORMAL: 0,
+  AUTO: 1,
+}
+
+const TR_AUTO_MODE_INTERVAL = 30
 // ------------------------------------------------------------
 // --- 変数
 // ------------------------------------------------------------
+let lastTapTime = 0
+
+let trCanvas
+
+let trWindowSize
+
+let trWindowGap
+
 let trCalcDataGridResult = {
   key0: 0,
   key1: 0,
@@ -152,8 +182,25 @@ let trIsNoDevice = false
 
 let trSoftUiStartPos
 
-let trDataGrid = trGetOrInitializeValue(`trDataGrid-ver${TR_VERSION}`, TR_INIT_DATA_GRID)
+let trDataGrid = TR_INIT_DATA_GRID
 
+let trIsDataGridClickable = true
+
+let trChangePatternFrame = 0
+
+let trBlockFrameCount = 0
+
+let trRotateValue = 0
+
+let trQrImage
+
+// MODE object value
+let trMode = TR_MODE.NORMAL
+
+// life gameの初期値はランダム値
+let trModeLifeGameGrid = Array.from({ length: 64 }, () => Math.floor(Math.random() * 2)).join('')
+
+let trModeLifeGameGridHistory = []
 // ------------------------------------------------------------
 // --- 関数
 // ------------------------------------------------------------
@@ -188,10 +235,19 @@ function trCalcDataGrid(dataGrid) {
  * @param {number} width - 幅
  */
 function trDrawEllipseSquare(pos, width) {
-  ellipse(pos.x - width / 3, pos.y - width / 3, width / 3)
-  ellipse(pos.x + width / 3, pos.y - width / 3, width / 3)
-  ellipse(pos.x - width / 3, pos.y + width / 3, width / 3)
-  ellipse(pos.x + width / 3, pos.y + width / 3, width / 3)
+  trDrawBlock(() => {
+    translate(pos.x, pos.y)
+    let w = width
+    if (trRotateValue <= PI * 2) {
+      rotate(trRotateValue)
+      w = width * abs(sin((frameCount - trChangePatternFrame) / TR_CYCLE_FRAME))
+    }
+    w = w / 3
+    ellipse(0 - w, 0 - w, w)
+    ellipse(0 + w, 0 - w, w)
+    ellipse(0 - w, 0 + w, w)
+    ellipse(0 + w, 0 + w, w)
+  })
 }
 
 /**
@@ -200,10 +256,19 @@ function trDrawEllipseSquare(pos, width) {
  * @param {number} width - 幅
  */
 function trDrawEllipseRhombus(pos, width) {
-  ellipse(pos.x - width / 3, pos.y, width / 3)
-  ellipse(pos.x + width / 3, pos.y, width / 3)
-  ellipse(pos.x, pos.y - width / 3, width / 3)
-  ellipse(pos.x, pos.y + width / 3, width / 3)
+  trDrawBlock(() => {
+    translate(pos.x, pos.y)
+    let w = width
+    if (trRotateValue <= PI * 2) {
+      rotate(trRotateValue)
+      w = width * abs(sin((frameCount - trChangePatternFrame) / TR_CYCLE_FRAME))
+    }
+    w = w / 3
+    ellipse(0 - w, 0, w)
+    ellipse(0 + w, 0, w)
+    ellipse(0, 0 - w, w)
+    ellipse(0, 0 + w, w)
+  })
 }
 
 /**
@@ -212,7 +277,15 @@ function trDrawEllipseRhombus(pos, width) {
  * @param {number} width - 幅
  */
 function trDrawHalfEllipseTop(pos, width) {
-  arc(pos.x, pos.y, width, width, PI, TWO_PI)
+  trDrawBlock(() => {
+    translate(pos.x, pos.y)
+    let w = width
+    if (trRotateValue <= PI * 2) {
+      rotate(trRotateValue)
+      w = width * abs(sin((frameCount - trChangePatternFrame) / TR_CYCLE_FRAME))
+    }
+    arc(0, 0, w, w, PI, TWO_PI)
+  })
 }
 
 /**
@@ -221,7 +294,15 @@ function trDrawHalfEllipseTop(pos, width) {
  * @param {number} width - 幅
  */
 function trDrawHalfEllipseBottom(pos, width) {
-  arc(pos.x, pos.y, width, width, 0, PI)
+  trDrawBlock(() => {
+    translate(pos.x, pos.y)
+    let w = width
+    if (trRotateValue <= PI * 2) {
+      rotate(trRotateValue)
+      w = width * abs(sin((frameCount - trChangePatternFrame) / TR_CYCLE_FRAME))
+    }
+    arc(0, 0, w, w, 0, PI)
+  })
 }
 
 /**
@@ -230,8 +311,18 @@ function trDrawHalfEllipseBottom(pos, width) {
  * @param {number} width - 幅
  */
 function trDrawRect(pos, width) {
-  rectMode(CENTER)
-  rect(pos.x, pos.y, width)
+  trDrawBlock(() => {
+    translate(pos.x, pos.y)
+
+    let w = width
+    if (trRotateValue <= PI * 2) {
+      rotate(trRotateValue)
+      w = width * abs(sin((frameCount - trChangePatternFrame) / TR_CYCLE_FRAME))
+    }
+
+    rectMode(CENTER)
+    rect(0, 0, w)
+  })
 }
 
 /**
@@ -240,10 +331,17 @@ function trDrawRect(pos, width) {
  * @param {number} width - 幅
  */
 function trDrawRectSquare(pos, width) {
-  trDrawRect(createVector(pos.x - width / 3, pos.y - width / 3), width / 3)
-  trDrawRect(createVector(pos.x + width / 3, pos.y - width / 3), width / 3)
-  trDrawRect(createVector(pos.x - width / 3, pos.y + width / 3), width / 3)
-  trDrawRect(createVector(pos.x + width / 3, pos.y + width / 3), width / 3)
+  trDrawBlock(() => {
+    translate(pos.x, pos.y)
+    if (trRotateValue <= PI * 2) {
+      rotate(trRotateValue)
+    }
+    const w = width / 3.5
+    trDrawRect(createVector(0 - w, 0 - w), w)
+    trDrawRect(createVector(0 + w, 0 - w), w)
+    trDrawRect(createVector(0 - w, 0 + w), w)
+    trDrawRect(createVector(0 + w, 0 + w), w)
+  })
 }
 
 /**
@@ -252,10 +350,17 @@ function trDrawRectSquare(pos, width) {
  * @param {number} width - 幅
  */
 function trDrawRectRhombus(pos, width) {
-  trDrawRect(createVector(pos.x - width / 3, pos.y), width / 3)
-  trDrawRect(createVector(pos.x + width / 3, pos.y), width / 3)
-  trDrawRect(createVector(pos.x, pos.y - width / 3), width / 3)
-  trDrawRect(createVector(pos.x, pos.y + width / 3), width / 3)
+  trDrawBlock(() => {
+    translate(pos.x, pos.y)
+    if (trRotateValue <= PI * 2) {
+      rotate(trRotateValue)
+    }
+    const w = width / 3.5
+    trDrawRect(createVector(0 - w, 0), w)
+    trDrawRect(createVector(0 + w, 0), w)
+    trDrawRect(createVector(0, 0 - w), w)
+    trDrawRect(createVector(0, 0 + w), w)
+  })
 }
 
 /**
@@ -264,12 +369,19 @@ function trDrawRectRhombus(pos, width) {
  * @param {number} width - 幅
  */
 function trDrawRhombus(pos, width) {
-  beginShape()
-  vertex(pos.x, pos.y - width)
-  vertex(pos.x + width, pos.y)
-  vertex(pos.x, pos.y + width)
-  vertex(pos.x - width, pos.y)
-  endShape(CLOSE)
+  trDrawBlock(() => {
+    translate(pos.x, pos.y)
+    if (trRotateValue <= PI * 2) {
+      rotate(trRotateValue)
+    }
+    const w = width / 2
+    beginShape()
+    vertex(0, -w)
+    vertex(w, 0)
+    vertex(0, w)
+    vertex(-w, 0)
+    endShape(CLOSE)
+  })
 }
 
 /**
@@ -278,10 +390,17 @@ function trDrawRhombus(pos, width) {
  * @param {number} width - 幅
  */
 function trDrawRhombusSquare(pos, width) {
-  trDrawRhombus(createVector(pos.x - width / 3, pos.y - width / 3), width / 3)
-  trDrawRhombus(createVector(pos.x + width / 3, pos.y - width / 3), width / 3)
-  trDrawRhombus(createVector(pos.x - width / 3, pos.y + width / 3), width / 3)
-  trDrawRhombus(createVector(pos.x + width / 3, pos.y + width / 3), width / 3)
+  trDrawBlock(() => {
+    translate(pos.x, pos.y)
+    if (trRotateValue <= PI * 2) {
+      rotate(trRotateValue)
+    }
+    const w = width / 3.5
+    trDrawRhombus(createVector(0 - w, 0 - w), w)
+    trDrawRhombus(createVector(0 + w, 0 - w), w)
+    trDrawRhombus(createVector(0 - w, 0 + w), w)
+    trDrawRhombus(createVector(0 + w, 0 + w), w)
+  })
 }
 
 /**
@@ -290,10 +409,17 @@ function trDrawRhombusSquare(pos, width) {
  * @param {number} width - 幅
  */
 function trDrawRhombusRhombus(pos, width) {
-  trDrawRhombus(createVector(pos.x - width / 3, pos.y), width / 3)
-  trDrawRhombus(createVector(pos.x + width / 3, pos.y), width / 3)
-  trDrawRhombus(createVector(pos.x, pos.y - width / 3), width / 3)
-  trDrawRhombus(createVector(pos.x, pos.y + width / 3), width / 3)
+  trDrawBlock(() => {
+    translate(pos.x, pos.y)
+    if (trRotateValue <= PI * 2) {
+      rotate(trRotateValue)
+    }
+    const w = width / 3.5
+    trDrawRhombus(createVector(0 - w, 0), w)
+    trDrawRhombus(createVector(0 + w, 0), w)
+    trDrawRhombus(createVector(0, 0 - w), w)
+    trDrawRhombus(createVector(0, 0 + w), w)
+  })
 }
 
 /**
@@ -370,56 +496,56 @@ function trFuncArray(
       },
       () => {
         // 四隅に円
-        trDrawEllipseSquare(centerPos, width)
+        trDrawEllipseSquare(centerPos, width * rate)
       },
       () => {
         //四隅に円（ずらした）1
         if ((y % 2 === 0 && x % 2 === 1) || (y % 2 === 1 && x % 2 === 0)) {
-          trDrawEllipseSquare(centerPos, width)
+          trDrawEllipseSquare(centerPos, width * rate)
         }
       },
       () => {
         //四隅に円（ずらした）2
         if ((y % 2 === 0 && x % 2 === 0) || (y % 2 === 1 && x % 2 === 1)) {
-          trDrawEllipseSquare(centerPos, width)
+          trDrawEllipseSquare(centerPos, width * rate)
         }
       },
       () => {
         // ひし形に円を配置（4つ）
-        trDrawEllipseRhombus(centerPos, width)
+        trDrawEllipseRhombus(centerPos, width * rate)
       },
       () => {
         // ひし形に円を配置（4つ）（ずらした）1
         if ((y % 2 === 0 && x % 2 === 1) || (y % 2 === 1 && x % 2 === 0)) {
-          trDrawEllipseRhombus(centerPos, width)
+          trDrawEllipseRhombus(centerPos, width * rate)
         }
       },
       () => {
         // ひし形に円を配置（4つ）（ずらした）2
         if ((y % 2 === 0 && x % 2 === 0) || (y % 2 === 1 && x % 2 === 1)) {
-          trDrawEllipseRhombus(centerPos, width)
+          trDrawEllipseRhombus(centerPos, width * rate)
         }
       },
       // 半円（上）
-      () => {
-        trDrawHalfEllipseTop(centerPos, width * rate)
-      },
+      // () => {
+      //   trDrawHalfEllipseTop(centerPos, width * rate)
+      // },
       // 半円（下）
-      () => {
-        trDrawHalfEllipseBottom(centerPos, width * rate)
-      },
-      () => {
-        // ずらした半円1（下）
-        if ((y % 2 === 0 && x % 2 === 1) || (y % 2 === 1 && x % 2 === 0)) {
-          trDrawHalfEllipseBottom(centerPos, width * rate)
-        }
-      },
-      () => {
-        // ずらした半円2（下）
-        if ((y % 2 === 0 && x % 2 === 0) || (y % 2 === 1 && x % 2 === 1)) {
-          trDrawHalfEllipseBottom(centerPos, width * rate)
-        }
-      },
+      // () => {
+      //   trDrawHalfEllipseBottom(centerPos, width * rate)
+      // },
+      // () => {
+      //   // ずらした半円1（下）
+      //   if ((y % 2 === 0 && x % 2 === 1) || (y % 2 === 1 && x % 2 === 0)) {
+      //     trDrawHalfEllipseBottom(centerPos, width * rate)
+      //   }
+      // },
+      // () => {
+      //   // ずらした半円2（下）
+      //   if ((y % 2 === 0 && x % 2 === 0) || (y % 2 === 1 && x % 2 === 1)) {
+      //     trDrawHalfEllipseBottom(centerPos, width * rate)
+      //   }
+      // },
       // 四角系
       () => {
         // 四角
@@ -427,34 +553,34 @@ function trFuncArray(
       },
       () => {
         // 四隅に四角
-        trDrawRectSquare(centerPos, width)
+        trDrawRectSquare(centerPos, width * rate)
       },
       () => {
         // 四隅に四角（ずらした）1
         if ((y % 2 === 0 && x % 2 === 1) || (y % 2 === 1 && x % 2 === 0)) {
-          trDrawRectSquare(centerPos, width)
+          trDrawRectSquare(centerPos, width * rate)
         }
       },
       () => {
         // 四隅に四角（ずらした）2
         if ((y % 2 === 0 && x % 2 === 0) || (y % 2 === 1 && x % 2 === 1)) {
-          trDrawRectSquare(centerPos, width)
+          trDrawRectSquare(centerPos, width * rate)
         }
       },
       () => {
         // ひし形に四角を配置（4つ）
-        trDrawRectRhombus(centerPos, width)
+        trDrawRectRhombus(centerPos, width * rate)
       },
       () => {
         // ひし形に四角を配置（4つ）（ずらした）1
         if ((y % 2 === 0 && x % 2 === 1) || (y % 2 === 1 && x % 2 === 0)) {
-          trDrawRectRhombus(centerPos, width)
+          trDrawRectRhombus(centerPos, width * rate)
         }
       },
       () => {
         // ひし形に四角を配置（4つ）（ずらした）2
         if ((y % 2 === 0 && x % 2 === 0) || (y % 2 === 1 && x % 2 === 1)) {
-          trDrawRectRhombus(centerPos, width)
+          trDrawRectRhombus(centerPos, width * rate)
         }
       },
       // ひし形
@@ -463,34 +589,34 @@ function trFuncArray(
       },
       () => {
         // 四隅にひし形
-        trDrawRhombusSquare(centerPos, width)
+        trDrawRhombusSquare(centerPos, width * rate)
       },
       () => {
         // 四隅にひし形（ずらした）1
         if ((y % 2 === 0 && x % 2 === 1) || (y % 2 === 1 && x % 2 === 0)) {
-          trDrawRhombusSquare(centerPos, width)
+          trDrawRhombusSquare(centerPos, width * rate)
         }
       },
       () => {
         // 四隅にひし形（ずらした）2
         if ((y % 2 === 0 && x % 2 === 0) || (y % 2 === 1 && x % 2 === 1)) {
-          trDrawRhombusSquare(centerPos, width)
+          trDrawRhombusSquare(centerPos, width * rate)
         }
       },
       () => {
         // ひし形にひし形を配置（4つ）
-        trDrawRhombusRhombus(centerPos, width)
+        trDrawRhombusRhombus(centerPos, width * rate)
       },
       () => {
         // ひし形にひし形を配置（4つ）（ずらした）1
         if ((y % 2 === 0 && x % 2 === 1) || (y % 2 === 1 && x % 2 === 0)) {
-          trDrawRhombusRhombus(centerPos, width)
+          trDrawRhombusRhombus(centerPos, width * rate)
         }
       },
       () => {
         // ひし形にひし形を配置（4つ）（ずらした）2
         if ((y % 2 === 0 && x % 2 === 0) || (y % 2 === 1 && x % 2 === 1)) {
-          trDrawRhombusRhombus(centerPos, width)
+          trDrawRhombusRhombus(centerPos, width * rate)
         }
       },
     ]) {
@@ -528,7 +654,7 @@ function trFuncArray(
  * @param {string} color - 形状の色
  * @param {boolean} isFill - 形状が塗りつぶされるか輪郭のみかを決定します
  */
-function drawShape(value, shapeCount, rate, color, isFill) {
+function trDrawShape(value, shapeCount, rate, color, isFill) {
   if (value === 0) {
     return
   }
@@ -573,7 +699,9 @@ function trSetDataGridIsPressed(value, isPressed) {
   for (let i = 0; i < trDataGrid.length; i++) {
     if (trDataGrid[i].value === value) {
       trDataGrid[i].isPressed = isPressed
-      trSaveToLocalStorage(`trDataGrid-ver${TR_VERSION}`, trDataGrid)
+      trUpdateUrl()
+      trCreateQrCode()
+      trChangePatternFrame = frameCount
     }
   }
 }
@@ -591,4 +719,248 @@ function trSetColor() {
     return
   }
   trColor = _color
+}
+
+/**
+ * デバイスの描画を行う関数
+ */
+function trDeviceDraw() {
+  if (trIsNoDevice) {
+    trDrawBlock(() => {
+      const gap = 10
+      fill(TR_COLORS.lineMain)
+      noStroke()
+      rect(trSoftUiStartPos.x - gap / 2, trSoftUiStartPos.y - gap / 2, TR_SOFT_UI_WIDTH + gap)
+    })
+    trDrawBlock(() => {
+      stroke(TR_COLORS.lineMain)
+      strokeWeight(1)
+      for (let xi = 0; xi < TR_DEVICE_GRID_NUM; xi++) {
+        for (let yi = 0; yi < TR_DEVICE_GRID_NUM; yi++) {
+          const value = TR_MAPPING_GRID[yi][xi]
+          const getIndex = trDataGrid.findIndex((item) => item.value === value)
+          if (getIndex === undefined) {
+            continue
+          }
+
+          trDrawBlock(() => {
+            if (trDataGrid[getIndex].isPressed) {
+              fill(TR_COLORS.cellMain)
+            } else {
+              fill(TR_COLORS.cellNormal)
+            }
+
+            rect(
+              trSoftUiStartPos.x + TR_SOFT_UI_CELL_WIDTH * xi,
+              trSoftUiStartPos.y + TR_SOFT_UI_CELL_WIDTH * yi,
+              TR_SOFT_UI_CELL_WIDTH,
+              TR_SOFT_UI_CELL_WIDTH,
+            )
+          })
+        }
+      }
+    })
+  }
+}
+
+/**
+ * 壁紙を保存する関数
+ */
+function trSaveWallPaper(mode = TR_WALLPAPER_MODE.FULL) {
+  const originalDensity = pixelDensity() // 現在の密度を保存
+
+  pixelDensity(2)
+
+  if (mode === TR_WALLPAPER_MODE.FULL) {
+    resizeCanvas(TR_WALLPAPER_SIZE, TR_WALLPAPER_SIZE)
+  } else if (mode === TR_WALLPAPER_MODE.INFO) {
+    resizeCanvas(TR_WALLPAPER_SIZE, TR_WALLPAPER_SIZE)
+  }
+
+  trCellDivNum = ceil(width / 50)
+
+  const tempTrIsNoDevice = trIsNoDevice
+  const tempTrSoftUiStartPos = { ...trSoftUiStartPos }
+
+  trIsNoDevice = false
+  if (mode === TR_WALLPAPER_MODE.INFO) {
+    trIsNoDevice = true
+    trSoftUiStartPos = createVector(width / 2 - TR_SOFT_UI_WIDTH / 2, height / 2 - TR_SOFT_UI_WIDTH / 2)
+  }
+
+  trUiDraw()
+
+  if (mode === TR_WALLPAPER_MODE.INFO) {
+    trInfoDraw()
+    if (trQrImage) {
+      trQrDraw()
+    }
+  }
+
+  trSaveImage(trCanvas)
+
+  // すべて元に戻す
+  trIsNoDevice = tempTrIsNoDevice
+  trSoftUiStartPos = tempTrSoftUiStartPos
+  resizeCanvas(windowWidth - trWindowGap, windowHeight - trWindowGap)
+  trCellDivNum = ceil(width / 50)
+  pixelDensity(originalDensity) // 密度を元に戻す
+}
+
+/**
+ * ダイアログを非表示にする関数。
+ * ダイアログの表示スタイルを 'none' に設定し、データグリッドをクリック可能にする。
+ */
+function trHideDialog() {
+  const dialog = document.getElementById('dialog')
+  dialog.style.display = 'none'
+  trIsDataGridClickable = true
+}
+
+/**
+ * 画像を保存する関数
+ * @param {p5.Image} img - 保存する画像
+ */
+function trSaveImageClick(dialog) {
+  return (e) => {
+    trIsDataGridClickable = false
+
+    // デフォルト挙動をキャンセル
+    e.preventDefault()
+
+    dialog.style.display = 'block'
+  }
+}
+
+/**
+ * trInfoDraw 関数は、情報表示用の描画を行います。
+ *
+ * @function trInfoDraw
+ */
+function trInfoDraw() {
+  const infoWidth = 30
+  trDrawBlock(() => {
+    noStroke()
+    fill(TR_COLORS.cellMain)
+    rect(0, 0, width, infoWidth)
+    rect(width - infoWidth, 0, infoWidth, height)
+    rect(0, 0, infoWidth, height)
+    rect(0, height - infoWidth, width, infoWidth)
+  })
+
+  trDrawBlock(() => {
+    fill(TR_COLORS.lineMain)
+    textSize(12)
+    textFont('sans-serif')
+
+    // データ情報
+    textAlign(LEFT, CENTER)
+    text(trGridDataToString(), infoWidth, infoWidth / 2)
+
+    // バージョン情報
+    textAlign(RIGHT, CENTER)
+    text(
+      `${TR_APP_NAME} - ${TR_VERSION_NAME}(${TR_VERSION}) CREATED BY YUSKE`,
+      width - infoWidth,
+      height - infoWidth / 2,
+    )
+  })
+
+  trDrawBlock(() => {
+    noFill()
+    stroke(TR_COLORS.lineMain)
+    strokeWeight(2)
+    rect(0, 0, width, height)
+    rect(infoWidth, infoWidth, width - infoWidth * 2, height - infoWidth * 2)
+  })
+}
+
+/**
+ * trGridDataToString 関数は、trDataGrid 配列の各要素の isPressed プロパティを
+ * 文字列に変換し、'1' または '0' の文字列として結合して返します。
+ *
+ * @returns {string} trDataGrid の各要素の isPressed プロパティを '1' または '0' に変換し、
+ * それらを結合した文字列
+ */
+function trGridDataToString() {
+  return trDataGrid
+    .map((item) => item.isPressed)
+    .map((item) => (item ? '1' : '0'))
+    .join('')
+}
+
+/**
+ * trRotateCalc 関数は、現在のフレーム数とパターン変更フレーム数の差を TR_ROTATE_NUM で割った値を
+ * trRotateValue に代入します。
+ */
+function trRotateCalc() {
+  trRotateValue = (frameCount - trChangePatternFrame) / TR_ROTATE_NUM
+}
+
+/**
+ * URLのクエリパラメータからデータを取得し、trDataGridを更新する関数。
+ * URLに'data'パラメータが含まれている場合、その値を解析してtrDataGridを更新する。
+ * 'data'パラメータが存在しない場合、trDataGridを初期データに設定する。
+ */
+function trUrlToData() {
+  const url = new URL(window.location.href)
+  const data = url.searchParams.get('data')
+
+  // dataをバリデーション
+  // dataは0または1のみで構成されている必要がある
+  // dataの長さは64である必要がある
+  const isValidData = data && data.length === 64 && /^[01]+$/.test(data)
+
+  if (isValidData) {
+    const dataGrid = data.split('').map((item) => (item === '1' ? true : false))
+    for (let i = 0; i < trDataGrid.length; i++) {
+      trDataGrid[i].isPressed = dataGrid[i]
+    }
+  } else {
+    trDataGrid = TR_INIT_DATA_GRID
+  }
+}
+
+/**
+ * 現在のURLにデータを追加して更新します。
+ *
+ * この関数は、現在のウィンドウのURLを取得し、URLの検索パラメータに
+ * 'data' パラメータを設定します。その後、履歴を更新して新しいURLを
+ * ブラウザのアドレスバーに反映させます。
+ */
+function trUpdateUrl() {
+  const url = new URL(window.location.href)
+  url.searchParams.set('data', trGridDataToString())
+  window.history.pushState({}, '', url)
+}
+
+/**
+ * QRコードを作成する関数
+ */
+function trCreateQrCode() {
+  const url = new URL(window.location.href)
+  const data = url.searchParams.get('data')
+  const qrData = `${url.origin}${url.pathname}?data=${data}`
+
+  // QRコードを作成
+  const qr = qrcode(0, 'L')
+  qr.addData(qrData)
+  qr.make()
+
+  // QRコードのHTML要素を作成
+  const qrDiv = document.createElement('div')
+  qrDiv.innerHTML = qr.createImgTag(4, 0)
+
+  // QRコードの画像を読み込む
+  const imgElement = qrDiv.querySelector('img')
+  trQrImage = loadImage(imgElement.src)
+}
+
+/**
+ * QRコードを描画する関数
+ */
+function trQrDraw() {
+  imageMode(CENTER)
+  const gap = trQrImage.width / 2 + 40
+  image(trQrImage, width - gap, height - gap)
 }
