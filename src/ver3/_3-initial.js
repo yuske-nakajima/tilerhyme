@@ -35,7 +35,11 @@ async function trInitial() {
   trGenerateNoise()
 
   // MIDI
-  trMidiAccess = await navigator.requestMIDIAccess()
+  try {
+    trMidiAccess = await navigator.requestMIDIAccess()
+  } catch (e) {
+    console.error(e)
+  }
 
   // フォントデータ読み込み
   const fontResponse = await fetch('../assets/font.json')
