@@ -2,7 +2,7 @@
 // --- 定数
 // ------------------------------------------------------------
 const TR_APP_NAME = 'TILERHYME'
-const TR_VERSION = '2.2'
+const TR_VERSION = '3'
 const TR_VERSION_NAME = 'KICK'
 
 const TR_FUNCTION_CODE = {
