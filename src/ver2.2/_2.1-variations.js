@@ -5,6 +5,11 @@ function _trDrawTilePattern1(func) {
       const y = _y * tileSize
 
       const { color1, color2, color3, color4, color5 } = trChromaticGetColor()
+      const colorDict = trChromaticGetColor()
+      const colorList = []
+      for (const item of Object.values(colorDict)) {
+        colorList.push(item)
+      }
 
       const p1 = trDataParams[_x % trDataParams.length]
       const p2 = trDataParams[_y % trDataParams.length]
@@ -17,7 +22,7 @@ function _trDrawTilePattern1(func) {
       // 0.1 から 1 まで
       // 1 から 0.1 まで
       // 線形補間
-      const sineValue = sin(frameCount * 50 * 0.004)
+      const sineValue = trSineCalc()
 
       const gap = 1 - map(trDataParams[7], 0, 99, 0.1, 0.5)
       const _tileSize = tileSize * sineValue
@@ -30,6 +35,14 @@ function _trDrawTilePattern1(func) {
       const _squareSize2 = squareSize2 * sineValue
 
       trCalcSineCount(sineValue)
+
+      const noiseVal = trGenerateNoiseValue(_x, _y)
+
+      const strokeSize400 = (tileSize * trDataParams[noiseVal % trDataParams.length]) / 400
+      const strokeSize600 = (tileSize * trDataParams[noiseVal % trDataParams.length]) / 600
+      const strokeSize800 = (tileSize * trDataParams[noiseVal % trDataParams.length]) / 800
+      const strokeSize1200 = (tileSize * trDataParams[noiseVal % trDataParams.length]) / 1200
+      const strokeSize1600 = (tileSize * trDataParams[noiseVal % trDataParams.length]) / 1600
 
       trDrawBlock(() => {
         func({
@@ -50,7 +63,15 @@ function _trDrawTilePattern1(func) {
           color3,
           color4,
           color5,
+          colorDict,
+          colorList,
           sineValue,
+          noiseVal,
+          strokeSize400,
+          strokeSize600,
+          strokeSize800,
+          strokeSize1200,
+          strokeSize1600,
           p1,
           p2,
           p3,
@@ -110,16 +131,16 @@ function _trDrawRectEllipseSquare(func) {
 }
 
 const trDrawRectEllipseSquare16 = _trDrawRectEllipseSquare((params) => {
-  const { color1, color2, v1 } = params
+  const { colorList, noiseVal } = params
   noStroke()
-  fill([color1, color2][v1 % 2])
+  fill(colorList[noiseVal % colorList.length])
 })
 
 const trDrawRectEllipseSquare26 = _trDrawRectEllipseSquare((params) => {
-  const { color1, color2, v1 } = params
+  const { colorList, noiseVal, strokeSize400 } = params
   noFill()
-  stroke([color1, color2][v1 % 2])
-  strokeWeight(min((params.tileSize * trDataParams[5]) / 400, trStrokeWeight))
+  stroke(colorList[noiseVal % colorList.length])
+  strokeWeight(min(strokeSize400, trStrokeWeight))
 })
 
 function _trDrawRect(func, func2) {
@@ -146,32 +167,35 @@ function _trDrawRect(func, func2) {
 }
 
 const trDrawRect11 = _trDrawRect((params) => {
+  const { colorList, noiseVal } = params
   noStroke()
-  fill(params.color1)
+  fill(colorList[noiseVal % colorList.length])
 })
 
 const trDrawRect16 = _trDrawRect((params) => {
-  const { color1, color2, v1 } = params
+  const { colorList, noiseVal } = params
   noStroke()
-  fill([color1, color2][v1 % 2])
+  fill(colorList[noiseVal % colorList.length])
 })
 
 const trDrawRect19 = _trDrawRect(
   (params) => {
+    const { colorList, noiseVal } = params
     noStroke()
-    fill(params.color1)
+    fill(colorList[noiseVal % colorList.length])
   },
   (params) => {
     if (trSineCount >= TR_SINE_LOOP_COUNT) {
       // 文字を描画
-      const { _x, _y, tileSize } = params
+      const { colorList, noiseVal, tileSize } = params
 
       //上下左右真ん中寄せ
       textAlign(CENTER, CENTER)
       textSize(tileSize / 2)
-      fill(params.color2)
-      const aList = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('')
-      const index = ceil(trDataParams[_x % trDataParams.length] + trDataParams[_y % trDataParams.length]) % aList.length
+      fill(colorList[trDataParams[noiseVal % trDataParams.length] % colorList.length])
+      const aList = '0123456789!@#$%^&*()'.split('')
+      const index =
+        ceil(trDataParams[noiseVal % trDataParams.length] + trDataParams[noiseVal % trDataParams.length]) % aList.length
       const a = aList[index]
 
       text(a, 0, 0)
@@ -180,36 +204,39 @@ const trDrawRect19 = _trDrawRect(
 )
 
 const trDrawRect21 = _trDrawRect((params) => {
+  const { strokeSize1600, colorList, noiseVal } = params
+
   noFill()
-  stroke(params.color1)
-  strokeWeight(min((params.tileSize * trDataParams[5]) / 1600, trStrokeWeight))
+  stroke(colorList[noiseVal % colorList.length])
+  strokeWeight(min(strokeSize1600, trStrokeWeight))
 })
 
 const trDrawRect26 = _trDrawRect((params) => {
-  const { color1, color2, v1 } = params
+  const { strokeSize400, colorList, noiseVal } = params
   noFill()
-  stroke([color1, color2][v1 % 2])
-  strokeWeight(min((params.tileSize * trDataParams[5]) / 400, trStrokeWeight))
+  stroke(colorList[noiseVal % colorList.length])
+  strokeWeight(min(strokeSize400, trStrokeWeight))
 })
 
 const trDrawRect29 = _trDrawRect(
   (params) => {
-    const { color1, tileSize } = params
+    const { colorList, noiseVal, strokeSize400 } = params
     noFill()
-    stroke(color1)
-    strokeWeight(min((tileSize * trDataParams[5]) / 400, trStrokeWeight))
+    stroke(colorList[noiseVal % colorList.length])
+    strokeWeight(min(strokeSize400, trStrokeWeight))
   },
   (params) => {
     if (trSineCount >= TR_SINE_LOOP_COUNT) {
       // 文字を描画
-      const { _x, _y, tileSize } = params
+      const { colorList, noiseVal, tileSize } = params
 
       //上下左右真ん中寄せ
       textAlign(CENTER, CENTER)
       textSize(tileSize / 2)
-      fill(params.color2)
-      const aList = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('')
-      const index = ceil(trDataParams[_x % trDataParams.length] + trDataParams[_y % trDataParams.length]) % aList.length
+      fill(colorList[trDataParams[noiseVal % trDataParams.length] % colorList.length])
+      const aList = '0123456789!@#$%^&*()'.split('')
+      const index =
+        ceil(trDataParams[noiseVal % trDataParams.length] + trDataParams[noiseVal % trDataParams.length]) % aList.length
       const a = aList[index]
 
       noStroke()
@@ -236,9 +263,9 @@ function _trDrawRectBig(func) {
 }
 
 const trDrawRectBig26 = _trDrawRectBig((params) => {
-  const { tileSize, color1, color2, v1 } = params
-  stroke([color1, color2][v1 % 2])
-  strokeWeight(min((tileSize * trDataParams[5]) / 400, trStrokeWeight))
+  const { colorList, noiseVal, strokeSize400 } = params
+  stroke(colorList[noiseVal % colorList.length])
+  strokeWeight(min(strokeSize400, trStrokeWeight))
 })
 
 function _trDrawSquare(func) {
@@ -263,27 +290,29 @@ function _trDrawSquare(func) {
 }
 
 const trDrawSquare11 = _trDrawSquare((params) => {
+  const { colorList, noiseVal } = params
   noStroke()
-  fill(params.color1)
+  fill(colorList[noiseVal % colorList.length])
 })
 
 const trDrawSquare16 = _trDrawSquare((params) => {
-  const { color1, color2, v1 } = params
+  const { colorList, noiseVal } = params
   noStroke()
-  fill([color1, color2][v1 % 2])
+  fill(colorList[noiseVal % colorList.length])
 })
 
 const trDrawSquare21 = _trDrawSquare((params) => {
+  const { colorList, noiseVal, strokeSize1600 } = params
   noFill()
-  stroke(params.color1)
-  strokeWeight(min((params.tileSize * trDataParams[5]) / 1600, trStrokeWeight))
+  stroke(colorList[noiseVal % colorList.length])
+  strokeWeight(min(strokeSize1600, trStrokeWeight))
 })
 
 const trDrawSquare26 = _trDrawSquare((params) => {
-  const { tileSize, color1, color2, v1 } = params
+  const { colorList, noiseVal, strokeSize1600 } = params
   noFill()
-  stroke([color1, color2][v1 % 2])
-  strokeWeight(max((tileSize * trDataParams[5]) / 1600, 1))
+  stroke(colorList[trDataParams[noiseVal % trDataParams.length] % colorList.length])
+  strokeWeight(min(strokeSize1600, trStrokeWeight))
 })
 
 function trDrawSquareBig(func) {
@@ -309,9 +338,9 @@ function trDrawSquareBig(func) {
 }
 
 const trDrawSquareBig26 = trDrawSquareBig((params) => {
-  const { tileSize, color1, color2, v1 } = params
-  stroke([color1, color2][v1 % 2])
-  strokeWeight(min((tileSize * trDataParams[5]) / 400, trStrokeWeight))
+  const { colorList, noiseVal, strokeSize400 } = params
+  stroke(colorList[noiseVal % colorList.length])
+  strokeWeight(min(strokeSize400, trStrokeWeight))
 })
 
 function _trDrawEllipse(func) {
@@ -334,16 +363,16 @@ function _trDrawEllipse(func) {
 }
 
 const trDrawEllipse16 = _trDrawEllipse((params) => {
-  const { color1, color2, v1 } = params
+  const { colorList, noiseVal } = params
   noStroke()
-  fill([color1, color2][v1 % 2])
+  fill(colorList[noiseVal % colorList.length])
 })
 
 const trDrawEllipse26 = _trDrawEllipse((params) => {
-  const { tileSize, color1, color2, v1 } = params
+  const { colorList, noiseVal, strokeSize400 } = params
   noFill()
-  stroke([color1, color2][v1 % 2])
-  strokeWeight(min((tileSize * trDataParams[5]) / 400, trStrokeWeight))
+  stroke(colorList[noiseVal % colorList.length])
+  strokeWeight(min(strokeSize400, trStrokeWeight))
 })
 
 function _trDrawEllipseSmall(func) {
@@ -366,9 +395,9 @@ function _trDrawEllipseSmall(func) {
 }
 
 const trDrawEllipseSmall11 = _trDrawEllipseSmall((params) => {
-  const { color3, color4, v1 } = params
+  const { colorList, noiseVal } = params
   noStroke()
-  fill([color3, color4][v1 % 2])
+  fill(colorList[(trDataParams[noiseVal % trDataParams.length] + noiseVal) % colorList.length])
 })
 
 function _trDrawEllipseBig(func) {
@@ -405,6 +434,18 @@ function _trDrawTilePattern2(func) {
       const centerPos = createVector(x + tileSize / 2, y + tileSize / 2)
 
       const { color1, color2, color3, color4, color5 } = trChromaticGetColor()
+      const colorDict = trChromaticGetColor()
+      const colorList = []
+      for (const item of Object.values(colorDict)) {
+        colorList.push(item)
+      }
+      const noiseVal = trGenerateNoiseValue(_x, _y)
+
+      const strokeSize400 = (tileSize * trDataParams[noiseVal % trDataParams.length]) / 400
+      const strokeSize600 = (tileSize * trDataParams[noiseVal % trDataParams.length]) / 600
+      const strokeSize800 = (tileSize * trDataParams[noiseVal % trDataParams.length]) / 800
+      const strokeSize1200 = (tileSize * trDataParams[noiseVal % trDataParams.length]) / 1200
+      const strokeSize1600 = (tileSize * trDataParams[noiseVal % trDataParams.length]) / 1600
 
       const pointList = [
         { x: x + tileSize * 0.5, y: y },
@@ -420,7 +461,7 @@ function _trDrawTilePattern2(func) {
       const p3 = (p1 + 2) % pointList.length
       const p4 = (p1 + 3) % pointList.length
 
-      const sineValue = sin(frameCount * 50 * 0.004)
+      const sineValue = trSineCalc()
 
       trCalcSineCount(sineValue)
 
@@ -440,8 +481,16 @@ function _trDrawTilePattern2(func) {
           color3,
           color4,
           color5,
+          strokeSize400,
+          strokeSize600,
+          strokeSize800,
+          strokeSize1200,
+          strokeSize1600,
+          colorDict,
+          colorList,
           _tileSize,
           pointList,
+          noiseVal,
           p1,
           p2,
           p3,
@@ -788,7 +837,7 @@ const trDrawCrossRotate11 = _trDrawCrossRotate((params) => {
 function _trDrawArc(func) {
   return _trDrawTilePattern2((params) => {
     trDrawBlock(() => {
-      const { x, y, centerPos, tileSize, _tileSize, color1, color2, color3, color4, color5 } = params
+      const { x, y, centerPos, tileSize, _tileSize, colorList, noiseVal } = params
 
       rectMode(CENTER)
 
@@ -796,11 +845,8 @@ function _trDrawArc(func) {
 
       trDrawBlock(() => {
         noStroke()
-        if (v % 2 === 0) {
-          fill(color1)
-          rect(centerPos.x, centerPos.y, tileSize * 1.01, tileSize * 1.01)
-        } else {
-          fill(color2)
+        if (noiseVal % 2 === 0) {
+          fill(colorList[noiseVal % colorList.length])
           rect(centerPos.x, centerPos.y, tileSize * 1.01, tileSize * 1.01)
         }
 
@@ -815,19 +861,19 @@ function _trDrawArc(func) {
 
         if (v % 2 === 0) {
           rotate(PI)
-          fill(color4)
+          fill(colorList[noiseVal % 4])
           arc(0, t / 2, t, t, HALF_PI, PI + HALF_PI)
 
           rotate(0)
-          fill(color5)
+          fill(colorList[noiseVal % 5])
           arc(0, 0 - t / 2, t, t, -HALF_PI, HALF_PI)
         } else {
           rotate(PI)
-          fill(color3)
+          fill(colorList[noiseVal % 3])
           arc(0, 0 - t / 2, t, t, -HALF_PI, HALF_PI)
 
           rotate(0)
-          fill(color2)
+          fill(colorList[noiseVal % 2])
           arc(0, t / 2, t, t, HALF_PI, PI + HALF_PI)
         }
       })
@@ -939,7 +985,7 @@ function _trDrawTilePattern(func) {
   return function (xi, yi, tileSize) {
     const { color1, color2, color3, color4, color5 } = trChromaticGetColor()
 
-    const sineValue = sin(frameCount * 50 * 0.004)
+    const sineValue = trSineCalc()
     trCalcSineCount(sineValue)
     const _tileSize = tileSize * map(sineValue, -1, 1, 0.01, 1)
 
@@ -1032,7 +1078,7 @@ function trDrawEllipseParts(xi, yi, tileSize) {
   const { color1, color2, color3, color5 } = trChromaticGetColor()
   const centerPos = createVector(xi * tileSize + tileSize / 2, yi * tileSize + tileSize / 2)
 
-  const sineValue = sin(frameCount * 50 * 0.004)
+  const sineValue = trSineCalc()
   trCalcSineCount(sineValue)
   const _tileSize = tileSize * map(sineValue, -1, 1, 0.01, 1)
 
@@ -1082,7 +1128,7 @@ function trDrawRectAndStroke(xi, yi, tileSize) {
   const { color1, color2, color3, color4, color5 } = trChromaticGetColor()
   const centerPos = createVector(xi * tileSize + tileSize / 2, yi * tileSize + tileSize / 2)
 
-  const sineValue = sin(frameCount * 50 * 0.004)
+  const sineValue = trSineCalc()
   trCalcSineCount(sineValue)
   let _sineValue = 1
   if (trSineCount < TR_SINE_LOOP_COUNT) {
@@ -1106,3 +1152,193 @@ function trDrawRectAndStroke(xi, yi, tileSize) {
     trDrawSimpleLine(centerPos, angle, length)
   })
 }
+
+function _trDrawSquareCascade(func) {
+  return _trDrawTilePattern1((params) => {
+    trDrawBlock(() => {
+      let t = params.tileSize
+      if (trSineCount < TR_SINE_LOOP_COUNT) {
+        t = params._tileSize
+      }
+
+      rectMode(CENTER)
+      func({ ...params, t })
+    })
+  })
+}
+
+const trDrawSquareCascade1 = _trDrawSquareCascade((params) => {
+  trDrawBlock(() => {
+    const { x, y, t, tileSize, colorList, noiseVal } = params
+    noFill()
+    strokeWeight(min((tileSize * trDataParams[5]) / 800, trStrokeWeight))
+
+    rectMode(CORNER)
+    for (let i = 4; i >= 1; i--) {
+      stroke(colorList[(noiseVal + i) % colorList.length])
+      rect(x, y, t * 0.2 * i)
+    }
+  })
+})
+
+const trDrawSquareCascade2 = _trDrawSquareCascade((params) => {
+  trDrawBlock(() => {
+    const { x, y, t, colorList, noiseVal } = params
+    noStroke()
+
+    for (let i = 4; i >= 1; i--) {
+      fill(colorList[(noiseVal + i) % colorList.length])
+      rect(x, y, t * 0.2 * i)
+    }
+  })
+})
+
+const trDrawSquareCascade3 = _trDrawSquareCascade((params) => {
+  trDrawBlock(() => {
+    const { x, y, t, colorList, noiseVal } = params
+    noStroke()
+
+    const t025 = t * 0.25
+    const t0125 = t * 0.125
+
+    if (noiseVal % 2 === 0) {
+      fill(colorList[noiseVal % colorList.length])
+      rect(x - t025 + t0125, y - t025 + t0125, t * 0.7)
+
+      fill(colorList[trDataParams[noiseVal % trDataParams.length] % colorList.length])
+      rect(x + t025 - t0125, y + t025 - t0125, t * 0.7)
+    } else {
+      fill(colorList[trDataParams[noiseVal % trDataParams.length] % colorList.length])
+      rect(x + t025 - t0125, y - t025 + t0125, t * 0.7)
+
+      fill(colorList[noiseVal % colorList.length])
+      rect(x - t025 + t0125, y + t025 - t0125, t * 0.7)
+    }
+  })
+})
+
+function drawStar(x, y, size) {
+  trDrawBlock(() => {
+    // 外側の頂点と内側の頂点の数（5角形なので5）
+    const numPoints = 5
+    // 内側の頂点の半径（外側に対する比率）
+    const innerRadius = size * 0.2
+    const outerRadius = size * 0.5
+
+    beginShape()
+    for (let i = 0; i < numPoints * 2; i++) {
+      // 角度を計算（360度を10等分）
+      const angle = (TWO_PI * i) / (numPoints * 2) - PI / 2
+      // 外側と内側の頂点を交互に配置
+      const radius = i % 2 === 0 ? outerRadius : innerRadius
+      // 頂点の座標を計算
+      const px = x + cos(angle) * radius
+      const py = y + sin(angle) * radius
+      vertex(px, py)
+    }
+    endShape(CLOSE)
+  })
+}
+
+const trDrawFillStar = _trDrawSquareCascade((params) => {
+  trDrawBlock(() => {
+    const { x, y, t, colorList, noiseVal } = params
+    noStroke()
+
+    if (noiseVal % 2 === 0) {
+      fill(colorList[noiseVal % colorList.length])
+    } else {
+      fill(colorList[trDataParams[noiseVal % trDataParams.length] % colorList.length])
+    }
+    drawStar(x, y, t)
+  })
+})
+
+const trDrawStrokeStar = _trDrawSquareCascade((params) => {
+  trDrawBlock(() => {
+    const { x, y, t, colorList, noiseVal, strokeSize400 } = params
+    noFill()
+    strokeWeight(min(strokeSize400, trStrokeWeight))
+
+    if (noiseVal % 2 === 0) {
+      stroke(colorList[noiseVal % colorList.length])
+    } else {
+      stroke(colorList[trDataParams[noiseVal % trDataParams.length] % colorList.length])
+    }
+    drawStar(x, y, t)
+  })
+})
+
+function drawPolygon(x, y, size, numPoints = 5) {
+  // 開始角度（-90度 = -HALF_PI）で上部から開始
+  const startAngle = -HALF_PI
+
+  beginShape()
+  for (let i = 0; i < numPoints; i++) {
+    // 角度を計算（360度を5等分）
+    const angle = startAngle + (TWO_PI * i) / numPoints
+    // 頂点の座標を計算
+    const px = x + cos(angle) * size * 0.45
+    const py = y + sin(angle) * size * 0.45
+    vertex(px, py)
+  }
+  endShape(CLOSE)
+}
+
+const trDrawFillPentagon = _trDrawSquareCascade((params) => {
+  trDrawBlock(() => {
+    const { x, y, t, colorList, noiseVal } = params
+    noStroke()
+
+    if (noiseVal % 2 === 0) {
+      fill(colorList[noiseVal % colorList.length])
+    } else {
+      fill(colorList[trDataParams[noiseVal % trDataParams.length] % colorList.length])
+    }
+    drawPolygon(x, y, t)
+  })
+})
+
+const trDrawStrokePentagon = _trDrawSquareCascade((params) => {
+  trDrawBlock(() => {
+    const { x, y, t, colorList, noiseVal, strokeSize400 } = params
+    noFill()
+    strokeWeight(min(strokeSize400, trStrokeWeight))
+
+    if (noiseVal % 2 === 0) {
+      stroke(colorList[noiseVal % colorList.length])
+    } else {
+      stroke(colorList[trDataParams[noiseVal % trDataParams.length] % colorList.length])
+    }
+    drawPolygon(x, y, t)
+  })
+})
+
+const trDrawFillHexagon = _trDrawSquareCascade((params) => {
+  trDrawBlock(() => {
+    const { x, y, t, colorList, noiseVal } = params
+    noStroke()
+
+    if (noiseVal % 2 === 0) {
+      fill(colorList[noiseVal % colorList.length])
+    } else {
+      fill(colorList[trDataParams[noiseVal % trDataParams.length] % colorList.length])
+    }
+    drawPolygon(x, y, t, 6)
+  })
+})
+
+const trDrawStrokeHexagon = _trDrawSquareCascade((params) => {
+  trDrawBlock(() => {
+    const { x, y, t, colorList, noiseVal, strokeSize400 } = params
+    noFill()
+    strokeWeight(min(strokeSize400, trStrokeWeight))
+
+    if (noiseVal % 2 === 0) {
+      stroke(colorList[noiseVal % colorList.length])
+    } else {
+      stroke(colorList[trDataParams[noiseVal % trDataParams.length] % colorList.length])
+    }
+    drawPolygon(x, y, t, 6)
+  })
+})

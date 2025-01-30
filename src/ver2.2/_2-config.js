@@ -6,10 +6,22 @@ const TR_VERSION = '2.2'
 const TR_VERSION_NAME = 'KICK'
 
 const TR_FUNCTION_CODE = {
-  IS_LIGHT: 19,
+  IS_DARK: 19,
   IS_CHROMATIC: 29,
+  IS_NOISE_FILTER: 39,
+  IS_GRAY_SCALE: 49,
+  IS_RANDOM_FILTER_PARAMS: 59,
+  IS_RANDOM_SHAPE_PARAMS: 69,
+  RANDOM_FILTER_PARAMS: 79,
+  RANDOM_SHAPE_PARAMS: 89,
   STROKE_WEIGHT_UP: 91,
   STROKE_WEIGHT_DOWN: 92,
+  HUE_SHIFT_UP: 93,
+  HUE_SHIFT_DOWN: 94,
+  TILE_SIZE_DIV_UP: 95,
+  TILE_SIZE_DIV_DOWN: 96,
+  RANDOM_TILE: 97,
+  RANDOM_FONT_TILE: 98,
 }
 
 const TR_DATA_GRID_SIZE = 64
@@ -81,23 +93,22 @@ const TR_INIT_DATA_GRID = [
   { value: 87, isPressed: false },
   { value: 88, isPressed: false },
   // 以下は機能コード
-  { value: TR_FUNCTION_CODE.IS_LIGHT, isPressed: false },
+  { value: TR_FUNCTION_CODE.IS_DARK, isPressed: false },
   { value: TR_FUNCTION_CODE.IS_CHROMATIC, isPressed: false },
-  { value: 39, isPressed: false },
-  { value: 49, isPressed: false },
-  { value: 59, isPressed: false },
-  { value: 69, isPressed: false },
-  { value: 79, isPressed: false },
-  { value: 89, isPressed: false },
-  { value: 91, isPressed: false },
-  { value: 92, isPressed: false },
-  { value: 93, isPressed: false },
-  { value: 94, isPressed: false },
-  { value: 95, isPressed: false },
-  { value: 96, isPressed: false },
-  { value: 97, isPressed: false },
-  { value: 98, isPressed: false },
-  { value: 99, isPressed: false },
+  { value: TR_FUNCTION_CODE.IS_GRAY_SCALE, isPressed: false },
+  { value: TR_FUNCTION_CODE.IS_NOISE_FILTER, isPressed: false },
+  { value: TR_FUNCTION_CODE.IS_RANDOM_FILTER_PARAMS, isPressed: false },
+  { value: TR_FUNCTION_CODE.RANDOM_SHAPE_PARAMS, isPressed: false },
+  { value: TR_FUNCTION_CODE.IS_RANDOM_SHAPE_PARAMS, isPressed: false },
+  { value: TR_FUNCTION_CODE.RANDOM_FILTER_PARAMS, isPressed: false },
+  { value: TR_FUNCTION_CODE.STROKE_WEIGHT_UP, isPressed: false },
+  { value: TR_FUNCTION_CODE.STROKE_WEIGHT_DOWN, isPressed: false },
+  { value: TR_FUNCTION_CODE.HUE_SHIFT_UP, isPressed: false },
+  { value: TR_FUNCTION_CODE.HUE_SHIFT_DOWN, isPressed: false },
+  { value: TR_FUNCTION_CODE.TILE_SIZE_DIV_UP, isPressed: false },
+  { value: TR_FUNCTION_CODE.TILE_SIZE_DIV_DOWN, isPressed: false },
+  { value: TR_FUNCTION_CODE.RANDOM_TILE, isPressed: false },
+  { value: TR_FUNCTION_CODE.RANDOM_FONT_TILE, isPressed: false },
 ]
 
 const TR_MAPPING_GRID = [
@@ -111,7 +122,19 @@ const TR_MAPPING_GRID = [
   [11, 12, 13, 14, 15, 16, 17, 18],
 ]
 
-const TR_SOFT_UI_WIDTH = 200
+const TR_TOFU_GRID = [
+  [0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 1, 1, 1, 1, 1, 1, 0],
+  [0, 1, 1, 0, 0, 1, 1, 0],
+  [0, 1, 0, 1, 1, 0, 1, 0],
+  [0, 1, 0, 1, 1, 0, 1, 0],
+  [0, 1, 1, 0, 0, 1, 1, 0],
+  [0, 1, 1, 1, 1, 1, 1, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0],
+]
+
+const TR_SOFT_UI_WIDTH = 100
+const TR_SOFT_UI_WIDTH_GAP = TR_SOFT_UI_WIDTH / 20
 const TR_SOFT_UI_CELL_SIZE = TR_SOFT_UI_WIDTH / 8
 
 const TR_COLORS = {}
@@ -130,9 +153,11 @@ const TR_DEVICE_GRID_NUM = 8
 const TR_MODE = {
   NORMAL: 0,
   AUTO: 1,
+  FONT_AUTO: 2,
+  FONT_2_AUTO: 3,
 }
 
-const TR_AUTO_MODE_INTERVAL = 90
+const TR_AUTO_MODE_INTERVAL = 60
 
 const TR_SINE_LOOP_COUNT = 2
 
@@ -140,14 +165,64 @@ const TR_BACKGROUND_MODE = {
   LIGHT: 0,
   DARK: 1,
   CHROMATIC: 2,
+  CHROMATIC_DARK: 3,
 }
 
-const TR_STROKE_WEIGHT_STEP = 1
+const TR_GRAY_FILTER = {
+  NONE: 0,
+  GRAY: 1,
+}
+
+const TR_NOISE_FILTER = {
+  NONE: 0,
+  NOISE: 1,
+}
+
+const TR_RANDOM_SHAPE_PARAMS_MODE = {
+  NONE: 0,
+  RANDOM: 1,
+}
+
+const TR_RANDOM_FILTER_PARAMS_MODE = {
+  NONE: 0,
+  RANDOM: 1,
+}
+
+const TR_STROKE_WEIGHT = {
+  MIN: 1,
+  MAX: 30,
+}
+const TR_STROKE_WEIGHT_STEP = 2
+
+const TR_HUE_SHIFT = {
+  MIN: 0,
+  MAX: 360,
+}
+
+const TR_HUE_SHIFT_STEP = 10
 
 const TR_WINDOW_TYPE = {
   SQUARE: 0,
   FULL: 1,
 }
+
+const TR_SET_DATA_PARAMS_LENGTH = 20
+
+const TR_TILE_SIZE_DIV = {
+  MIN: 2,
+  MAX: 12,
+  DEFAULT: 6,
+  STEP: 1,
+}
+
+const TR_SINE_SPEED = {
+  MIN: 0.5,
+  MAX: 2.0,
+  STEP: 0.05,
+  DEFAULT: 1.0,
+}
+
+const TR_PRIME = 65537
 // ------------------------------------------------------------
 // --- 変数
 // ------------------------------------------------------------
@@ -159,7 +234,7 @@ let trWindowGap
 
 let trCellDivNum
 
-let trIsNoDevice = false
+let trIsNoDevice = true
 
 let trSoftUiStartPos
 
@@ -176,6 +251,12 @@ let trQrImage
 // MODE object value
 let trMode = TR_MODE.NORMAL
 
+let trFont2AutoText = trGetOrInitializeValue('trFont2AutoText', '')
+
+let trFont2AutoCount = 0
+
+let trFont2AutoBitmapList = []
+
 // life gameの初期値はランダム値
 let trModeLifeGameGrid = Array.from({ length: 64 }, () => Math.floor(Math.random() * 2)).join('')
 
@@ -188,19 +269,57 @@ let trSineCount = 0
 
 // light | dark | chromatic
 let trBackgroundMode = TR_BACKGROUND_MODE.LIGHT
-trDataGrid.find((item) => item.value === TR_FUNCTION_CODE.IS_LIGHT).isPressed = true
+
+// none | gray
+let trGrayFilter = TR_GRAY_FILTER.NONE
+
+let trNoiseFilter = TR_NOISE_FILTER.NONE
 
 // 線幅の係数
 let trStrokeWeight = 4
 
 let trNoiseGraphic
+
+let trHueShift = 0
+
+let trTileSizeDivNum = TR_TILE_SIZE_DIV.DEFAULT
+
+let trMidiAccess
+
+let trBitMapFontData
+
+let trSineSpeed = TR_SINE_SPEED.DEFAULT
+
+let trRandomShapeParamsMode = TR_RANDOM_SHAPE_PARAMS_MODE.NONE
+
+let trRandomFilterParamsMode = TR_RANDOM_FILTER_PARAMS_MODE.NONE
 // ------------------------------------------------------------
 // --- 関数
 // ------------------------------------------------------------
 
 const trProgrammerModeSetup = createLaunchpadSetup({
   noteRange: { min: 11, max: 99 },
-  incrementButtonCodeList: [TR_FUNCTION_CODE.STROKE_WEIGHT_UP, TR_FUNCTION_CODE.STROKE_WEIGHT_DOWN],
+  incrementButtonCodeList: [
+    TR_FUNCTION_CODE.STROKE_WEIGHT_UP, // 線幅を増加
+    TR_FUNCTION_CODE.STROKE_WEIGHT_DOWN, // 線幅を減少
+    TR_FUNCTION_CODE.HUE_SHIFT_UP, // 色相シフトを増加
+    TR_FUNCTION_CODE.HUE_SHIFT_DOWN, // 色相シフトを減少
+    TR_FUNCTION_CODE.TILE_SIZE_DIV_UP, // タイルサイズ分割を増加
+    TR_FUNCTION_CODE.TILE_SIZE_DIV_DOWN, // タイルサイズ分割を減少
+    TR_FUNCTION_CODE.RANDOM_FILTER_PARAMS, // ランダムフィルターパラメータ
+    TR_FUNCTION_CODE.RANDOM_SHAPE_PARAMS, // ランダムパラメータ
+    TR_FUNCTION_CODE.RANDOM_TILE, // ランダムタイル
+    TR_FUNCTION_CODE.RANDOM_FONT_TILE, // ランダムフォントタイル
+  ],
+  functionButtonCodeList: [
+    TR_FUNCTION_CODE.IS_DARK, // ダークモード
+    TR_FUNCTION_CODE.IS_CHROMATIC, // クロマチックモード
+    TR_FUNCTION_CODE.IS_GRAY_SCALE, // グレースケール
+    TR_FUNCTION_CODE.IS_NOISE_FILTER, // ノイズフィルター
+    TR_FUNCTION_CODE.IS_RANDOM_FILTER_PARAMS, // ランダムフィルターパラメータモード
+    TR_FUNCTION_CODE.IS_RANDOM_SHAPE_PARAMS, // ランダム形状パラメータモード
+  ],
+  noneButtonCodeList: [],
 })
 
 /**
@@ -223,56 +342,155 @@ function trSetDataGridIsPressed(value, isPressed) {
 function trUtilityDataGridIsPressed(value, isPressed) {
   if (isPressed) {
     // ON
-    // TODO: 押した時の処理を実装する
+    // TODO: 押した時にONになる処理
+    console.clear()
     console.log(`ON: ${value}`)
     switch (value) {
-      case TR_FUNCTION_CODE.IS_LIGHT:
+      case TR_FUNCTION_CODE.IS_DARK:
         trBackgroundMode = trDataGrid.find((item) => item.value === TR_FUNCTION_CODE.IS_CHROMATIC).isPressed
-          ? TR_BACKGROUND_MODE.CHROMATIC
-          : TR_BACKGROUND_MODE.LIGHT
+          ? TR_BACKGROUND_MODE.CHROMATIC_DARK
+          : TR_BACKGROUND_MODE.DARK
         break
       case TR_FUNCTION_CODE.IS_CHROMATIC:
-        trBackgroundMode = TR_BACKGROUND_MODE.CHROMATIC
+        trBackgroundMode = trDataGrid.find((item) => item.value === TR_FUNCTION_CODE.IS_DARK).isPressed
+          ? TR_BACKGROUND_MODE.CHROMATIC_DARK
+          : TR_BACKGROUND_MODE.CHROMATIC
         break
-      case TR_FUNCTION_CODE.STROKE_WEIGHT_UP:
-        trStrokeWeight += TR_STROKE_WEIGHT_STEP
+      case TR_FUNCTION_CODE.IS_GRAY_SCALE:
+        trGrayFilter = TR_GRAY_FILTER.GRAY
         break
-      case TR_FUNCTION_CODE.STROKE_WEIGHT_DOWN:
-        trStrokeWeight -= TR_STROKE_WEIGHT_STEP
-        if (trStrokeWeight <= 0) {
-          trStrokeWeight = 1
-        }
+      case TR_FUNCTION_CODE.IS_RANDOM_FILTER_PARAMS:
+        trRandomFilterParamsMode = TR_RANDOM_FILTER_PARAMS_MODE.RANDOM
+        break
+      case TR_FUNCTION_CODE.IS_RANDOM_SHAPE_PARAMS:
+        trRandomShapeParamsMode = TR_RANDOM_SHAPE_PARAMS_MODE.RANDOM
+        break
+      case TR_FUNCTION_CODE.IS_NOISE_FILTER:
+        trNoiseFilter = TR_NOISE_FILTER.NOISE
         break
       default:
         break
     }
   } else {
     // OFF
-    // TODO: 押した時の処理を実装する
+    // TODO: 押した時にOFFになる処理を実装する
+    console.clear()
     console.log(`OFF: ${value}`)
     switch (value) {
-      case TR_FUNCTION_CODE.IS_LIGHT:
+      case TR_FUNCTION_CODE.IS_DARK:
         trBackgroundMode = trDataGrid.find((item) => item.value === TR_FUNCTION_CODE.IS_CHROMATIC).isPressed
           ? TR_BACKGROUND_MODE.CHROMATIC
-          : TR_BACKGROUND_MODE.DARK
+          : TR_BACKGROUND_MODE.LIGHT
         break
       case TR_FUNCTION_CODE.IS_CHROMATIC:
-        trBackgroundMode = trDataGrid.find((item) => item.value === TR_FUNCTION_CODE.IS_LIGHT).isPressed
-          ? TR_BACKGROUND_MODE.LIGHT
-          : TR_BACKGROUND_MODE.DARK
+        trBackgroundMode = trDataGrid.find((item) => item.value === TR_FUNCTION_CODE.IS_DARK).isPressed
+          ? TR_BACKGROUND_MODE.DARK
+          : TR_BACKGROUND_MODE.LIGHT
         break
-      case TR_FUNCTION_CODE.STROKE_WEIGHT_UP:
-        trStrokeWeight += TR_STROKE_WEIGHT_STEP
+      case TR_FUNCTION_CODE.IS_GRAY_SCALE:
+        trGrayFilter = TR_GRAY_FILTER.NONE
         break
-      case TR_FUNCTION_CODE.STROKE_WEIGHT_DOWN:
-        trStrokeWeight -= TR_STROKE_WEIGHT_STEP
-        if (trStrokeWeight <= 0) {
-          trStrokeWeight = 1
-        }
+      case TR_FUNCTION_CODE.IS_NOISE_FILTER:
+        trNoiseFilter = TR_NOISE_FILTER.NONE
+        break
+      case TR_FUNCTION_CODE.IS_RANDOM_FILTER_PARAMS:
+        trRandomFilterParamsMode = TR_RANDOM_FILTER_PARAMS_MODE.NONE
+        break
+      case TR_FUNCTION_CODE.IS_RANDOM_SHAPE_PARAMS:
+        trRandomShapeParamsMode = TR_RANDOM_SHAPE_PARAMS_MODE.NONE
         break
       default:
         break
     }
+  }
+
+  switch (value) {
+    case TR_FUNCTION_CODE.STROKE_WEIGHT_UP:
+      trStrokeWeight =
+        trStrokeWeight + TR_STROKE_WEIGHT_STEP <= TR_STROKE_WEIGHT.MAX
+          ? trStrokeWeight + TR_STROKE_WEIGHT_STEP
+          : TR_STROKE_WEIGHT.MAX
+      break
+    case TR_FUNCTION_CODE.STROKE_WEIGHT_DOWN:
+      trStrokeWeight =
+        trStrokeWeight - TR_STROKE_WEIGHT_STEP >= TR_STROKE_WEIGHT.MIN
+          ? trStrokeWeight - TR_STROKE_WEIGHT_STEP
+          : TR_STROKE_WEIGHT.MIN
+      break
+    case TR_FUNCTION_CODE.HUE_SHIFT_UP:
+      trHueShift = (trHueShift + TR_HUE_SHIFT_STEP) % TR_HUE_SHIFT.MAX
+      break
+    case TR_FUNCTION_CODE.HUE_SHIFT_DOWN:
+      trHueShift =
+        trHueShift - TR_HUE_SHIFT_STEP < TR_HUE_SHIFT.MIN
+          ? TR_HUE_SHIFT.MAX - TR_HUE_SHIFT_STEP
+          : trHueShift - TR_HUE_SHIFT_STEP
+      break
+    case TR_FUNCTION_CODE.TILE_SIZE_DIV_UP:
+      trTileSizeDivNum = min(trTileSizeDivNum + TR_TILE_SIZE_DIV.STEP, TR_TILE_SIZE_DIV.MAX)
+      break
+    case TR_FUNCTION_CODE.TILE_SIZE_DIV_DOWN:
+      trTileSizeDivNum = max(trTileSizeDivNum - TR_TILE_SIZE_DIV.STEP, TR_TILE_SIZE_DIV.MIN)
+      break
+    case TR_FUNCTION_CODE.RANDOM_FILTER_PARAMS:
+      trFunctionFilterParamsRandomize()
+      trSetInitUrlAndMidi()
+      break
+    case TR_FUNCTION_CODE.RANDOM_SHAPE_PARAMS:
+      trFunctionShapeParamsRandomize()
+      trSetInitUrlAndMidi()
+      break
+    case TR_FUNCTION_CODE.RANDOM_TILE:
+      // オートモード時は無効
+      if (trMode !== TR_MODE.NORMAL) {
+        break
+      }
+
+      if (trRandomShapeParamsMode === TR_RANDOM_SHAPE_PARAMS_MODE.RANDOM) {
+        trDataGrid.find((item) => item.value === TR_FUNCTION_CODE.IS_RANDOM_SHAPE_PARAMS).isPressed = true
+        trFunctionShapeParamsRandomize()
+      }
+      if (trRandomFilterParamsMode === TR_RANDOM_FILTER_PARAMS_MODE.RANDOM) {
+        trDataGrid.find((item) => item.value === TR_FUNCTION_CODE.IS_RANDOM_FILTER_PARAMS).isPressed = true
+        trFunctionFilterParamsRandomize()
+      }
+
+      trDataGrid = trDataGrid.map((item, i) => {
+        if (i >= TR_DATA_GRID_SIZE) {
+          return item
+        }
+        item.isPressed = random() > 0.5
+        return item
+      })
+      trSetInitUrlAndMidi()
+      break
+    case TR_FUNCTION_CODE.RANDOM_FONT_TILE:
+      // オートモード時は無効
+      if (trMode !== TR_MODE.NORMAL) {
+        break
+      }
+
+      if (trRandomShapeParamsMode === TR_RANDOM_SHAPE_PARAMS_MODE.RANDOM) {
+        trDataGrid.find((item) => item.value === TR_FUNCTION_CODE.IS_RANDOM_SHAPE_PARAMS).isPressed = true
+        trFunctionShapeParamsRandomize()
+      }
+      if (trRandomFilterParamsMode === TR_RANDOM_FILTER_PARAMS_MODE.RANDOM) {
+        trDataGrid.find((item) => item.value === TR_FUNCTION_CODE.IS_RANDOM_FILTER_PARAMS).isPressed = true
+        trFunctionFilterParamsRandomize()
+      }
+
+      const randomFontBitmap = trBitMapFontData.getRandomBitmap().bitmap
+      for (let yi = 0; yi < 8; yi++) {
+        for (let xi = 0; xi < 8; xi++) {
+          const gridIndex = TR_MAPPING_GRID[yi][xi]
+          const trDataGridIndex = trDataGrid.findIndex((item) => item.value === gridIndex)
+          trDataGrid[trDataGridIndex].isPressed = randomFontBitmap[yi][xi] === 1
+        }
+      }
+      trSetInitUrlAndMidi()
+      break
+    default:
+      break
   }
 }
 
@@ -301,53 +519,110 @@ function trCalcWindowSize(params = {}) {
  * デバイスの描画を行う関数
  */
 function trDeviceDraw() {
-  if (trIsNoDevice) {
-    const frameColor = color(map(trDataParams[0], 0, 99, 0, 360), 40, 95)
+  const position = createVector(width / 2, height / 2)
+  const softUiStartPos = createVector(position.x - TR_SOFT_UI_WIDTH / 2, position.y - TR_SOFT_UI_WIDTH / 2)
 
-    trDrawBlock(() => {
-      const gap = 10
+  trDrawBlock(() => {
+    stroke(TR_COLORS.device)
+    strokeWeight(1)
+    rectMode(CENTER)
 
-      // noStroke()
-      stroke(TR_COLORS.cellMain)
-      strokeWeight(2)
-      rectMode(CENTER)
+    fill(TR_COLORS.device)
+    rect(
+      position.x,
+      position.y,
+      TR_SOFT_UI_WIDTH + TR_SOFT_UI_WIDTH_GAP * 2,
+      TR_SOFT_UI_WIDTH + TR_SOFT_UI_WIDTH_GAP * 2,
+    )
+    rect(position.x, position.y, TR_SOFT_UI_WIDTH + TR_SOFT_UI_WIDTH_GAP, TR_SOFT_UI_WIDTH + TR_SOFT_UI_WIDTH_GAP)
+  })
+  trDrawBlock(() => {
+    stroke(TR_COLORS.lineMain)
+    strokeWeight(2)
+    for (let xi = 0; xi < TR_DEVICE_GRID_NUM; xi++) {
+      for (let yi = 0; yi < TR_DEVICE_GRID_NUM; yi++) {
+        const value = TR_MAPPING_GRID[yi][xi]
+        const getIndex = trDataGrid.findIndex((item) => item.value === value)
+        if (getIndex === undefined) {
+          continue
+        }
 
-      fill(frameColor)
-      rect(width / 2, height / 2, TR_SOFT_UI_WIDTH + gap * 2, TR_SOFT_UI_WIDTH + gap * 2, 10, 10, 10, 10)
-
-      fill(TR_COLORS.device)
-      rect(width / 2, height / 2, TR_SOFT_UI_WIDTH + gap, TR_SOFT_UI_WIDTH + gap, 10, 10, 10, 10)
-    })
-    trDrawBlock(() => {
-      stroke(TR_COLORS.lineMain)
-      strokeWeight(2)
-      for (let xi = 0; xi < TR_DEVICE_GRID_NUM; xi++) {
-        for (let yi = 0; yi < TR_DEVICE_GRID_NUM; yi++) {
-          const value = TR_MAPPING_GRID[yi][xi]
-          const getIndex = trDataGrid.findIndex((item) => item.value === value)
-          if (getIndex === undefined) {
-            continue
+        trDrawBlock(() => {
+          if (trDataGrid[getIndex].isPressed) {
+            fill(TR_COLORS.cellMain)
+          } else {
+            fill(TR_COLORS.cellNormal)
           }
 
-          trDrawBlock(() => {
-            if (trDataGrid[getIndex].isPressed) {
-              fill(frameColor)
-            } else {
-              fill(TR_COLORS.cellNormal)
-            }
-
-            ellipseMode(CORNER)
-            ellipse(
-              trSoftUiStartPos.x + TR_SOFT_UI_CELL_SIZE * xi,
-              trSoftUiStartPos.y + TR_SOFT_UI_CELL_SIZE * yi,
-              TR_SOFT_UI_CELL_SIZE,
-              TR_SOFT_UI_CELL_SIZE,
-            )
-          })
-        }
+          rectMode(CORNER)
+          rect(
+            softUiStartPos.x + TR_SOFT_UI_CELL_SIZE * xi,
+            softUiStartPos.y + TR_SOFT_UI_CELL_SIZE * yi,
+            TR_SOFT_UI_CELL_SIZE,
+            TR_SOFT_UI_CELL_SIZE,
+          )
+        })
       }
-    })
+    }
+  })
+}
+
+/**
+ * ダミーデバイスの描画を行う関数。
+ * 指定された位置とデータグリッドを使用してデバイスのUIを描画します。
+ *
+ * @param {p5.Vector} [position] - 描画する位置。デフォルトは画面の中央。
+ * @param {Array} [dataGrid] - 使用するデータグリッド。デフォルトは `trDataGrid`。
+ */
+function trDeviceDummyDraw(position = undefined, dataGrid = undefined) {
+  if (!position) {
+    position = createVector(width / 2, height / 2)
   }
+
+  const softUiStartPos = createVector(position.x - TR_SOFT_UI_WIDTH / 2, position.y - TR_SOFT_UI_WIDTH / 2)
+
+  if (!dataGrid) {
+    dataGrid = trDataGrid
+  }
+
+  trDrawBlock(() => {
+    stroke(TR_COLORS.device)
+    strokeWeight(1)
+    rectMode(CENTER)
+
+    fill(TR_COLORS.device)
+    rect(
+      position.x,
+      position.y,
+      TR_SOFT_UI_WIDTH + TR_SOFT_UI_WIDTH_GAP * 2,
+      TR_SOFT_UI_WIDTH + TR_SOFT_UI_WIDTH_GAP * 2,
+    )
+    rect(position.x, position.y, TR_SOFT_UI_WIDTH + TR_SOFT_UI_WIDTH_GAP, TR_SOFT_UI_WIDTH + TR_SOFT_UI_WIDTH_GAP)
+  })
+  trDrawBlock(() => {
+    for (let xi = 0; xi < TR_DEVICE_GRID_NUM; xi++) {
+      for (let yi = 0; yi < TR_DEVICE_GRID_NUM; yi++) {
+        trDrawBlock(() => {
+          strokeWeight(1)
+          if (dataGrid[yi][xi]) {
+            fill(TR_COLORS.cellSub)
+            stroke(TR_COLORS.cellSub)
+          } else {
+            fill(TR_COLORS.device)
+            stroke(TR_COLORS.device)
+          }
+
+          rectMode(CORNER)
+          rect(
+            softUiStartPos.x + TR_SOFT_UI_CELL_SIZE * xi,
+            softUiStartPos.y + TR_SOFT_UI_CELL_SIZE * yi,
+            TR_SOFT_UI_CELL_SIZE,
+            TR_SOFT_UI_CELL_SIZE,
+          )
+        })
+      }
+    }
+  })
 }
 
 /**
@@ -474,6 +749,29 @@ function trRotateCalc() {
   trRotateValue = (frameCount - trChangePatternFrame) / TR_ROTATE_NUM
 }
 
+function trChangeBackgroundButton(mode) {
+  switch (mode) {
+    case TR_BACKGROUND_MODE.LIGHT:
+      trDataGrid.find((item) => item.value === TR_FUNCTION_CODE.IS_DARK).isPressed = false
+      trDataGrid.find((item) => item.value === TR_FUNCTION_CODE.IS_CHROMATIC).isPressed = false
+      break
+    case TR_BACKGROUND_MODE.DARK:
+      trDataGrid.find((item) => item.value === TR_FUNCTION_CODE.IS_DARK).isPressed = true
+      trDataGrid.find((item) => item.value === TR_FUNCTION_CODE.IS_CHROMATIC).isPressed = false
+      break
+    case TR_BACKGROUND_MODE.CHROMATIC:
+      trDataGrid.find((item) => item.value === TR_FUNCTION_CODE.IS_DARK).isPressed = false
+      trDataGrid.find((item) => item.value === TR_FUNCTION_CODE.IS_CHROMATIC).isPressed = true
+      break
+    case TR_BACKGROUND_MODE.CHROMATIC_DARK:
+      trDataGrid.find((item) => item.value === TR_FUNCTION_CODE.IS_DARK).isPressed = true
+      trDataGrid.find((item) => item.value === TR_FUNCTION_CODE.IS_CHROMATIC).isPressed = true
+      break
+    default:
+      break
+  }
+}
+
 /**
  * URLのクエリパラメータからデータを取得し、trDataGridを更新する関数。
  * URLに'data'パラメータが含まれている場合、その値を解析してtrDataGridを更新する。
@@ -504,11 +802,67 @@ function trUrlToData() {
   const isValidBackground = background && Object.values(TR_BACKGROUND_MODE).includes(parseInt(background))
   if (isValidBackground) {
     trBackgroundMode = parseInt(background)
+    trChangeBackgroundButton(trBackgroundMode)
   } else {
     trBackgroundMode = TR_BACKGROUND_MODE.LIGHT
   }
 
-  if (!isValidData || !isValidBackground) {
+  // gray filter
+  const grayScale = url.searchParams.get('gray-scale')
+  const isValidGrayScale = grayScale && Object.values(TR_GRAY_FILTER).includes(parseInt(grayScale))
+  if (isValidGrayScale) {
+    trGrayFilter = parseInt(grayScale)
+    if (trGrayFilter === TR_GRAY_FILTER.GRAY) {
+      trDataGrid.find((item) => item.value === TR_FUNCTION_CODE.IS_GRAY_SCALE).isPressed = true
+    }
+  } else {
+    trGrayFilter = TR_GRAY_FILTER.NONE
+  }
+
+  // noise filter
+  const noiseFilter = url.searchParams.get('noise-filter')
+  const isValidNoiseFilter = noiseFilter && Object.values(TR_NOISE_FILTER).includes(parseInt(noiseFilter))
+  if (isValidNoiseFilter) {
+    trNoiseFilter = parseInt(noiseFilter)
+    if (trNoiseFilter === TR_NOISE_FILTER.NOISE) {
+      trDataGrid.find((item) => item.value === TR_FUNCTION_CODE.IS_NOISE_FILTER).isPressed = true
+    }
+  } else {
+    trNoiseFilter = TR_NOISE_FILTER.NONE
+  }
+
+  // stroke weight
+  const _strokeWeight = url.searchParams.get('stroke-weight')
+  const isValidTrStrokeWeight =
+    _strokeWeight && _strokeWeight >= TR_STROKE_WEIGHT.MIN && _strokeWeight <= TR_STROKE_WEIGHT.MAX
+  if (isValidTrStrokeWeight) {
+    trStrokeWeight = parseInt(_strokeWeight)
+  }
+
+  // hue shift
+  const hueShift = url.searchParams.get('hue-shift')
+  const isValidHueShift = hueShift && hueShift >= TR_HUE_SHIFT.MIN && hueShift <= TR_HUE_SHIFT.MAX
+  if (isValidHueShift) {
+    trHueShift = parseInt(hueShift)
+  }
+
+  // タイルの分割数
+  const tileSizeDivNum = url.searchParams.get('tile-size-div')
+  const isValidTileSizeDivNum =
+    tileSizeDivNum && tileSizeDivNum >= TR_TILE_SIZE_DIV.MIN && tileSizeDivNum <= TR_TILE_SIZE_DIV.MAX
+  if (isValidTileSizeDivNum) {
+    trTileSizeDivNum = parseInt(tileSizeDivNum)
+  }
+
+  if (
+    !isValidData ||
+    !isValidBackground ||
+    !isValidGrayScale ||
+    !isValidNoiseFilter ||
+    !isValidTrStrokeWeight ||
+    !isValidHueShift ||
+    !isValidTileSizeDivNum
+  ) {
     trUpdateUrl()
   }
 }
@@ -524,8 +878,13 @@ function trUpdateUrl() {
   const url = new URL(window.location.href)
 
   // URLの検索パラメータを設定
-  url.searchParams.set('data', trGridDataToString())
   url.searchParams.set('background', trBackgroundMode)
+  url.searchParams.set('gray-scale', trGrayFilter)
+  url.searchParams.set('noise-filter', trNoiseFilter)
+  url.searchParams.set('stroke-weight', trStrokeWeight)
+  url.searchParams.set('hue-shift', trHueShift)
+  url.searchParams.set('tile-size-div', trTileSizeDivNum)
+  url.searchParams.set('data', trGridDataToString())
 
   window.history.pushState({}, '', url)
 }
@@ -583,28 +942,43 @@ async function trSetDataParams() {
   // 全てオフの状態を特別扱いしない
   const hashInput = input === 0n ? 'all_off' : input.toString()
 
-  // SHA-256ハッシュを生成
-  const hashBuffer = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(hashInput))
-  const hashArray = Array.from(new Uint8Array(hashBuffer))
-  const hashHex = hashArray.map((b) => b.toString(16).padStart(2, '0')).join('')
+  if (hashInput === 'all_off') {
+    trDataParams = Array(TR_SET_DATA_PARAMS_LENGTH).fill(0)
+  } else {
+    // SHA-256ハッシュを生成
+    const hashBuffer = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(hashInput))
+    const hashArray = Array.from(new Uint8Array(hashBuffer))
+    const hashHex = hashArray.map((b) => b.toString(16).padStart(2, '0')).join('')
 
-  // ハッシュを20個のパラメータに分割（各パラメータは0-99の範囲）
-  trDataParams = []
-  for (let i = 0; i < 20; i++) {
-    const part = hashHex.substring(i * 3, i * 3 + 3)
-    trDataParams.push(parseInt(part, 16) % 100)
+    // ハッシュをTR_SET_DATA_PARAMS_LENGTH個のパラメータに分割（各パラメータは0-99の範囲）
+    trDataParams = []
+    for (let i = 0; i < TR_SET_DATA_PARAMS_LENGTH; i++) {
+      const part = hashHex.substring(i * 3, i * 3 + 3)
+      trDataParams.push(parseInt(part, 16) % 100)
+    }
   }
+}
 
+/**
+ * trSineCountをリセットする関数。
+ */
+function trSineCountReset() {
   trSineCount = 0
 }
 
+/**
+ * trChromaticGetColor 関数は、trDataParams 配列の値に基づいて色を生成します。
+ * 各色は HSL カラーモデルを使用して計算され、色相、彩度、明度の値が設定されます。
+ *
+ * @returns {Object} colors - 生成された色のオブジェクト。キーは 'color1', 'color2', ... の形式。
+ */
 function trChromaticGetColor() {
   const colors = {}
 
-  // カラー
+  // カラ���
   for (let i = 1; i <= trDataParams.length - 3; i++) {
     colors[`color${i}`] = color(
-      map(trDataParams[i] * 4, 0, 99 * 4, 0, 360),
+      (map(trDataParams[i] * 4, 0, 99 * 4, 0, 360) + trHueShift) % 360,
       map(trDataParams[1 + i], 0, 99, 20, 80),
       map(trDataParams[2 + i], 0, 99, 80, 100),
     )
@@ -639,27 +1013,27 @@ function trCalcSineCount(sineValue) {
   }
 }
 
+/**
+ * 指定されたパラメータを使用して値を生成する関数。
+ *
+ * @param {number} x - 入力値。
+ * @param {number[]} params - パラメータの配列。
+ * @returns {number} 生成された値。
+ */
 function trGetDistributedValue(x, params) {
-  // パラメータのインデックスを動的に選択
-  const index1 = x % 20 // 0-19でループ
-  const index2 = (x + 7) % 20 // オフセット付きでループ
-  const index3 = (x * 13) % 20 // 別のパターンでループ
+  // ハッシュ関数的なアプローチで周期性を減らす
+  const hash = (x * 0x9e3779b9) >>> 0
+  const index1 = hash % params.length
+  const index2 = (hash * 31) % params.length
+  const index3 = (hash * 37) % params.length
 
-  // 選択したパラメータを使用して値を生成
   let value = x
-
-  // 1段階目: 最初のパラメータを使用
-  value = ((value * params[index1] + 0x45d9f3b) >>> 0) % 1000
-
-  // 2段階目: 2つ目のパラメータで変調
-  value = ((value + params[index2] * 0x45d9f3b) >>> 0) % 1000
-
-  // 3段階目: 3つ目のパラメータで更に変調
-  value = ((value ^ (params[index3] * 0x45d9f3b)) >>> 0) % 1000
+  value = ((value * params[index1] + 0x9e3779b9) >>> 0) % TR_PRIME
+  value = ((value + params[index2] * 0x9e3779b9) >>> 0) % TR_PRIME
+  value = ((value ^ (params[index3] * 0x9e3779b9)) >>> 0) % TR_PRIME
 
   return value
 }
-
 /**
  * ノイズを生成する関数。
  * trNoiseGraphic のピクセルデータをランダムなノイズ値で更新します。
@@ -680,7 +1054,7 @@ function trGenerateNoise() {
  * ノイズフィルターを適用する関数。
  * 現在の背景モードに応じてブレンドモードを設定し、ノイズグラフィックを描画します。
  */
-function trNoiseFilter() {
+function trDrawNoiseFilter() {
   trDrawBlock(() => {
     switch (trBackgroundMode) {
       case TR_BACKGROUND_MODE.LIGHT || TR_BACKGROUND_MODE.CHROMATIC:
@@ -696,9 +1070,130 @@ function trNoiseFilter() {
   })
 }
 
+/**
+ * 指定された座標に基づいてノイズ値を生成する関数。
+ *
+ * @param {number} x - X座標
+ * @param {number} y - Y座標
+ * @returns {number} 生成されたノイズ値
+ */
 function trGenerateNoiseValue(x, y) {
   return trGetDistributedValue(
     trDataParams.at(x % trDataParams.length) * trDataParams.at(y % trDataParams.length),
     trDataParams,
   )
+}
+
+/**
+ * ランダムな形状パラメータを設定する関数。
+ * 線幅とタイルサイズの分割数をランダムに設定します。
+ */
+function trFunctionShapeParamsRandomize() {
+  trStrokeWeight = ceil(random(TR_STROKE_WEIGHT.MIN, TR_STROKE_WEIGHT.MAX))
+  trTileSizeDivNum = ceil(random(TR_TILE_SIZE_DIV.MIN, TR_TILE_SIZE_DIV.MAX))
+}
+
+/**
+ * フィルターパラメータをランダムに設定する関数。
+ * 色相シフト、背景モード、グレイスケールフィルター、ノイズフィルターをランダムに設定します。
+ * グレイスケールフィルターは、フレームカウントが4の倍数のときにのみランダムに設定されます。
+ */
+function trFunctionFilterParamsRandomize() {
+  trHueShift = ceil(random(TR_HUE_SHIFT.MIN, TR_HUE_SHIFT.MAX))
+  trBackgroundMode = random(Object.values(TR_BACKGROUND_MODE))
+}
+
+/**
+ * trSetInitUrlAndMidi 関数は、URLとMIDIの初期設定を行います。
+ * URLを更新し、QRコードを生成し、パターン変更フレームを設定し、
+ * データパラメータを設定します。
+ * その後、プログラマーモードのセットアップを行います。
+ */
+function trSetInitUrlAndMidi() {
+  trUpdateUrl()
+  trCreateQrCode()
+  trChangePatternFrame = frameCount
+  trSetDataParams().then(() => {
+    trSineCountReset()
+    trUrlToData()
+
+    trProgrammerModeSetup(
+      async (i) => {
+        trUtilityDataGridIsPressed(i, !trGetPressedKeyList(trDataGrid).includes(i))
+        trSetDataGridIsPressed(i, !trGetPressedKeyList(trDataGrid).includes(i))
+        await trSetDataParams()
+      },
+      () => {
+        trIsNoDevice = true
+      },
+      trSetDataParams,
+      trDataGrid,
+      trMidiAccess,
+      () => {
+        if (trMode !== TR_MODE.AUTO) {
+          trSineCountReset()
+        }
+      },
+    ).then()
+  })
+}
+
+/**
+ * BitmapUtils クラスは、ビットマップデータを管理し、ランダムまたは特定のビットマップを取得するためのユーティリティを提供します。
+ */
+class BitmapUtils {
+  /**
+   * BitmapUtils のコンストラクタ
+   * @param {Object} jsonData - ビットマップデータを含む JSON オブジ���クト
+   */
+  constructor(jsonData) {
+    this.data = jsonData
+    this.characters = Object.keys(jsonData.bitmaps)
+  }
+
+  /**
+   * ランダムに1文字のビットマップを取得
+   * @returns {{character: string, bitmap: number[][]}} ランダムに選ばれた文字とそのビットマップ
+   */
+  getRandomBitmap() {
+    const randomChar = this.characters[Math.floor(Math.random() * this.characters.length)]
+    return {
+      character: randomChar,
+      bitmap: this.data.bitmaps[randomChar].bitmap,
+    }
+  }
+
+  /**
+   * 指定した数のビットマップをランダムに取得
+   * @param {number} count - 取得する文字数
+   * @returns {Array<{character: string, bitmap: number[][]}>} ランダムに選ばれた文字とそのビットマップの配列
+   */
+  getRandomBitmaps(count = 1) {
+    return Array.from({ length: count }, () => this.getRandomBitmap())
+  }
+
+  /**
+   * 特定の文字のビットマップを取得
+   * @param {string} character - 取得したい文字
+   * @returns {{character: string, bitmap: number[][]}} 指定された文字とそのビットマップ
+   */
+  getBitmap(character) {
+    if (this.data.bitmaps[character]) {
+      return {
+        character,
+        bitmap: this.data.bitmaps[character].bitmap,
+      }
+    }
+    return undefined
+  }
+}
+
+/**
+ * サイン波の計算を行う関数。
+ * 現在のフレーム数とサイン波の速度を使用してサイン波の値を計算します。
+ *
+ * @returns {number} サイン波の値
+ */
+function trSineCalc() {
+  return sin(frameCount * 50 * 0.004 * trSineSpeed)
 }
