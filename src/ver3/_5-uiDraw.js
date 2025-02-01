@@ -124,7 +124,7 @@ async function trUiDraw() {
   }
 
   if (trMode === TR_MODE.FONT_2_AUTO) {
-    if (frameCount % TR_AUTO_MODE_INTERVAL === 0) {
+    if (frameCount % (TR_AUTO_MODE_INTERVAL * 0.3) === 0) {
       let index = trFont2AutoCount % trFont2AutoText.length
 
       // 係数をランダムに変更
