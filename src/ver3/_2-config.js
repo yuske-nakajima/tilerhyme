@@ -3,7 +3,7 @@
 // ------------------------------------------------------------
 const TR_APP_NAME = 'TILERHYME'
 const TR_VERSION = '3'
-const TR_VERSION_NAME = 'KICK'
+const TR_VERSION_NAME = 'KETHUME'
 
 const TR_FUNCTION_CODE = {
   IS_DARK: 19,
