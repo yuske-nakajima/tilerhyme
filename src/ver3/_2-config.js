@@ -894,8 +894,10 @@ function trUpdateUrl() {
  */
 function trCreateQrCode() {
   const url = new URL(window.location.href)
-  const data = url.searchParams.get('data')
-  const qrData = `${url.origin}${url.pathname}?data=${data}`
+
+  const paramList = ['data', 'background', 'gray-scale', 'noise-filter', 'stroke-weight', 'hue-shift', 'tile-size-div']
+  const params = paramList.map((param) => `${param}=${url.searchParams.get(param)}`).join('&')
+  const qrData = `${url.origin}${url.pathname}?${params}`
 
   // QRコードを作成
   const qr = qrcode(0, 'L')
