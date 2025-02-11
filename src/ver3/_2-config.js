@@ -142,6 +142,14 @@ const TR_COLORS = {}
 const TR_WALLPAPER_MODE = {
   FULL: 0,
   INFO: 1,
+  PHOTO: 2,
+  PHOTO_FULL: 3,
+}
+
+const TR_WALLPAPER_L_SIZE = {
+  WIDTH: 1051, // 89mm × 300dpi ≈ 1051px
+  // HEIGHT: 1500, // 127mm × 300dpi ≈ 1500px // 実寸
+  HEIGHT: 1406, // 119mm × 300dpi ≈ 1406px // CP1500に依存
 }
 
 const TR_WALLPAPER_SIZE = 1080
@@ -633,10 +641,16 @@ function trSaveWallPaper(mode = TR_WALLPAPER_MODE.FULL) {
 
   pixelDensity(2)
 
-  if (mode === TR_WALLPAPER_MODE.FULL) {
-    resizeCanvas(TR_WALLPAPER_SIZE, TR_WALLPAPER_SIZE)
-  } else if (mode === TR_WALLPAPER_MODE.INFO) {
-    resizeCanvas(TR_WALLPAPER_SIZE, TR_WALLPAPER_SIZE)
+  // キャンバスのリサイズ
+  switch (mode) {
+    case TR_WALLPAPER_MODE.PHOTO | TR_WALLPAPER_MODE.PHOTO_FULL:
+      resizeCanvas(TR_WALLPAPER_L_SIZE.WIDTH, TR_WALLPAPER_L_SIZE.HEIGHT)
+      break
+    case TR_WALLPAPER_MODE.FULL:
+    case TR_WALLPAPER_MODE.INFO:
+    default:
+      resizeCanvas(TR_WALLPAPER_SIZE, TR_WALLPAPER_SIZE)
+      break
   }
 
   trCellDivNum = ceil(width / 50)
@@ -652,10 +666,39 @@ function trSaveWallPaper(mode = TR_WALLPAPER_MODE.FULL) {
 
   trUiDraw()
 
+  // PHOTOモードの場合はtrUiDrawとtrInfoDrawをスキップし、パターンのみ描画
   if (mode === TR_WALLPAPER_MODE.INFO) {
     trInfoDraw()
     if (trQrImage) {
       trQrDraw()
+    }
+  }
+
+  if (mode === TR_WALLPAPER_MODE.PHOTO) {
+    trInfoDraw({
+      size: {
+        info: 40,
+        text: 16,
+      },
+      position: {
+        data: {
+          x: 30,
+          y: 60,
+        },
+        version: {
+          x: width - 30,
+          y: height - 50,
+        },
+      },
+    })
+    if (trQrImage) {
+      trQrDraw({
+        scale: 0.5,
+        // gapX: -80,
+        gapX: -60,
+        // gapY: -60,
+        gapY: -20,
+      })
     }
   }
 
@@ -700,9 +743,35 @@ function trSaveImageClick(dialog) {
  * trInfoDraw 関数は、情報表示用の描画を行います。
  *
  * @function trInfoDraw
+ * @param {Object} options - 表示オプション
+ * @param {Object} [options.size] - サイズ設定
+ * @param {number} [options.size.info=30] - 基本的な情報サイズ
+ * @param {number} [options.size.text=12] - テキストサイズ
+ * @param {Object} [options.position] - 位置設定
+ * @param {Object} [options.position.data] - データ情報の位置
+ * @param {number} [options.position.data.x] - データ情報のX座標（デフォルト: infoSize/4）
+ * @param {number} [options.position.data.y] - データ情報のY座標（デフォルト: infoSize/2）
+ * @param {Object} [options.position.version] - バージョン情報の位置
+ * @param {number} [options.position.version.x] - バージョン情報のX座標（デフォルト: width - infoSize/4）
+ * @param {number} [options.position.version.y] - バージョン情報のY座標（デフォルト: height - infoSize/2）
  */
-function trInfoDraw() {
-  const infoSize = 30
+function trInfoDraw(options = {}) {
+  const {
+    size = {
+      info: 30,
+      text: 12,
+    },
+    position = {
+      data: {
+        x: size.info / 4,
+        y: size.info / 2,
+      },
+      version: {
+        x: width - size.info / 4,
+        y: height - size.info / 2,
+      },
+    },
+  } = options
 
   trDrawBlock(() => {
     if (trBackgroundMode === TR_BACKGROUND_MODE.LIGHT) {
@@ -710,19 +779,15 @@ function trInfoDraw() {
     } else {
       fill(TR_COLORS.lineMainDark)
     }
-    textSize(12)
+    textSize(size.text)
 
     // データ情報
     textAlign(LEFT, CENTER)
-    text(trGridDataToString(), infoSize / 4, infoSize / 2)
+    text(trGridDataToString(), position.data.x, position.data.y)
 
     // バージョン情報
     textAlign(RIGHT, CENTER)
-    text(
-      `${TR_APP_NAME} - ${TR_VERSION_NAME}(${TR_VERSION}) CREATED BY YUSKE`,
-      width - infoSize / 4,
-      height - infoSize / 2,
-    )
+    text(`${TR_APP_NAME} - ${TR_VERSION_NAME}(${TR_VERSION}) CREATED BY YUSKE`, position.version.x, position.version.y)
   })
 }
 
@@ -915,12 +980,20 @@ function trCreateQrCode() {
 
 /**
  * QRコードを描画する関数
+ * @param {Object} options - QRコード描画のオプション
+ * @param {number} [options.scale=2] - QRコードのスケール（デフォルト:2）
+ * @param {number} [options.gapX=10] - X軸方向の余白（デフォルト:10）
+ * @param {number} [options.gapY=30] - Y軸方向の余白（デフォルト:30）
  */
-function trQrDraw() {
+function trQrDraw(options = {}) {
+  const { scale = 1, gapX = -30, gapY = 0 } = options
+
   trDrawBlock(() => {
     imageMode(CENTER)
-    const gap = createVector(trQrImage.width / 2 + 10, trQrImage.width / 2 + 30)
-    image(trQrImage, width - gap.x, height - gap.y)
+    const scaledWidth = trQrImage.width / scale
+    const gap = createVector(scaledWidth + gapX, scaledWidth + gapY)
+
+    image(trQrImage, width - gap.x, height - gap.y, scaledWidth, scaledWidth)
   })
 }
 

@@ -3,6 +3,8 @@ const dialog = document.getElementById('dialog')
 const dialogCancel = document.getElementById('dialog-cancel')
 const dialogDownload = document.getElementById('dialog-download')
 const dialogDownloadInfo = document.getElementById('dialog-download-info')
+const dialogDownloadPhoto = document.getElementById('dialog-download-photo')
+const dialogDownloadPhotoFull = document.getElementById('dialog-download-photo-full')
 
 imageDownloadArea.addEventListener('click', trSaveImageClick(dialog))
 imageDownloadArea.addEventListener('touchend', trSaveImageClick(dialog))
@@ -35,6 +37,28 @@ dialogDownloadInfo.addEventListener('click', () => {
 // タッチイベント
 dialogDownloadInfo.addEventListener('touchend', () => {
   trSaveWallPaper(TR_WALLPAPER_MODE.INFO)
+  trHideDialog()
+})
+
+// ダウンロード-写真のクリックイベント
+dialogDownloadPhoto.addEventListener('click', () => {
+  trSaveWallPaper(TR_WALLPAPER_MODE.PHOTO)
+  trHideDialog()
+})
+// タッチイベント
+dialogDownloadPhoto.addEventListener('touchend', () => {
+  trSaveWallPaper(TR_WALLPAPER_MODE.PHOTO)
+  trHideDialog()
+})
+
+// ダウンロード-写真-フルのクリックイベント
+dialogDownloadPhotoFull.addEventListener('click', () => {
+  trSaveWallPaper(TR_WALLPAPER_MODE.PHOTO_FULL)
+  trHideDialog()
+})
+// タッチイベント
+dialogDownloadPhotoFull.addEventListener('touchend', () => {
+  trSaveWallPaper(TR_WALLPAPER_MODE.PHOTO_FULL)
   trHideDialog()
 })
 
