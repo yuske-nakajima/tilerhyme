@@ -643,7 +643,8 @@ function trSaveWallPaper(mode = TR_WALLPAPER_MODE.FULL) {
 
   // キャンバスのリサイズ
   switch (mode) {
-    case TR_WALLPAPER_MODE.PHOTO | TR_WALLPAPER_MODE.PHOTO_FULL:
+    case TR_WALLPAPER_MODE.PHOTO:
+    case TR_WALLPAPER_MODE.PHOTO_FULL:
       resizeCanvas(TR_WALLPAPER_L_SIZE.WIDTH, TR_WALLPAPER_L_SIZE.HEIGHT)
       break
     case TR_WALLPAPER_MODE.FULL:
