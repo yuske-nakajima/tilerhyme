@@ -683,7 +683,7 @@ function trSaveWallPaper(mode = TR_WALLPAPER_MODE.FULL) {
       },
       position: {
         data: {
-          x: 30,
+          x: 40,
           y: 60,
         },
         version: {
