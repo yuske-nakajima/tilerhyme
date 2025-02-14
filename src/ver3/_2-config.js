@@ -660,10 +660,6 @@ function trSaveWallPaper(mode = TR_WALLPAPER_MODE.FULL) {
   const tempTrSoftUiStartPos = { ...trSoftUiStartPos }
 
   trIsNoDevice = false
-  if (mode === TR_WALLPAPER_MODE.INFO) {
-    trIsNoDevice = true
-    trSoftUiStartPos = createVector(width / 2 - TR_SOFT_UI_WIDTH / 2, height / 2 - TR_SOFT_UI_WIDTH / 2)
-  }
 
   trUiDraw()
 
